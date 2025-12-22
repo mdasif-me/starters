@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WithdrawalsIndexRouteImport } from './routes/withdrawals/index'
+import { Route as SalesIndexRouteImport } from './routes/sales/index'
+import { Route as RevenueIndexRouteImport } from './routes/revenue/index'
+import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as ApprovalsIndexRouteImport } from './routes/approvals/index'
+import { Route as AgentsIndexRouteImport } from './routes/agents/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WithdrawalsIndexRoute = WithdrawalsIndexRouteImport.update({
+  id: '/withdrawals/',
+  path: '/withdrawals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SalesIndexRoute = SalesIndexRouteImport.update({
+  id: '/sales/',
+  path: '/sales/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RevenueIndexRoute = RevenueIndexRouteImport.update({
+  id: '/revenue/',
+  path: '/revenue/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApprovalsIndexRoute = ApprovalsIndexRouteImport.update({
+  id: '/approvals/',
+  path: '/approvals/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgentsIndexRoute = AgentsIndexRouteImport.update({
+  id: '/agents/',
+  path: '/agents/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/agents': typeof AgentsIndexRoute
+  '/approvals': typeof ApprovalsIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/projects': typeof ProjectsIndexRoute
+  '/revenue': typeof RevenueIndexRoute
+  '/sales': typeof SalesIndexRoute
+  '/withdrawals': typeof WithdrawalsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/agents': typeof AgentsIndexRoute
+  '/approvals': typeof ApprovalsIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/projects': typeof ProjectsIndexRoute
+  '/revenue': typeof RevenueIndexRoute
+  '/sales': typeof SalesIndexRoute
+  '/withdrawals': typeof WithdrawalsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/agents/': typeof AgentsIndexRoute
+  '/approvals/': typeof ApprovalsIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/projects/': typeof ProjectsIndexRoute
+  '/revenue/': typeof RevenueIndexRoute
+  '/sales/': typeof SalesIndexRoute
+  '/withdrawals/': typeof WithdrawalsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/agents'
+    | '/approvals'
+    | '/dashboard'
+    | '/projects'
+    | '/revenue'
+    | '/sales'
+    | '/withdrawals'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/agents'
+    | '/approvals'
+    | '/dashboard'
+    | '/projects'
+    | '/revenue'
+    | '/sales'
+    | '/withdrawals'
+  id:
+    | '__root__'
+    | '/'
+    | '/agents/'
+    | '/approvals/'
+    | '/dashboard/'
+    | '/projects/'
+    | '/revenue/'
+    | '/sales/'
+    | '/withdrawals/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AgentsIndexRoute: typeof AgentsIndexRoute
+  ApprovalsIndexRoute: typeof ApprovalsIndexRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  ProjectsIndexRoute: typeof ProjectsIndexRoute
+  RevenueIndexRoute: typeof RevenueIndexRoute
+  SalesIndexRoute: typeof SalesIndexRoute
+  WithdrawalsIndexRoute: typeof WithdrawalsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/withdrawals/': {
+      id: '/withdrawals/'
+      path: '/withdrawals'
+      fullPath: '/withdrawals'
+      preLoaderRoute: typeof WithdrawalsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sales/': {
+      id: '/sales/'
+      path: '/sales'
+      fullPath: '/sales'
+      preLoaderRoute: typeof SalesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/revenue/': {
+      id: '/revenue/'
+      path: '/revenue'
+      fullPath: '/revenue'
+      preLoaderRoute: typeof RevenueIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects/': {
+      id: '/projects/'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/approvals/': {
+      id: '/approvals/'
+      path: '/approvals'
+      fullPath: '/approvals'
+      preLoaderRoute: typeof ApprovalsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agents/': {
+      id: '/agents/'
+      path: '/agents'
+      fullPath: '/agents'
+      preLoaderRoute: typeof AgentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AgentsIndexRoute: AgentsIndexRoute,
+  ApprovalsIndexRoute: ApprovalsIndexRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  ProjectsIndexRoute: ProjectsIndexRoute,
+  RevenueIndexRoute: RevenueIndexRoute,
+  SalesIndexRoute: SalesIndexRoute,
+  WithdrawalsIndexRoute: WithdrawalsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
