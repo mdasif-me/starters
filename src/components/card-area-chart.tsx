@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/chart'
 import { SaleTag02Icon } from '@hugeicons-pro/core-solid-rounded'
 import { Area, AreaChart, XAxis } from 'recharts'
+import { formatMoney } from '../utils/format-money'
 import { Icon } from '../utils/icon'
 
 // Digital Marketing Impressions data for different periods (in thousands)
@@ -52,16 +53,6 @@ const chartConfig = {
     color: '#fff',
   },
 } satisfies ChartConfig
-
-// Period configuration
-const PERIODS = {
-  '5D': { key: '5D', label: '5D' },
-  '2W': { key: '2W', label: '2W' },
-  '1M': { key: '1M', label: '1M' },
-  '6M': { key: '6M', label: '6M' },
-} as const
-
-type PeriodKey = keyof typeof PERIODS
 
 // Custom Tooltip
 interface TooltipProps {
@@ -115,8 +106,8 @@ export default function CardAreaChart({
           </div>
           <p className={'card-chip'}>+23%</p>
         </div>
-        <h1 className="text-white text-3xl font-semibold tracking-tight mt-2">
-          ৳5,000,000.00
+        <h1 className="text-white w-full truncate text-3xl font-semibold tracking-tight mt-2">
+          {formatMoney(887474)}
         </h1>
 
         <ChartContainer

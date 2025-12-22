@@ -41,7 +41,7 @@ function RouteComponent() {
           Export PDF
         </Button>
       </div>
-      <div className="flex flex-wrap justify-center items-center gap-10">
+      <div className="flex flex-wrap justify-center items-center gap-8">
         {cardTypes.map((type) => (
           <CardAreaChart
             key={type}
