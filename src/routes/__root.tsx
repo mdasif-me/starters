@@ -47,7 +47,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
                   orientation="vertical"
                   className="mr-2 data-[orientation=vertical]:h-9"
                 />
-                <GlobalSearch />
+                <div className="lg:block md:hidden sm:block hidden">
+                  <GlobalSearch />
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-3">
