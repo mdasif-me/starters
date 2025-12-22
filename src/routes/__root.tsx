@@ -1,5 +1,9 @@
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+import {
+  Link,
+  Outlet,
+  createRootRouteWithContext,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import ClerkProvider from '../integrations/clerk/provider'
@@ -9,13 +13,21 @@ import StoreDevtools from '../lib/demo-store-devtools'
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import type { QueryClient } from '@tanstack/react-query'
+import GlobalSearch from '../components/global-search'
 import { AppSidebar } from '../components/ui/app-sidebar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '../components/ui/base-avatar'
 import { Separator } from '../components/ui/separator'
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from '../components/ui/sidebar'
+
+import user from '/user.png'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -28,44 +40,34 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         <SidebarProvider>
           <AppSidebar />
           <SidebarInset>
-            <header className="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4">
-              <SidebarTrigger className="-ml-1" />
-              <Separator
-                orientation="vertical"
-                className="mr-2 data-[orientation=vertical]:h-4"
-              />
-              {/* <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="/">Home</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="dim" mode="icon" className="size-6">
-                          <BreadcrumbEllipsis />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="start">
-                        <DropdownMenuItem>Documentation</DropdownMenuItem>
-                        <DropdownMenuItem>Themes</DropdownMenuItem>
-                        <DropdownMenuItem>GitHub</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbLink href="/docs/components">
-                      Components
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
-                  </BreadcrumbItem>
-                </BreadcrumbList>
-              </Breadcrumb> */}
+            <header className="bg-background sticky top-0 flex h-16 shrink-0 items-center gap-2 border-b px-4 justify-between">
+              <div className="flex items-center gap-2">
+                <SidebarTrigger className="-ml-1 text-muted-foreground" />
+                <Separator
+                  orientation="vertical"
+                  className="mr-2 data-[orientation=vertical]:h-9"
+                />
+                <GlobalSearch />
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3">
+                  <Avatar className="size-9">
+                    <AvatarImage src={`${user}`} alt={`user profile`} />
+                    <AvatarFallback>AS</AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col">
+                    <Link
+                      to="/"
+                      className="text-sm font-medium text-foreground hover:text-primary"
+                    >
+                      {'Kathryn Campbell'}
+                    </Link>
+                    <div className="text-xs font-normal text-muted-foreground">
+                      {'kathryn.campbell@example.com'}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 p-4">
               <Outlet />

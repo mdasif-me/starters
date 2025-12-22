@@ -76,7 +76,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               size={'lg'}
-              className="bg-destructive/5 hover:bg-destructive/10"
+              className="bg-destructive/5 hover:bg-destructive/10 rounded-2xl"
             >
               <LogOutIcon size={24} className="text-destructive shrink-0" />
               <span className="text-destructive text-lg">Logout</span>
