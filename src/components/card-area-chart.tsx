@@ -88,9 +88,9 @@ export default function CardAreaChart({
   return (
     <div
       onClick={onClick}
-      className={`card-container ${isSelected ? 'card-selected' : ''} max-w-96`}
+      className={`card-container ${isSelected ? 'card-selected' : ''} max-w-96 w-full h-full`}
     >
-      <div className="h-32 mb-0 w-full z-50 p-3">
+      <div className="h-32 mb-0 w-full z-30 p-3">
         <div className="flex items-center justify-between text-white -mt-9">
           <div className="flex items-center gap-2">
             <div className={'card-chip'}>

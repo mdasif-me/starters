@@ -150,6 +150,7 @@ code {
 .card-container {
   position: relative;
   width: 100%;
+  min-height: 280px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,9 +190,7 @@ code {
 .card-selected::after {
   opacity: 1;
 }
-/* .card-container:hover::after {
-  opacity: 1;
-} */
+
 .card-chip {
   display: flex;
   padding: 0 13px;
@@ -202,28 +201,6 @@ code {
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(25px);
-}
-@media (max-width: 360px) {
-  .card-container {
-    min-height: 180px;
-    padding: 12px !important;
-  }
-
-  .card-chip {
-    padding: 4px 8px;
-    border-radius: 12px;
-  }
-}
-@media (min-width: 1200px) and (max-width: 1535px) {
-  .card-container {
-    min-height: 240px;
-  }
-}
-
-@media (min-width: 1536px) {
-  .card-container {
-    min-height: 280px;
-  }
 }
 
 .chartAxisTick {
