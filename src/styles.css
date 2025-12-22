@@ -135,3 +135,14 @@ code {
     @apply bg-background text-foreground;
   }
 }
+.gradient-btn {
+  display: inline-flex;
+  height: 44px;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #74b5ff 0%, #407aff 100%);
+}
