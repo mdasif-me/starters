@@ -1,0 +1,32 @@
+# Project Rules: pms-admin
+
+## Project Context
+- **Framework**: React + Create React App (CRA)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + shadcn/ui
+- **State Management**: TanStack Query + Store
+- **Auth**: Clerk
+- **Package Manager**: pnpm
+
+## Code Style Rules
+
+### TypeScript Rules
+1. Always use TypeScript strict mode
+2. Define explicit return types for functions
+3. Use interfaces for props, types for state
+4. Avoid `any` type - use `unknown` with type guards
+
+### React Patterns
+1. Use functional components with hooks
+2. Implement proper error boundaries
+3. Follow Container/Presentational pattern
+4. Use React.memo for expensive components
+5. Implement proper dependency arrays for hooks
+
+### State Management
+1. Use TanStack Query for server state
+2. Use Zustand/Jotai for client state (based on your store choice)
+3. Always handle loading and error states
+4. Implement optimistic updates where appropriate
+
+### File Structure
