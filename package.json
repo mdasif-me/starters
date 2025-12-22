@@ -2,6 +2,21 @@
   "name": "pms-admin",
   "private": true,
   "type": "module",
+  "version": "1.0.0",
+  "description": "Property Management System Admin Panel",
+  "author": "Muhammad Asif",
+  "contributors": [
+    {
+      "name": "Muhammad Asif",
+      "email": "cn.mdasif@gmail.com",
+      "url": "https://muhammadasif.me/"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZMC-Technologies-Limited/property-chain-panel-csr"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "vite --port 3000",
     "build": "vite build && tsc",
@@ -37,6 +52,7 @@
     "@tanstack/store": "^0.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "lucide-react": "^0.544.0",
     "radix-ui": "^1.4.3",
     "react": "^19.2.0",
@@ -47,7 +63,7 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@tanstack/devtools-event-client": "^0.3.2",
+    "@tanstack/devtools-event-client": "latest",
     "@tanstack/devtools-vite": "^0.3.11",
     "@tanstack/eslint-config": "^0.3.0",
     "@testing-library/dom": "^10.4.0",

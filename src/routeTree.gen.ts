@@ -14,7 +14,6 @@ import { Route as WithdrawalsIndexRouteImport } from './routes/withdrawals/index
 import { Route as SalesIndexRouteImport } from './routes/sales/index'
 import { Route as RevenueIndexRouteImport } from './routes/revenue/index'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as ApprovalsIndexRouteImport } from './routes/approvals/index'
 import { Route as AgentsIndexRouteImport } from './routes/agents/index'
 
@@ -43,11 +42,6 @@ const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
   path: '/projects/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApprovalsIndexRoute = ApprovalsIndexRouteImport.update({
   id: '/approvals/',
   path: '/approvals/',
@@ -63,7 +57,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/agents': typeof AgentsIndexRoute
   '/approvals': typeof ApprovalsIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
   '/projects': typeof ProjectsIndexRoute
   '/revenue': typeof RevenueIndexRoute
   '/sales': typeof SalesIndexRoute
@@ -73,7 +66,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/agents': typeof AgentsIndexRoute
   '/approvals': typeof ApprovalsIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
   '/projects': typeof ProjectsIndexRoute
   '/revenue': typeof RevenueIndexRoute
   '/sales': typeof SalesIndexRoute
@@ -84,7 +76,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/agents/': typeof AgentsIndexRoute
   '/approvals/': typeof ApprovalsIndexRoute
-  '/dashboard/': typeof DashboardIndexRoute
   '/projects/': typeof ProjectsIndexRoute
   '/revenue/': typeof RevenueIndexRoute
   '/sales/': typeof SalesIndexRoute
@@ -96,7 +87,6 @@ export interface FileRouteTypes {
     | '/'
     | '/agents'
     | '/approvals'
-    | '/dashboard'
     | '/projects'
     | '/revenue'
     | '/sales'
@@ -106,7 +96,6 @@ export interface FileRouteTypes {
     | '/'
     | '/agents'
     | '/approvals'
-    | '/dashboard'
     | '/projects'
     | '/revenue'
     | '/sales'
@@ -116,7 +105,6 @@ export interface FileRouteTypes {
     | '/'
     | '/agents/'
     | '/approvals/'
-    | '/dashboard/'
     | '/projects/'
     | '/revenue/'
     | '/sales/'
@@ -127,7 +115,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AgentsIndexRoute: typeof AgentsIndexRoute
   ApprovalsIndexRoute: typeof ApprovalsIndexRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
   ProjectsIndexRoute: typeof ProjectsIndexRoute
   RevenueIndexRoute: typeof RevenueIndexRoute
   SalesIndexRoute: typeof SalesIndexRoute
@@ -171,13 +158,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/approvals/': {
       id: '/approvals/'
       path: '/approvals'
@@ -199,7 +179,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AgentsIndexRoute: AgentsIndexRoute,
   ApprovalsIndexRoute: ApprovalsIndexRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
   ProjectsIndexRoute: ProjectsIndexRoute,
   RevenueIndexRoute: RevenueIndexRoute,
   SalesIndexRoute: SalesIndexRoute,

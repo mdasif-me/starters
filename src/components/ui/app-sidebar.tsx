@@ -8,86 +8,17 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar'
-import { Link, linkOptions, useLocation } from '@tanstack/react-router'
+import { Link, useLocation } from '@tanstack/react-router'
 import { LogOutIcon } from 'lucide-react'
 import * as React from 'react'
 import Logo from '/logo.svg'
 
-import {
-  UserGroupIcon as AgentsIcon,
-  CheckmarkBadge03Icon as ApprovalIcon,
-  DashboardSquare01Icon as DashboardStroke,
-  File02Icon as ProjectStroke,
-  ChartUpIcon as RevenueIcon,
-  Analytics01Icon as SalesIcon,
-  SaveMoneyEuroIcon as WithdrawalsIcon,
-} from '@hugeicons-pro/core-stroke-rounded'
-
-import {
-  UserGroupIcon as AgentsSolid,
-  CheckmarkBadge03Icon as ApprovalSolid,
-  DashboardSquare01Icon as DashboardSolid,
-  File02Icon as ProjectSolid,
-  ChartUpIcon as RevenueSolid,
-  Analytics01Icon as SalesSolid,
-  SaveMoneyEuroIcon as WithdrawalsSolid,
-} from '@hugeicons-pro/core-solid-rounded'
-
 import { cn } from '../../lib/utils'
 import { Icon } from '../../utils/icon'
+import options from '../app-routes'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { pathname } = useLocation()
-  const options = linkOptions([
-    {
-      to: '/',
-      label: 'Dashboard',
-      icon: DashboardStroke,
-      solidicon: DashboardSolid,
-      activeOptions: { exact: true },
-    },
-    {
-      to: '/projects',
-      label: 'Projects',
-      icon: ProjectStroke,
-      solidicon: ProjectSolid,
-    },
-    {
-      to: '/sales',
-      label: 'Sales',
-      icon: SalesIcon,
-      solidicon: SalesSolid,
-      activeOptions: { exact: true },
-    },
-    {
-      to: '/revenue',
-      label: 'Revenue',
-      icon: RevenueIcon,
-      solidicon: RevenueSolid,
-      activeOptions: { exact: true },
-    },
-    {
-      to: '/agents',
-      label: 'Agents',
-      icon: AgentsIcon,
-      solidicon: AgentsSolid,
-      activeOptions: { exact: true },
-    },
-    {
-      to: '/withdrawals',
-      label: 'Withdrawals',
-      icon: WithdrawalsIcon,
-      solidicon: WithdrawalsSolid,
-      activeOptions: { exact: true },
-    },
-    {
-      to: '/approvals',
-      label: 'Approvals',
-      icon: ApprovalIcon,
-      solidicon: ApprovalSolid,
-      activeOptions: { exact: true },
-    },
-  ])
 
   return (
     <Sidebar {...props}>
@@ -96,7 +27,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <img src={Logo} alt="logo" />
         </Link>
       </SidebarHeader>
-      <SidebarContent className="mt-16">
+      <SidebarContent className="mt-10">
         {options.map((option) => {
           const [isHovered, setIsHovered] = React.useState(false)
           const isActive = pathname === option.to
