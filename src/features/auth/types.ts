@@ -1,3 +1,7 @@
+export enum EScope {
+  LOGIN = 'login',
+  REGISTER = 'register',
+}
 export interface User {
   id: string
   name: string

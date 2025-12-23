@@ -32,6 +32,20 @@ export const useSignup = () => {
   })
 }
 
+export const useVerify = () => {
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
+  return useMutation({
+    mutationFn: authApi.verify,
+    onSuccess: (data) => {
+      apiClient.setToken(data.token)
+      queryClient.setQueryData(['user'], data.user)
+      navigate({ to: '/' })
+    },
+  })
+}
+
 export const useUser = () => {
   return useQuery({
     queryKey: ['user'],

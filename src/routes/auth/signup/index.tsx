@@ -1,129 +1,54 @@
+'use client'
+
+import hms from '@/assets/img/hotel-management-system-login.jpg'
+import { Separator } from '@/components/ui/separator'
 import { createFileRoute } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
-import { useSignup } from '@/features/auth/hooks'
-import { signupSchema, type SignupCredentials } from '@/features/auth/schemas'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import SignupForm from './form'
+import logo from '/logo-icon.svg'
 
 export const Route = createFileRoute('/auth/signup/')({
   component: RouteComponent,
 })
 
-function RouteComponent() {
-  const { mutate: signup, isPending, error } = useSignup()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignupCredentials>({
-    resolver: zodResolver(signupSchema),
-  })
-
-  const onSubmit = (data: SignupCredentials) => {
-    signup(data)
-  }
-
+export default function RouteComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 bg-white p-8 shadow rounded-lg">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link
-              to="/auth/login"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              Sign in
-            </Link>
-          </p>
+    <div className="h-screen flex items-center justify-center">
+      <div className="w-full h-full grid lg:grid-cols-2">
+        <div className="relative w-full sm:max-w-md m-auto flex flex-col items-center p-8 outline-0 sm:outline-2 outline-border/40 dark:outline-border/80 outline-offset-0.5">
+          <div className="max-sm:hidden absolute border-t top-0 inset-x-0 w-[calc(100%+4rem)] -translate-x-8" />
+          <div className="max-sm:hidden absolute border-b bottom-0 inset-x-0 w-[calc(100%+4rem)] -translate-x-8" />
+          <div className="max-sm:hidden absolute border-s left-0 inset-y-0 h-[calc(100%+4rem)] -translate-y-8" />
+          <div className="max-sm:hidden absolute border-e right-0 inset-y-0 h-[calc(100%+4rem)] -translate-y-8" />
+
+          <div className="max-sm:hidden absolute border-t -top-1 inset-x-0 w-[calc(100%+3rem)] -translate-x-6" />
+          <div className="max-sm:hidden absolute border-b -bottom-1 inset-x-0 w-[calc(100%+3rem)] -translate-x-6" />
+          <div className="max-sm:hidden absolute border-s -left-1 inset-y-0 h-[calc(100%+3rem)] -translate-y-6" />
+          <div className="max-sm:hidden absolute border-e -right-1 inset-y-0 h-[calc(100%+3rem)] -translate-y-6" />
+
+          <article>
+            <img
+              src={logo}
+              alt="Logo"
+              className="size-32 flex justify-center w-full"
+            />
+            <p className="sm:text-xl text-lg text-center font-semibold tracking-tight">
+              Signup to Property Management <br /> System
+            </p>
+          </article>
+          <div className="my-7 w-full flex items-center justify-center overflow-hidden">
+            <Separator />
+            <span className="text-sm px-2">-</span>
+            <Separator />
+          </div>
+          <SignupForm />
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                type="text"
-                autoComplete="name"
-                {...register('name')}
-                className={errors.name ? 'border-red-500' : ''}
-              />
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="email">Email address</Label>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                {...register('email')}
-                className={errors.email ? 'border-red-500' : ''}
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                autoComplete="new-password"
-                {...register('password')}
-                className={errors.password ? 'border-red-500' : ''}
-              />
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                autoComplete="new-password"
-                {...register('confirmPassword')}
-                className={errors.confirmPassword ? 'border-red-500' : ''}
-              />
-              {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.confirmPassword.message}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {error && (
-            <div className="text-sm text-red-600 bg-red-50 p-2 rounded">
-              {(error as Error).message || 'Signup failed'}
-            </div>
-          )}
-
-          <div>
-            <Button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              disabled={isPending}
-            >
-              {isPending ? 'Creating account...' : 'Sign up'}
-            </Button>
-          </div>
-        </form>
+        <div className="bg-muted hidden lg:block border-l max-h-screen min-h-screen">
+          <img
+            src={hms}
+            alt="hotel-management-system"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
     </div>
   )

@@ -1,5 +1,9 @@
 import { apiClient } from '../../lib/api-client'
-import type { LoginCredentials, SignupCredentials } from './schemas'
+import type {
+  AuthVerifyCredentials,
+  LoginCredentials,
+  SignupCredentials,
+} from './schemas'
 import type { AuthResponse, User } from './types'
 
 export const authApi = {
@@ -9,6 +13,10 @@ export const authApi = {
 
   signup: (data: SignupCredentials) => {
     return apiClient.post<AuthResponse>('/auth/signup', data)
+  },
+
+  verify: (data: AuthVerifyCredentials) => {
+    return apiClient.post<AuthResponse>('/auth/verify-otp', data)
   },
 
   getUserProfile: () => {

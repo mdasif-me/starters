@@ -9,25 +9,25 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { useSignup } from '@/features/auth/hooks'
+import { signupSchema } from '@/features/auth/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from '@tanstack/react-router'
 import { LoaderCircleIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useLogin } from '../../../features/auth/hooks'
-import { loginSchema } from '../../../features/auth/schemas'
 
-export default function LoginForm() {
-  const { mutate: login, isPending } = useLogin()
+export default function SignupForm() {
+  const { mutate: signup, isPending } = useSignup()
 
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
     defaultValues: { phone_number: '' },
     mode: 'onSubmit',
   })
 
-  function onSubmit(data: z.infer<typeof loginSchema>) {
-    login(data, {
+  function onSubmit(data: z.infer<typeof signupSchema>) {
+    signup(data, {
       onError: (error) => {
         console.log('error', error)
       },
@@ -64,12 +64,12 @@ export default function LoginForm() {
 
         <div className="mt-20 space-y-5">
           <p className="text-sm text-center">
-            Don&apos;t have an account?
+            Already have an account?
             <Link
-              to="/auth/signup"
+              to="/auth/login"
               className="ml-1 underline text-muted-foreground"
             >
-              Create account
+              Login
             </Link>
           </p>
         </div>
@@ -83,7 +83,7 @@ export default function LoginForm() {
             {isPending ? (
               <LoaderCircleIcon className="animate-spin size-4" />
             ) : null}
-            {isPending ? 'Logging in...' : 'Login'}
+            {isPending ? 'Signing up...' : 'Signup'}
           </Button>
         </div>
       </form>
