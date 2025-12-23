@@ -9,81 +9,130 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as WithdrawalsIndexRouteImport } from './routes/withdrawals/index'
-import { Route as SalesIndexRouteImport } from './routes/sales/index'
-import { Route as RevenueIndexRouteImport } from './routes/revenue/index'
-import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
-import { Route as ApprovalsIndexRouteImport } from './routes/approvals/index'
-import { Route as AgentsIndexRouteImport } from './routes/agents/index'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as R403RouteImport } from './routes/403'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthSignupIndexRouteImport } from './routes/auth/signup/index'
+import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as AuthenticatedWithdrawalsIndexRouteImport } from './routes/_authenticated/withdrawals/index'
+import { Route as AuthenticatedSalesIndexRouteImport } from './routes/_authenticated/sales/index'
+import { Route as AuthenticatedRevenueIndexRouteImport } from './routes/_authenticated/revenue/index'
+import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects/index'
+import { Route as AuthenticatedApprovalsIndexRouteImport } from './routes/_authenticated/approvals/index'
+import { Route as AuthenticatedAgentsIndexRouteImport } from './routes/_authenticated/agents/index'
 
-const IndexRoute = IndexRouteImport.update({
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const R403Route = R403RouteImport.update({
+  id: '/403',
+  path: '/403',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const WithdrawalsIndexRoute = WithdrawalsIndexRouteImport.update({
-  id: '/withdrawals/',
-  path: '/withdrawals/',
-  getParentRoute: () => rootRouteImport,
+const AuthSignupIndexRoute = AuthSignupIndexRouteImport.update({
+  id: '/signup/',
+  path: '/signup/',
+  getParentRoute: () => AuthRoute,
 } as any)
-const SalesIndexRoute = SalesIndexRouteImport.update({
+const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthenticatedWithdrawalsIndexRoute =
+  AuthenticatedWithdrawalsIndexRouteImport.update({
+    id: '/withdrawals/',
+    path: '/withdrawals/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSalesIndexRoute = AuthenticatedSalesIndexRouteImport.update({
   id: '/sales/',
   path: '/sales/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const RevenueIndexRoute = RevenueIndexRouteImport.update({
-  id: '/revenue/',
-  path: '/revenue/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProjectsIndexRoute = ProjectsIndexRouteImport.update({
-  id: '/projects/',
-  path: '/projects/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApprovalsIndexRoute = ApprovalsIndexRouteImport.update({
-  id: '/approvals/',
-  path: '/approvals/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AgentsIndexRoute = AgentsIndexRouteImport.update({
-  id: '/agents/',
-  path: '/agents/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedRevenueIndexRoute =
+  AuthenticatedRevenueIndexRouteImport.update({
+    id: '/revenue/',
+    path: '/revenue/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedProjectsIndexRoute =
+  AuthenticatedProjectsIndexRouteImport.update({
+    id: '/projects/',
+    path: '/projects/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedApprovalsIndexRoute =
+  AuthenticatedApprovalsIndexRouteImport.update({
+    id: '/approvals/',
+    path: '/approvals/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAgentsIndexRoute =
+  AuthenticatedAgentsIndexRouteImport.update({
+    id: '/agents/',
+    path: '/agents/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/agents': typeof AgentsIndexRoute
-  '/approvals': typeof ApprovalsIndexRoute
-  '/projects': typeof ProjectsIndexRoute
-  '/revenue': typeof RevenueIndexRoute
-  '/sales': typeof SalesIndexRoute
-  '/withdrawals': typeof WithdrawalsIndexRoute
+  '/403': typeof R403Route
+  '/auth': typeof AuthRouteWithChildren
+  '/': typeof AuthenticatedIndexRoute
+  '/agents': typeof AuthenticatedAgentsIndexRoute
+  '/approvals': typeof AuthenticatedApprovalsIndexRoute
+  '/projects': typeof AuthenticatedProjectsIndexRoute
+  '/revenue': typeof AuthenticatedRevenueIndexRoute
+  '/sales': typeof AuthenticatedSalesIndexRoute
+  '/withdrawals': typeof AuthenticatedWithdrawalsIndexRoute
+  '/auth/login': typeof AuthLoginIndexRoute
+  '/auth/signup': typeof AuthSignupIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/agents': typeof AgentsIndexRoute
-  '/approvals': typeof ApprovalsIndexRoute
-  '/projects': typeof ProjectsIndexRoute
-  '/revenue': typeof RevenueIndexRoute
-  '/sales': typeof SalesIndexRoute
-  '/withdrawals': typeof WithdrawalsIndexRoute
+  '/403': typeof R403Route
+  '/auth': typeof AuthRouteWithChildren
+  '/': typeof AuthenticatedIndexRoute
+  '/agents': typeof AuthenticatedAgentsIndexRoute
+  '/approvals': typeof AuthenticatedApprovalsIndexRoute
+  '/projects': typeof AuthenticatedProjectsIndexRoute
+  '/revenue': typeof AuthenticatedRevenueIndexRoute
+  '/sales': typeof AuthenticatedSalesIndexRoute
+  '/withdrawals': typeof AuthenticatedWithdrawalsIndexRoute
+  '/auth/login': typeof AuthLoginIndexRoute
+  '/auth/signup': typeof AuthSignupIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/agents/': typeof AgentsIndexRoute
-  '/approvals/': typeof ApprovalsIndexRoute
-  '/projects/': typeof ProjectsIndexRoute
-  '/revenue/': typeof RevenueIndexRoute
-  '/sales/': typeof SalesIndexRoute
-  '/withdrawals/': typeof WithdrawalsIndexRoute
+  '/403': typeof R403Route
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/auth': typeof AuthRouteWithChildren
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/agents/': typeof AuthenticatedAgentsIndexRoute
+  '/_authenticated/approvals/': typeof AuthenticatedApprovalsIndexRoute
+  '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
+  '/_authenticated/revenue/': typeof AuthenticatedRevenueIndexRoute
+  '/_authenticated/sales/': typeof AuthenticatedSalesIndexRoute
+  '/_authenticated/withdrawals/': typeof AuthenticatedWithdrawalsIndexRoute
+  '/auth/login/': typeof AuthLoginIndexRoute
+  '/auth/signup/': typeof AuthSignupIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/403'
+    | '/auth'
     | '/'
     | '/agents'
     | '/approvals'
@@ -91,8 +140,12 @@ export interface FileRouteTypes {
     | '/revenue'
     | '/sales'
     | '/withdrawals'
+    | '/auth/login'
+    | '/auth/signup'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/403'
+    | '/auth'
     | '/'
     | '/agents'
     | '/approvals'
@@ -100,89 +153,159 @@ export interface FileRouteTypes {
     | '/revenue'
     | '/sales'
     | '/withdrawals'
+    | '/auth/login'
+    | '/auth/signup'
   id:
     | '__root__'
-    | '/'
-    | '/agents/'
-    | '/approvals/'
-    | '/projects/'
-    | '/revenue/'
-    | '/sales/'
-    | '/withdrawals/'
+    | '/403'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/'
+    | '/_authenticated/agents/'
+    | '/_authenticated/approvals/'
+    | '/_authenticated/projects/'
+    | '/_authenticated/revenue/'
+    | '/_authenticated/sales/'
+    | '/_authenticated/withdrawals/'
+    | '/auth/login/'
+    | '/auth/signup/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AgentsIndexRoute: typeof AgentsIndexRoute
-  ApprovalsIndexRoute: typeof ApprovalsIndexRoute
-  ProjectsIndexRoute: typeof ProjectsIndexRoute
-  RevenueIndexRoute: typeof RevenueIndexRoute
-  SalesIndexRoute: typeof SalesIndexRoute
-  WithdrawalsIndexRoute: typeof WithdrawalsIndexRoute
+  R403Route: typeof R403Route
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  AuthRoute: typeof AuthRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/403': {
+      id: '/403'
+      path: '/403'
+      fullPath: '/403'
+      preLoaderRoute: typeof R403RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/withdrawals/': {
-      id: '/withdrawals/'
+    '/auth/signup/': {
+      id: '/auth/signup/'
+      path: '/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/login/': {
+      id: '/auth/login/'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_authenticated/withdrawals/': {
+      id: '/_authenticated/withdrawals/'
       path: '/withdrawals'
       fullPath: '/withdrawals'
-      preLoaderRoute: typeof WithdrawalsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedWithdrawalsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/sales/': {
-      id: '/sales/'
+    '/_authenticated/sales/': {
+      id: '/_authenticated/sales/'
       path: '/sales'
       fullPath: '/sales'
-      preLoaderRoute: typeof SalesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedSalesIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/revenue/': {
-      id: '/revenue/'
+    '/_authenticated/revenue/': {
+      id: '/_authenticated/revenue/'
       path: '/revenue'
       fullPath: '/revenue'
-      preLoaderRoute: typeof RevenueIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedRevenueIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/projects/': {
-      id: '/projects/'
+    '/_authenticated/projects/': {
+      id: '/_authenticated/projects/'
       path: '/projects'
       fullPath: '/projects'
-      preLoaderRoute: typeof ProjectsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedProjectsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/approvals/': {
-      id: '/approvals/'
+    '/_authenticated/approvals/': {
+      id: '/_authenticated/approvals/'
       path: '/approvals'
       fullPath: '/approvals'
-      preLoaderRoute: typeof ApprovalsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedApprovalsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/agents/': {
-      id: '/agents/'
+    '/_authenticated/agents/': {
+      id: '/_authenticated/agents/'
       path: '/agents'
       fullPath: '/agents'
-      preLoaderRoute: typeof AgentsIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAgentsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedAgentsIndexRoute: typeof AuthenticatedAgentsIndexRoute
+  AuthenticatedApprovalsIndexRoute: typeof AuthenticatedApprovalsIndexRoute
+  AuthenticatedProjectsIndexRoute: typeof AuthenticatedProjectsIndexRoute
+  AuthenticatedRevenueIndexRoute: typeof AuthenticatedRevenueIndexRoute
+  AuthenticatedSalesIndexRoute: typeof AuthenticatedSalesIndexRoute
+  AuthenticatedWithdrawalsIndexRoute: typeof AuthenticatedWithdrawalsIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedAgentsIndexRoute: AuthenticatedAgentsIndexRoute,
+  AuthenticatedApprovalsIndexRoute: AuthenticatedApprovalsIndexRoute,
+  AuthenticatedProjectsIndexRoute: AuthenticatedProjectsIndexRoute,
+  AuthenticatedRevenueIndexRoute: AuthenticatedRevenueIndexRoute,
+  AuthenticatedSalesIndexRoute: AuthenticatedSalesIndexRoute,
+  AuthenticatedWithdrawalsIndexRoute: AuthenticatedWithdrawalsIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
+interface AuthRouteChildren {
+  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
+  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthLoginIndexRoute: AuthLoginIndexRoute,
+  AuthSignupIndexRoute: AuthSignupIndexRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AgentsIndexRoute: AgentsIndexRoute,
-  ApprovalsIndexRoute: ApprovalsIndexRoute,
-  ProjectsIndexRoute: ProjectsIndexRoute,
-  RevenueIndexRoute: RevenueIndexRoute,
-  SalesIndexRoute: SalesIndexRoute,
-  WithdrawalsIndexRoute: WithdrawalsIndexRoute,
+  R403Route: R403Route,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  AuthRoute: AuthRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

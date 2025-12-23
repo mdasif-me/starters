@@ -1,11 +1,11 @@
 import { File01Icon } from '@hugeicons-pro/core-stroke-rounded'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import CardAreaChart from '../components/card-area-chart'
-import { Button } from '../components/ui/button'
-import { Icon } from '../utils/icon'
+import CardAreaChart from '../../components/card-area-chart'
+import { Button } from '../../components/ui/button'
+import { Icon } from '../../utils/icon'
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_authenticated/')({
   component: RouteComponent,
 })
 
