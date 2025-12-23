@@ -15,6 +15,7 @@ import { Route as R403RouteImport } from './routes/403'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthSignupIndexRouteImport } from './routes/auth/signup/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as AuthForgotPasswordIndexRouteImport } from './routes/auth/forgot-password/index'
 import { Route as AuthenticatedWithdrawalsIndexRouteImport } from './routes/_authenticated/withdrawals/index'
 import { Route as AuthenticatedSalesIndexRouteImport } from './routes/_authenticated/sales/index'
 import { Route as AuthenticatedRevenueIndexRouteImport } from './routes/_authenticated/revenue/index'
@@ -49,6 +50,11 @@ const AuthSignupIndexRoute = AuthSignupIndexRouteImport.update({
 const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthForgotPasswordIndexRoute = AuthForgotPasswordIndexRouteImport.update({
+  id: '/forgot-password/',
+  path: '/forgot-password/',
   getParentRoute: () => AuthRoute,
 } as any)
 const AuthenticatedWithdrawalsIndexRoute =
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/revenue': typeof AuthenticatedRevenueIndexRoute
   '/sales': typeof AuthenticatedSalesIndexRoute
   '/withdrawals': typeof AuthenticatedWithdrawalsIndexRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
 }
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/revenue': typeof AuthenticatedRevenueIndexRoute
   '/sales': typeof AuthenticatedSalesIndexRoute
   '/withdrawals': typeof AuthenticatedWithdrawalsIndexRoute
+  '/auth/forgot-password': typeof AuthForgotPasswordIndexRoute
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
 }
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/_authenticated/revenue/': typeof AuthenticatedRevenueIndexRoute
   '/_authenticated/sales/': typeof AuthenticatedSalesIndexRoute
   '/_authenticated/withdrawals/': typeof AuthenticatedWithdrawalsIndexRoute
+  '/auth/forgot-password/': typeof AuthForgotPasswordIndexRoute
   '/auth/login/': typeof AuthLoginIndexRoute
   '/auth/signup/': typeof AuthSignupIndexRoute
 }
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/revenue'
     | '/sales'
     | '/withdrawals'
+    | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
   fileRoutesByTo: FileRoutesByTo
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/revenue'
     | '/sales'
     | '/withdrawals'
+    | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
   id:
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/_authenticated/revenue/'
     | '/_authenticated/sales/'
     | '/_authenticated/withdrawals/'
+    | '/auth/forgot-password/'
     | '/auth/login/'
     | '/auth/signup/'
   fileRoutesById: FileRoutesById
@@ -219,6 +231,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/forgot-password/': {
+      id: '/auth/forgot-password/'
+      path: '/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordIndexRouteImport
       parentRoute: typeof AuthRoute
     }
     '/_authenticated/withdrawals/': {
@@ -291,11 +310,13 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface AuthRouteChildren {
+  AuthForgotPasswordIndexRoute: typeof AuthForgotPasswordIndexRoute
   AuthLoginIndexRoute: typeof AuthLoginIndexRoute
   AuthSignupIndexRoute: typeof AuthSignupIndexRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthForgotPasswordIndexRoute: AuthForgotPasswordIndexRoute,
   AuthLoginIndexRoute: AuthLoginIndexRoute,
   AuthSignupIndexRoute: AuthSignupIndexRoute,
 }

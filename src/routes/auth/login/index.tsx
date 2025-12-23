@@ -1,97 +1,48 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useLogin } from '@/features/auth/hooks'
-import { loginSchema, type LoginCredentials } from '@/features/auth/schemas'
+'use client'
+
+import { createFileRoute } from '@tanstack/react-router'
+import hms from '../../../assets/img/hotel-management-system-login.jpg'
+import LoginForm from './form'
+import logo from '/logo-icon.svg'
 
 export const Route = createFileRoute('/auth/login/')({
   component: RouteComponent,
 })
 
-function RouteComponent() {
-  const { mutate: login, isPending, error } = useLogin()
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginCredentials>({
-    resolver: zodResolver(loginSchema),
-  })
-
-  const onSubmit = (data: LoginCredentials) => {
-    login(data)
-  }
+export default function RouteComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8 bg-white p-8 shadow rounded-lg">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link
-              to="/auth/signup"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              start your 14-day free trial
-            </Link>
-          </p>
+    <div className="h-screen flex items-center justify-center">
+      <div className="w-full h-full grid lg:grid-cols-2">
+        <div className="relative max-w-md m-auto w-full flex flex-col items-center p-8 outline-0 sm:outline-2 outline-border/40 dark:outline-border/80 outline-offset-0.5">
+          <div className="max-sm:hidden absolute border-t top-0 inset-x-0 w-[calc(100%+4rem)] -translate-x-8" />
+          <div className="max-sm:hidden absolute border-b bottom-0 inset-x-0 w-[calc(100%+4rem)] -translate-x-8" />
+          <div className="max-sm:hidden absolute border-s left-0 inset-y-0 h-[calc(100%+4rem)] -translate-y-8" />
+          <div className="max-sm:hidden absolute border-e right-0 inset-y-0 h-[calc(100%+4rem)] -translate-y-8" />
+
+          <div className="max-sm:hidden absolute border-t -top-1 inset-x-0 w-[calc(100%+3rem)] -translate-x-6" />
+          <div className="max-sm:hidden absolute border-b -bottom-1 inset-x-0 w-[calc(100%+3rem)] -translate-x-6" />
+          <div className="max-sm:hidden absolute border-s -left-1 inset-y-0 h-[calc(100%+3rem)] -translate-y-6" />
+          <div className="max-sm:hidden absolute border-e -right-1 inset-y-0 h-[calc(100%+3rem)] -translate-y-6" />
+
+          <article className="mb-10">
+            <img
+              src={logo}
+              alt="Logo"
+              className="size-32 flex justify-center w-full"
+            />
+            <p className="text-xl text-center font-semibold tracking-tight">
+              Log in to Property Management <br /> System
+            </p>
+          </article>
+          <LoginForm />
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="email">Email address</Label>
-              <Input
-                id="email"
-                type="email"
-                autoComplete="email"
-                {...register('email')}
-                className={errors.email ? 'border-red-500' : ''}
-              />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                autoComplete="current-password"
-                {...register('password')}
-                className={errors.password ? 'border-red-500' : ''}
-              />
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {error && (
-            <div className="text-sm text-red-600 bg-red-50 p-2 rounded">
-              {(error as Error).message || 'Invalid credentials'}
-            </div>
-          )}
-
-          <div>
-            <Button
-              type="submit"
-              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              disabled={isPending}
-            >
-              {isPending ? 'Signing in...' : 'Sign in'}
-            </Button>
-          </div>
-        </form>
+        <div className="bg-muted hidden lg:block border-l max-h-screen min-h-screen">
+          <img
+            src={hms}
+            alt="hotel-management-system"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
     </div>
   )
