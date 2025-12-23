@@ -38,7 +38,7 @@ export const authVerifySchema = z.object({
     .refine(isValidPhoneNumber, {
       message: 'Please enter a valid phone number.',
     })
-    .nonempty('Phone number is required'),
+    .optional(),
   scope: z
     .enum([EScope.LOGIN, EScope.REGISTER])
     .default(EScope.REGISTER)
