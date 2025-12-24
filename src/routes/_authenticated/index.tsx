@@ -1,9 +1,10 @@
 import { File01Icon } from '@hugeicons-pro/core-stroke-rounded'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import CardAreaChart from '../../components/card-area-chart'
-import { Button } from '../../components/ui/button'
-import { Icon } from '../../utils/icon'
+import CardAreaChart from '@/components/card-area-chart'
+import { Button } from '@/components/ui/button'
+import { Icon } from '@/utils/icon'
+import SalesBarChart from '@/components/sales-bar-chart'
 
 export const Route = createFileRoute('/_authenticated/')({
   component: RouteComponent,
@@ -50,6 +51,10 @@ function RouteComponent() {
             onClick={() => handleCardClick(type)}
           />
         ))}
+      </div>
+
+      <div>
+        <SalesBarChart />
       </div>
     </div>
   )
