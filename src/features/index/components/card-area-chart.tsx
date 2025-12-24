@@ -7,8 +7,8 @@ import {
 } from '@/components/ui/chart'
 import { SaleTag02Icon } from '@hugeicons-pro/core-solid-rounded'
 import { Area, AreaChart, XAxis } from 'recharts'
-import { formatMoney } from '../utils/format-money'
-import { Icon } from '../utils/icon'
+import { formatMoney } from '../../../utils/format-money'
+import { Icon } from '../../../utils/icon'
 
 // Digital Marketing Impressions data for different periods (in thousands)
 const impressionsData = {

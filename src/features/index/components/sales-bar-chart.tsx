@@ -19,8 +19,8 @@ import {
 } from '@hugeicons-pro/core-stroke-rounded'
 import * as React from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
-import { Icon } from '../utils/icon'
-import { Button } from './ui/button'
+import { Button } from '../../../components/ui/button'
+import { Icon } from '../../../utils/icon'
 
 export const description = 'An interactive bar chart'
 
@@ -132,7 +132,7 @@ export default function SalesBarChart() {
           {['sales'].map((key) => {
             const chart = key as keyof typeof chartConfig
             return (
-              <>
+              <div key={chart} className="flex flex-wrap">
                 <div className="flex items-center gap-2 px-4">
                   <Button
                     size={'lg'}
@@ -162,7 +162,6 @@ export default function SalesBarChart() {
                   </Button>
                 </div>
                 <button
-                  key={chart}
                   data-active={activeChart === chart}
                   className="data-[active=true]:bg-muted/50 relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6"
                   onClick={() => setActiveChart(chart)}
@@ -174,7 +173,7 @@ export default function SalesBarChart() {
                     {total[key as keyof typeof total].toLocaleString()}
                   </span>
                 </button>
-              </>
+              </div>
             )
           })}
         </div>

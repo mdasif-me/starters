@@ -1,10 +1,11 @@
+import { Button } from '@/components/ui/button'
+import CardAreaChart from '@/features/index/components/card-area-chart'
+import PendingSalesTable from '@/features/index/components/pending-sales.table'
+import SalesBarChart from '@/features/index/components/sales-bar-chart'
+import { Icon } from '@/utils/icon'
 import { File01Icon } from '@hugeicons-pro/core-stroke-rounded'
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import CardAreaChart from '@/components/card-area-chart'
-import { Button } from '@/components/ui/button'
-import { Icon } from '@/utils/icon'
-import SalesBarChart from '@/components/sales-bar-chart'
 
 export const Route = createFileRoute('/_authenticated/')({
   component: RouteComponent,
@@ -53,8 +54,9 @@ function RouteComponent() {
         ))}
       </div>
 
-      <div>
+      <div className="space-y-10 mt-5">
         <SalesBarChart />
+        <PendingSalesTable />
       </div>
     </div>
   )
