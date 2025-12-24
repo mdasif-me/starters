@@ -6,12 +6,12 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import StoreDevtools from '../lib/demo-store-devtools'
 
 import { AnchoredToastProvider, ToastProvider } from '@/components/ui/toast'
-import type { Role } from '@/features/auth/types'
+import type { IRole } from '@/features/auth/types'
 import type { QueryClient } from '@tanstack/react-query'
 
 interface AuthHelpers {
-  getUser: () => import('@/features/auth/types').User | null
-  hasRole: (roles: Role[]) => boolean
+  getUser: () => import('@/features/auth/types').IUser | null
+  hasRole: (roles: IRole[]) => boolean
   hasPermission: (permission: string) => boolean
 }
 

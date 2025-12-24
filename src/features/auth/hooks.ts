@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { apiClient } from '../../lib/api-client'
 import { authApi } from './api'
-import type { User } from './types'
+import type { IUser } from './types'
 
 export const useLogin = () => {
   const queryClient = useQueryClient()
@@ -11,8 +11,8 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      apiClient.setToken(data.token)
-      queryClient.setQueryData(['user'], data.user)
+      apiClient.setToken(data.access_token)
+      queryClient.setQueryData(['user'], data.access_token)
       navigate({ to: '/auth/verify' })
     },
   })
@@ -25,8 +25,8 @@ export const useSignup = () => {
   return useMutation({
     mutationFn: authApi.signup,
     onSuccess: (data) => {
-      apiClient.setToken(data.token)
-      queryClient.setQueryData(['user'], data.user)
+      apiClient.setToken(data.access_token)
+      queryClient.setQueryData(['user'], data.access_token)
       navigate({ to: '/auth/verify' })
     },
   })
@@ -39,8 +39,8 @@ export const useVerify = () => {
   return useMutation({
     mutationFn: authApi.verify,
     onSuccess: (data) => {
-      apiClient.setToken(data.token)
-      queryClient.setQueryData(['user'], data.user)
+      apiClient.setToken(data.access_token)
+      queryClient.setQueryData(['user'], data.access_token)
       navigate({ to: '/' })
     },
   })
@@ -78,7 +78,7 @@ export const usePermission = () => {
   const { data: user } = useUser()
 
   return {
-    hasRole: (roles: User['role'][]) => {
+    hasRole: (roles: IUser['role'][]) => {
       if (!user) return false
       return roles.includes(user.role)
     },

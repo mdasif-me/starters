@@ -9,16 +9,24 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { useLogin } from '@/features/auth/hooks'
+import { loginSchema, type LoginCredentials } from '@/features/auth/schemas'
+import { useCookieStorage } from '@/hooks/use-cookie-storage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from '@tanstack/react-router'
 import { LoaderCircleIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useLogin } from '@/features/auth/hooks'
-import { loginSchema } from '@/features/auth/schemas'
+import { toastManager } from '../../../components/ui/toast'
+import { EScope } from '../types'
 
 export default function LoginForm() {
   const { mutate: login, isPending } = useLogin()
+  const [, setAuthInfo] = useCookieStorage<LoginCredentials>(
+    'auth_verification',
+    { phone_number: '', scope: EScope.LOGIN },
+    { path: '/' },
+  )
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -27,9 +35,27 @@ export default function LoginForm() {
   })
 
   function onSubmit(data: z.infer<typeof loginSchema>) {
+    //* NOTE: we are storing phone number and scope in cookie to use it in verify form
+    const req_data: LoginCredentials = {
+      phone_number: data.phone_number,
+      scope: EScope.LOGIN,
+    }
+    setAuthInfo(req_data)
+
     login(data, {
+      onSuccess: (data) => {
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
+      },
       onError: (error) => {
-        console.log('error', error)
+        toastManager.add({
+          title: 'Error',
+          description: error.message,
+          type: 'error',
+        })
       },
     })
   }

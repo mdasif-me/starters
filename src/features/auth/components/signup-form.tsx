@@ -22,7 +22,7 @@ import { z } from 'zod'
 
 export default function SignupForm() {
   const [, setAuthInfo] = useCookieStorage<SignupCredentials>(
-    'auth_verification_info',
+    'auth_verification',
     { phone_number: '', scope: EScope.REGISTER },
     { path: '/' },
   )
@@ -36,13 +36,16 @@ export default function SignupForm() {
   })
 
   function onSubmit(data: z.infer<typeof signupSchema>) {
+    //* NOTE: we are storing phone number and scope in cookie to use it in verify form
+    const req_data = {
+      phone_number: data.phone_number,
+      scope: EScope.REGISTER,
+    }
+    setAuthInfo(req_data)
+
+    //* NOTE: navigate process on the api.ts file
     signup(data, {
       onSuccess(data) {
-        console.log('data', data)
-        setAuthInfo({
-          phone_number: data.user.phone_number,
-          scope: EScope.REGISTER,
-        })
         toastManager.add({
           title: 'Success',
           description: data.message,
@@ -50,7 +53,6 @@ export default function SignupForm() {
         })
       },
       onError: (error) => {
-        console.log('error', error)
         toastManager.add({
           title: 'Error',
           description: error.message,

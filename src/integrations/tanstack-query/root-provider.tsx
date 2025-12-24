@@ -1,5 +1,5 @@
+import type { IRole, IUser } from '@/features/auth/types'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import type { Role, User } from '@/features/auth/types'
 
 export function getContext() {
   const queryClient = new QueryClient()
@@ -9,11 +9,11 @@ export function getContext() {
 }
 
 export function getAuthHelpers(queryClient: QueryClient) {
-  const getUser = (): User | null => {
-    return queryClient.getQueryData<User>(['user']) ?? null
+  const getUser = (): IUser | null => {
+    return queryClient.getQueryData<IUser>(['user']) ?? null
   }
 
-  const hasRole = (roles: Role[]): boolean => {
+  const hasRole = (roles: IRole[]): boolean => {
     const user = getUser()
     if (!user) return false
     return roles.includes(user.role)

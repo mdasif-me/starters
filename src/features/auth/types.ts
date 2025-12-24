@@ -3,19 +3,23 @@ export enum EScope {
   REGISTER = 'register',
   VERIFY = 'verify',
 }
-export interface User {
+export enum ERole {
+  ADMIN = 'admin',
+  USER = 'user',
+  MANAGER = 'manager',
+}
+
+export interface IUser {
   id: string
   name: string
   phone_number: string
-  role: 'admin' | 'user' | 'manager'
+  role: ERole
   permissions?: string[]
   avatar?: string
 }
 
-export interface AuthResponse {
-  user: User
-  token: string
-  message?: string
+export interface IAuthResponse {
+  status_code: number
+  message: string
+  access_token: string
 }
-
-export type Role = User['role']
