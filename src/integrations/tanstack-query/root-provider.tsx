@@ -1,8 +1,21 @@
-import type { IRole, IUser } from '@/features/auth/types'
+import type { ERole, IUser } from '@/features/auth/types'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+import { getCookie } from '@/hooks/use-cookie-storage'
+
 export function getContext() {
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 60 * 5, // 5 minutes
+      },
+    },
+  })
+  const user = getCookie<IUser>('user')
+  if (user) {
+    queryClient.setQueryData(['user'], user)
+  }
+
   return {
     queryClient,
   }
@@ -13,16 +26,15 @@ export function getAuthHelpers(queryClient: QueryClient) {
     return queryClient.getQueryData<IUser>(['user']) ?? null
   }
 
-  const hasRole = (roles: IRole[]): boolean => {
+  const hasRole = (roles: ERole[]): boolean => {
     const user = getUser()
     if (!user) return false
     return roles.includes(user.role)
   }
 
-  const hasPermission = (permission: string): boolean => {
-    const user = getUser()
-    if (!user || !user.permissions) return false
-    return user.permissions.includes(permission)
+  const hasPermission = (_permission: string): boolean => {
+    //TODO: implement permission check
+    return false
   }
 
   return {
