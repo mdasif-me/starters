@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { cn } from '@/lib/utils'
-import { Avatar } from '@base-ui-components/react/avatar'
+import { Avatar } from '@base-ui/react/avatar'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 const avatarStatusVariants = cva(
