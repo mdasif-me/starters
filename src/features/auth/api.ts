@@ -4,7 +4,7 @@ import type {
   LoginCredentials,
   SignupCredentials,
 } from './schemas'
-import type { IAuthResponse, IUser } from './types'
+import type { IAuthResponse, IUserResponse } from './types'
 
 export const authApi = {
   login: (data: LoginCredentials) => {
@@ -24,7 +24,7 @@ export const authApi = {
   },
 
   getUserProfile: () => {
-    return apiClient.get<IUser>('/u/me')
+    return apiClient.get<IUserResponse>('/u/me')
   },
 
   logout: () => {

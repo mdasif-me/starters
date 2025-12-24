@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { toastManager } from '../../components/ui/toast'
+import { useCookieStorage } from '../../hooks/use-cookie-storage'
 import { apiClient } from '../../lib/api-client'
 import { authApi } from './api'
 import type { IUser } from './types'
@@ -33,15 +35,31 @@ export const useSignup = () => {
 }
 
 export const useVerify = () => {
+  const [, setUser] = useCookieStorage<IUser | null>('user', null, {
+    path: '/',
+  })
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
   return useMutation({
     mutationFn: authApi.verify,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       apiClient.setToken(data.access_token)
-      queryClient.setQueryData(['user'], data.access_token)
-      navigate({ to: '/' })
+
+      try {
+        const userResponse = await authApi.getUserProfile()
+        const user = userResponse.edge.data
+        setUser(user)
+        queryClient.setQueryData(['user'], user)
+        navigate({ to: '/' })
+      } catch (error) {
+        toastManager.add({
+          title: 'Error',
+          description: error as string,
+          type: 'error',
+        })
+        navigate({ to: '/' })
+      }
     },
   })
 }
@@ -56,6 +74,7 @@ export const useUser = () => {
   return useQuery({
     queryKey: ['user'],
     queryFn: authApi.getUserProfile,
+    select: (data) => data.edge.data,
     retry: false,
     staleTime: 1000 * 60 * 5,
   })
@@ -82,9 +101,9 @@ export const usePermission = () => {
       if (!user) return false
       return roles.includes(user.role)
     },
-    hasPermission: (permission: string) => {
-      if (!user || !user.permissions) return false
-      return user.permissions.includes(permission)
+    // permissions field is removed from IUser, so we default to false or remove this
+    hasPermission: (_permission: string) => {
+      return false
     },
     user,
   }

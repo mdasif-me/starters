@@ -7,15 +7,33 @@ export enum ERole {
   ADMIN = 'admin',
   USER = 'user',
   MANAGER = 'manager',
+  COMPANY = 'company',
 }
 
 export interface IUser {
   id: string
-  name: string
-  phone_number: string
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
   role: ERole
-  permissions?: string[]
-  avatar?: string
+  full_name: string | null
+  profile_picture: string | null
+  phone_number: string
+  email_address: string | null
+  otp: string | null
+  is_company: boolean
+  is_verified: boolean
+  company_info: any | null
+  employee_info: any | null
+}
+
+export interface IUserResponse {
+  status_code: number
+  message: string
+  edge: {
+    node: string
+    data: IUser
+  }
 }
 
 export interface IAuthResponse {
