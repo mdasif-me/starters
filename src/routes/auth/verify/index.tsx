@@ -3,7 +3,7 @@
 import hms from '@/assets/img/hotel-management-system-login.jpg'
 import { Separator } from '@/components/ui/separator'
 import { createFileRoute } from '@tanstack/react-router'
-import SignupForm from './form'
+import VerifyForm from '@/features/auth/components/verify-form'
 import logo from '/logo-icon.svg'
 
 export const Route = createFileRoute('/auth/verify/')({
@@ -40,7 +40,7 @@ export default function RouteComponent() {
             <span className="text-sm px-2">-</span>
             <Separator />
           </div>
-          <SignupForm />
+          <VerifyForm />
         </div>
         <div className="bg-muted hidden lg:block border-l max-h-screen min-h-screen">
           <img

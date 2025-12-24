@@ -3,7 +3,7 @@
 import hms from '@/assets/img/hotel-management-system-login.jpg'
 import { Separator } from '@/components/ui/separator'
 import { createFileRoute } from '@tanstack/react-router'
-import SignupForm from './form'
+import SignupForm from '@/features/auth/components/signup-form'
 import logo from '/logo-icon.svg'
 
 export const Route = createFileRoute('/auth/signup/')({

@@ -13,7 +13,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       apiClient.setToken(data.token)
       queryClient.setQueryData(['user'], data.user)
-      navigate({ to: '/' })
+      navigate({ to: '/auth/verify' })
     },
   })
 }
@@ -27,7 +27,7 @@ export const useSignup = () => {
     onSuccess: (data) => {
       apiClient.setToken(data.token)
       queryClient.setQueryData(['user'], data.user)
-      navigate({ to: '/' })
+      navigate({ to: '/auth/verify' })
     },
   })
 }
@@ -43,6 +43,12 @@ export const useVerify = () => {
       queryClient.setQueryData(['user'], data.user)
       navigate({ to: '/' })
     },
+  })
+}
+
+export const useResend = () => {
+  return useMutation({
+    mutationFn: authApi.resend,
   })
 }
 

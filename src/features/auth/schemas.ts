@@ -25,7 +25,7 @@ export const signupSchema = z.object({
     })
     .nonempty('Phone number is required'),
   scope: z
-    .enum([EScope.LOGIN, EScope.REGISTER])
+    .enum([EScope.LOGIN, EScope.REGISTER, EScope.VERIFY])
     .default(EScope.REGISTER)
     .optional(),
 })
@@ -40,8 +40,8 @@ export const authVerifySchema = z.object({
     })
     .optional(),
   scope: z
-    .enum([EScope.LOGIN, EScope.REGISTER])
-    .default(EScope.REGISTER)
+    .enum([EScope.LOGIN, EScope.REGISTER, EScope.VERIFY])
+    .default(EScope.VERIFY)
     .optional(),
   otp: z.string().nonempty('OTP is required'),
 })

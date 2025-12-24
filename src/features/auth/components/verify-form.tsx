@@ -1,40 +1,105 @@
 import { CreativeOTPInput } from '@/components/ui/creative-otp-input'
 import { Form } from '@/components/ui/form'
-import { useVerify } from '@/features/auth/hooks'
-import { authVerifySchema } from '@/features/auth/schemas'
+import { useResend, useVerify } from '@/features/auth/hooks'
+import {
+  authVerifySchema,
+  type AuthVerifyCredentials,
+} from '@/features/auth/schemas'
+import { useCookieStorage } from '@/hooks/use-cookie-storage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { toastManager } from '@/components/ui/toast'
+import { EScope } from '../types'
 
 export default function VerifyForm() {
+  const [authInfo, setAuthInfo] = useCookieStorage<AuthVerifyCredentials>(
+    'auth_verification_info',
+    { phone_number: '', otp: '', scope: EScope.REGISTER },
+    { path: '/' },
+  )
+  const { mutate: verify } = useVerify()
+  const { mutate: resend, isPending: isResending } = useResend()
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
-
-  const handleComplete = (otp: string) => {
-    console.log('Completed OTP:', otp)
-    if (otp === '123456') {
-      setStatus('success')
-    } else {
-      setStatus('error')
-    }
-  }
-
-  const { mutate: verify, isPending } = useVerify()
 
   const form = useForm<z.infer<typeof authVerifySchema>>({
     resolver: zodResolver(authVerifySchema),
-    defaultValues: { otp: '' },
+    defaultValues: {
+      otp: authInfo.otp,
+      phone_number: authInfo.phone_number,
+      scope: authInfo.scope || EScope.REGISTER,
+    },
     mode: 'onSubmit',
   })
 
+  useEffect(() => {
+    if (authInfo.phone_number) {
+      form.reset({
+        otp: authInfo.otp || '',
+        phone_number: authInfo.phone_number,
+        scope: authInfo.scope || EScope.REGISTER,
+      })
+    }
+  }, [authInfo, form])
+
   function onSubmit(data: z.infer<typeof authVerifySchema>) {
     verify(data, {
+      onSuccess: (data) => {
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
+        setStatus('success')
+      },
       onError: (error) => {
-        console.log('error', error)
+        toastManager.add({
+          title: 'Error',
+          description: error.message,
+          type: 'error',
+        })
+        setStatus('error')
       },
     })
   }
+
+  const handleResend = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!authInfo.phone_number) {
+      toastManager.add({
+        title: 'Error',
+        description:
+          'Phone number not found. Please try to login/signup again.',
+        type: 'error',
+      })
+      return
+    }
+
+    resend(
+      { phone_number: authInfo.phone_number, scope: authInfo.scope },
+      {
+        onSuccess: (data) => {
+          toastManager.add({
+            title: 'Success',
+            description:
+              data.message || 'Verification code resent successfully.',
+            type: 'success',
+          })
+          setStatus('idle')
+        },
+        onError: (error) => {
+          toastManager.add({
+            title: 'Error',
+            description: error.message,
+            type: 'error',
+          })
+        },
+      },
+    )
+  }
+
   return (
     <Form {...form}>
       <form
@@ -51,7 +116,7 @@ export default function VerifyForm() {
               Enter Verification Code
             </motion.h3>
             <p className="text-sm text-muted-foreground dark:text-muted-foreground/80">
-              We&apos;ve sent a code to your email
+              We&apos;ve sent a code to your number
             </p>
           </div>
 
@@ -60,7 +125,11 @@ export default function VerifyForm() {
               length={6}
               variant="default"
               status={status}
-              onComplete={handleComplete}
+              onComplete={(otp) => {
+                setAuthInfo({ ...authInfo, otp })
+                form.setValue('otp', otp)
+                form.handleSubmit(onSubmit)()
+              }}
             />
             <AnimatePresence>
               {status === 'error' && (
@@ -94,12 +163,13 @@ export default function VerifyForm() {
           >
             Didn&apos;t receive the code?{' '}
             <motion.button
-              className="text-primary hover:underline dark:text-primary/90"
-              onClick={() => setStatus('idle')}
+              className="text-primary hover:underline dark:text-primary/90 disabled:opacity-50"
+              onClick={handleResend}
+              disabled={isResending}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Resend
+              {isResending ? 'Sending...' : 'Resend'}
             </motion.button>
           </motion.p>
         </div>
