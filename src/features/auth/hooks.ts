@@ -98,26 +98,16 @@ export const useVerify = () => {
      */
     onSuccess: async (data) => {
       apiClient.setToken(data.access_token)
-
-      try {
-        const userResponse = await authApi.getUserProfile()
-        const user = userResponse.edge.data
-        setUser(user)
-        queryClient.setQueryData(['user'], user)
-        toastManager.add({
-          title: 'Success',
-          description: data.message,
-          type: 'success',
-        })
-        navigate({ to: '/' })
-      } catch (error) {
-        toastManager.add({
-          title: 'Error',
-          description: error as string,
-          type: 'error',
-        })
-        navigate({ to: '/' })
-      }
+      const userResponse = await authApi.getUserProfile()
+      const user = userResponse.edge.data
+      setUser(user)
+      queryClient.setQueryData(['user'], user)
+      toastManager.add({
+        title: 'Success',
+        description: data.message,
+        type: 'success',
+      })
+      navigate({ to: '/' })
     },
     onError: (error) => {
       toastManager.add({
