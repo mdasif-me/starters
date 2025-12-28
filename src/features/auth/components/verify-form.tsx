@@ -51,6 +51,12 @@ export default function VerifyForm() {
     })
   }
 
+  /**
+   * Handle resend OTP button click.
+   * If the phone number is not found, it will show an error toast.
+   * If the phone number is found, it will call the resend endpoint with the phone number and scope.
+   * If the resend is successful, it will set the status to 'idle'.
+   */
   const handleResend = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!authInfo.phone_number) {
@@ -61,28 +67,12 @@ export default function VerifyForm() {
       })
       return
     }
-
-    resend(
-      { phone_number: authInfo.phone_number, scope: authInfo.scope },
-      {
-        onSuccess: (data) => {
-          toastManager.add({
-            title: 'Success',
-            description:
-              data.message || 'Verification code resent successfully.',
-            type: 'success',
-          })
-          setStatus('idle')
-        },
-        onError: (error) => {
-          toastManager.add({
-            title: 'Error',
-            description: error.message,
-            type: 'error',
-          })
-        },
+    const data = { phone_number: authInfo.phone_number, scope: authInfo.scope }
+    resend(data, {
+      onSuccess: () => {
+        setStatus('idle')
       },
-    )
+    })
   }
 
   return (
