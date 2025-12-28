@@ -7,23 +7,47 @@ import type {
 import type { IAuthResponse, IUserResponse } from './types'
 
 export const authApi = {
-  login: (data: LoginCredentials) => {
+  /**
+   * Login with phone number.
+   * @param {LoginCredentials} data - Phone number and scope.
+   * @returns {Promise<IAuthResponse>} - Promise with auth response.
+   */
+  login: (data: LoginCredentials): Promise<IAuthResponse> => {
     return apiClient.post<IAuthResponse>('/a/otp/send', data)
   },
 
-  signup: (data: SignupCredentials) => {
+  /**
+   * Signup with phone number and scope.
+   * @param {SignupCredentials} data - Phone number and scope.
+   * @returns {Promise<IAuthResponse>} - Promise with auth response.
+   */
+  signup: (data: SignupCredentials): Promise<IAuthResponse> => {
     return apiClient.post<IAuthResponse>('/a/otp/send', data)
   },
 
-  resend: (data: SignupCredentials) => {
+  /**
+   * Resend a verification OTP.
+   * @param {SignupCredentials} data - Phone number and scope.
+   * @returns {Promise<IAuthResponse>} - Promise with auth response.
+   */
+  resend: (data: SignupCredentials): Promise<IAuthResponse> => {
     return apiClient.post<IAuthResponse>('/a/otp/send', data)
   },
 
-  verify: (data: AuthVerifyCredentials) => {
+  /**
+   * Verify a user with phone number and OTP.
+   * @param {AuthVerifyCredentials} data - Phone number and OTP.
+   * @returns {Promise<IAuthResponse>} - Promise with auth response.
+   */
+  verify: (data: AuthVerifyCredentials): Promise<IAuthResponse> => {
     return apiClient.post<IAuthResponse>('/a/otp/verify', data)
   },
 
-  getUserProfile: () => {
+  /**
+   * Get the user profile.
+   * @returns {Promise<IUserResponse>} - Promise with user response.
+   */
+  getUserProfile: (): Promise<IUserResponse> => {
     return apiClient.get<IUserResponse>('/u/me')
   },
 

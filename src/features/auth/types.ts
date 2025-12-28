@@ -12,9 +12,6 @@ export enum ERole {
 
 export interface IUser {
   id: string
-  created_at: string
-  updated_at: string
-  deleted_at: string | null
   role: ERole
   full_name: string | null
   profile_picture: string | null
@@ -25,6 +22,9 @@ export interface IUser {
   is_verified: boolean
   company_info: any | null
   employee_info: any | null
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
 }
 
 export interface IUserResponse {
