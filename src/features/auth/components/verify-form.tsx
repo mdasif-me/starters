@@ -35,6 +35,11 @@ export default function VerifyForm() {
     mode: 'onSubmit',
   })
 
+  /**
+   * Verify a user with phone number and OTP.
+   * If the verification is successful, it will set the status to 'success'.
+   * If the verification fails, it will set the status to 'error'.
+   */
   function onSubmit(data: z.infer<typeof authVerifySchema>) {
     verify(data, {
       onSuccess: () => {
