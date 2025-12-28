@@ -33,11 +33,6 @@ export default function LoginForm() {
     mode: 'onSubmit',
   })
 
-  /**
-   * onSubmit function is used to handle form submission
-   * it stores phone number and scope in cookie to use it in verify form
-   * and calls login function with the form data
-   */
   function onSubmit(data: z.infer<typeof loginSchema>) {
     //* NOTE: we are storing phone number and scope in cookie to use it in verify form
     const req_data: LoginCredentials = {
