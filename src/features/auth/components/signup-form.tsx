@@ -9,7 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { toastManager } from '@/components/ui/toast'
 import { useSignup } from '@/features/auth/hooks'
 import { signupSchema, type SignupCredentials } from '@/features/auth/schemas'
 import { EScope } from '@/features/auth/types'
@@ -42,24 +41,7 @@ export default function SignupForm() {
       scope: EScope.REGISTER,
     }
     setAuthInfo(req_data)
-
-    //* NOTE: navigate process on the api.ts file
-    signup(data, {
-      onSuccess(data) {
-        toastManager.add({
-          title: 'Success',
-          description: data.message,
-          type: 'success',
-        })
-      },
-      onError: (error) => {
-        toastManager.add({
-          title: 'Error',
-          description: error.message,
-          type: 'error',
-        })
-      },
-    })
+    signup(data)
   }
   return (
     <Form {...form}>

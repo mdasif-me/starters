@@ -17,7 +17,6 @@ import { Link } from '@tanstack/react-router'
 import { LoaderCircleIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { toastManager } from '../../../components/ui/toast'
 import { EScope } from '../types'
 
 export default function LoginForm() {
@@ -41,23 +40,7 @@ export default function LoginForm() {
       scope: EScope.LOGIN,
     }
     setAuthInfo(req_data)
-
-    login(data, {
-      onSuccess: (data) => {
-        toastManager.add({
-          title: 'Success',
-          description: data.message,
-          type: 'success',
-        })
-      },
-      onError: (error) => {
-        toastManager.add({
-          title: 'Error',
-          description: error.message,
-          type: 'error',
-        })
-      },
-    })
+    login(data)
   }
   return (
     <Form {...form}>

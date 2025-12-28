@@ -3,15 +3,14 @@ import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
-import StoreDevtools from '../lib/demo-store-devtools'
 
 import { AnchoredToastProvider, ToastProvider } from '@/components/ui/toast'
-import type { IRole } from '@/features/auth/types'
 import type { QueryClient } from '@tanstack/react-query'
+import type { ERole } from '@/features/auth/types'
 
 interface AuthHelpers {
   getUser: () => import('@/features/auth/types').IUser | null
-  hasRole: (roles: IRole[]) => boolean
+  hasRole: (roles: ERole[]) => boolean
   hasPermission: (permission: string) => boolean
 }
 
@@ -38,7 +37,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
               name: 'Tanstack Router',
               render: <TanStackRouterDevtoolsPanel />,
             },
-            StoreDevtools,
             TanStackQueryDevtools,
           ]}
         />

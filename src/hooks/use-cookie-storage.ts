@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from 'react'
 
 interface CookieOptions {
   days?: number
@@ -7,15 +7,15 @@ interface CookieOptions {
   path?: string
   domain?: string
   secure?: boolean
-  sameSite?: "strict" | "lax" | "none"
+  sameSite?: 'strict' | 'lax' | 'none'
 }
 
 function setCookie<T>(
   name: string,
   value: T,
-  options: CookieOptions = {}
+  options: CookieOptions = {},
 ): void {
-  if (typeof document === "undefined") return
+  if (typeof document === 'undefined') return
 
   try {
     const serializedValue = JSON.stringify(value)
@@ -34,30 +34,30 @@ function setCookie<T>(
       cookieString += `; max-age=${options.maxAge}`
     }
 
-    cookieString += `; path=${options.path || "/"}`
+    cookieString += `; path=${options.path || '/'}`
 
     if (options.domain) cookieString += `; domain=${options.domain}`
-    if (options.secure) cookieString += "; secure"
+    if (options.secure) cookieString += '; secure'
     if (options.sameSite) cookieString += `; samesite=${options.sameSite}`
 
     document.cookie = cookieString
   } catch (error) {
-    console.error("Error setting cookie:", error)
+    console.error('Error setting cookie:', error)
   }
 }
 
-function getCookie<T>(name: string): T | null {
-  if (typeof document === "undefined") return null
+export function getCookie<T>(name: string): T | null {
+  if (typeof document === 'undefined') return null
 
-  const cookies = document.cookie.split("; ")
+  const cookies = document.cookie.split('; ')
   for (const cookie of cookies) {
-    const [cookieName, ...rest] = cookie.split("=")
+    const [cookieName, ...rest] = cookie.split('=')
     if (cookieName === name) {
       try {
-        const decodedValue = decodeURIComponent(rest.join("="))
+        const decodedValue = decodeURIComponent(rest.join('='))
         return JSON.parse(decodedValue) as T
       } catch (error) {
-        console.error("Error parsing cookie:", error)
+        console.error('Error parsing cookie:', error)
         return null
       }
     }
@@ -68,20 +68,20 @@ function getCookie<T>(name: string): T | null {
 export function useCookieStorage<T>(
   key: string,
   initialValue: T | (() => T),
-  options: CookieOptions = {}
+  options: CookieOptions = {},
 ): [
   T,
   (value: T | ((prev: T) => T), options?: CookieOptions) => void,
   () => void,
 ] {
   const initialValueRef = React.useRef<T>(
-    typeof initialValue === "function"
+    typeof initialValue === 'function'
       ? (initialValue as () => T)()
-      : initialValue
+      : initialValue,
   )
 
   const [storedValue, setStoredValue] = React.useState<T>(() => {
-    if (typeof document === "undefined") return initialValueRef.current
+    if (typeof document === 'undefined') return initialValueRef.current
     const cookieValue = getCookie<T>(key)
     return cookieValue !== null ? cookieValue : initialValueRef.current
   })
@@ -90,17 +90,17 @@ export function useCookieStorage<T>(
     (value: T | ((prev: T) => T), overrideOptions?: CookieOptions) => {
       const mergedOptions = { ...options, ...overrideOptions }
       const newValue =
-        typeof value === "function"
+        typeof value === 'function'
           ? (value as (prev: T) => T)(storedValue)
           : value
       setCookie(key, newValue, mergedOptions)
       setStoredValue(newValue)
     },
-    [key, options, storedValue]
+    [key, options, storedValue],
   )
 
   const removeCookie = React.useCallback(() => {
-    setCookie(key, "", { ...options, expires: new Date(0) })
+    setCookie(key, '', { ...options, expires: new Date(0) })
     setStoredValue(initialValueRef.current)
   }, [key, options])
 
