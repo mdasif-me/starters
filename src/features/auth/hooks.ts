@@ -89,6 +89,13 @@ export const useVerify = () => {
 
   return useMutation({
     mutationFn: authApi.verify,
+    /**
+     * Called when the mutation is successful.
+     * Sets the token to the api client, updates the user data in the query client and
+     * cookie storage, shows a success toast and navigates the user to the root route.
+     * If an error occurs while getting the user profile, it shows an error toast and navigates
+     * the user to the root route.
+     */
     onSuccess: async (data) => {
       apiClient.setToken(data.access_token)
 
