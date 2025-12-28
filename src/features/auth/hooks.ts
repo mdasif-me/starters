@@ -158,6 +158,18 @@ export const useLogout = () => {
   })
 }
 
+/**
+ * A hook to check if a user has a certain role or permission.
+ * It takes advantage of the useUser hook to fetch the user data and then
+ * checks if the user has the specified role or permission.
+ * If the user is not logged in, it will return false for both checks.
+ * If the user is logged in, it will return true if the user has the specified role or permission,
+ * and false otherwise.
+ * @returns An object with two functions: hasRole and hasPermission.
+ * hasRole takes an array of roles and returns true if the user has any of those roles.
+ * hasPermission takes a string permission and returns true if the user has that permission.
+ * The user field contains the user data if the user is logged in, otherwise it is null.
+ */
 export const usePermission = () => {
   const { data: user } = useUser()
 
