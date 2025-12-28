@@ -34,6 +34,13 @@ export default function LoginForm() {
     mode: 'onSubmit',
   })
 
+  /**
+   * onSubmit function is used to handle the form submission.
+   * It stores phone number and scope in cookie to use it in verify form.
+   * It calls the login function with the given data and handles the response.
+   * If the response is successful, it shows a success toast.
+   * If the response is an error, it shows an error toast.
+   */
   function onSubmit(data: z.infer<typeof loginSchema>) {
     //* NOTE: we are storing phone number and scope in cookie to use it in verify form
     const req_data: LoginCredentials = {
