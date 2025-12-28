@@ -122,6 +122,13 @@ export const useVerify = () => {
   })
 }
 
+/**
+ * A hook to resend a verification OTP.
+ * It will call the resend endpoint, passing the required phone number and scope.
+ * It will also show a success toast if the resend is successful, and an error
+ * toast if the resend fails.
+ * @returns A mutation hook to resend a verification OTP.
+ */
 export const useResend = () => {
   return useMutation({
     mutationFn: authApi.resend,
@@ -145,6 +152,13 @@ export const useUser = () => {
   })
 }
 
+/**
+ * A hook to logout a user.
+ * It will call the logout endpoint, clear the user data from the query client and
+ * redirect the user to the login route.
+ * It will also show a success toast if the logout is successful, and an error
+ * toast if the logout fails.
+ */
 export const useLogout = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
