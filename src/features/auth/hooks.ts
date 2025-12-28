@@ -6,6 +6,13 @@ import { apiClient } from '../../lib/api-client'
 import { authApi } from './api'
 import type { IUser } from './types'
 
+/**
+ * A hook to login a user.
+ * It will call the login endpoint, set the token to the api client and
+ * update the user data in the query client.
+ * It will also show a success toast if the login is successful, and an error
+ * toast if the login fails.
+ */
 export const useLogin = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -15,11 +22,30 @@ export const useLogin = () => {
     onSuccess: (data) => {
       apiClient.setToken(data.access_token)
       queryClient.setQueryData(['user'], data.access_token)
+      toastManager.add({
+        title: 'Success',
+        description: data.message,
+        type: 'success',
+      })
       navigate({ to: '/auth/verify' })
+    },
+    onError: (error) => {
+      toastManager.add({
+        title: 'Error',
+        description: error.message,
+        type: 'error',
+      })
     },
   })
 }
 
+/**
+ * A hook to signup a user.
+ * It will call the signup endpoint, set the token to the api client and
+ * update the user data in the query client.
+ * It will also show a success toast if the signup is successful, and an error
+ * toast if the signup fails.
+ */
 export const useSignup = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -29,11 +55,31 @@ export const useSignup = () => {
     onSuccess: (data) => {
       apiClient.setToken(data.access_token)
       queryClient.setQueryData(['user'], data.access_token)
+      toastManager.add({
+        title: 'Success',
+        description: data.message,
+        type: 'success',
+      })
       navigate({ to: '/auth/verify' })
+    },
+    onError: (error) => {
+      toastManager.add({
+        title: 'Error',
+        description: error.message,
+        type: 'error',
+      })
     },
   })
 }
 
+/**
+ * A hook to verify a user.
+ * It will call the verify endpoint, set the token to the api client,
+ * update the user data in the query client and cookie storage.
+ * It will also show a success toast if the verification is successful, and an error
+ * toast if the verification fails. If the verification fails, it will also redirect
+ * the user to the root route.
+ */
 export const useVerify = () => {
   const [, setUser] = useCookieStorage<IUser | null>('user', null, {
     path: '/',
@@ -51,6 +97,11 @@ export const useVerify = () => {
         const user = userResponse.edge.data
         setUser(user)
         queryClient.setQueryData(['user'], user)
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
         navigate({ to: '/' })
       } catch (error) {
         toastManager.add({
@@ -61,6 +112,13 @@ export const useVerify = () => {
         navigate({ to: '/' })
       }
     },
+    onError: (error) => {
+      toastManager.add({
+        title: 'Error',
+        description: error.message,
+        type: 'error',
+      })
+    },
   })
 }
 
@@ -69,6 +127,13 @@ export const useResend = () => {
     mutationFn: authApi.resend,
   })
 }
+
+/**
+ * A hook to get the user data from the query client.
+ * It will fetch the user data from the api and cache it in the query client.
+ * The user data will be fetched only once, and subsequent calls will return the cached data.
+ * The stale time for the user data is 5 minutes.
+ */
 
 export const useUser = () => {
   return useQuery({

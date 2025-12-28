@@ -37,20 +37,10 @@ export default function VerifyForm() {
 
   function onSubmit(data: z.infer<typeof authVerifySchema>) {
     verify(data, {
-      onSuccess: (data) => {
-        toastManager.add({
-          title: 'Success',
-          description: data.message,
-          type: 'success',
-        })
+      onSuccess: () => {
         setStatus('success')
       },
-      onError: (error) => {
-        toastManager.add({
-          title: 'Error',
-          description: error.message,
-          type: 'error',
-        })
+      onError: () => {
         setStatus('error')
       },
     })

@@ -17,7 +17,6 @@ import { Link } from '@tanstack/react-router'
 import { LoaderCircleIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { toastManager } from '../../../components/ui/toast'
 import { EScope } from '../types'
 
 export default function LoginForm() {
@@ -35,11 +34,9 @@ export default function LoginForm() {
   })
 
   /**
-   * onSubmit function is used to handle the form submission.
-   * It stores phone number and scope in cookie to use it in verify form.
-   * It calls the login function with the given data and handles the response.
-   * If the response is successful, it shows a success toast.
-   * If the response is an error, it shows an error toast.
+   * onSubmit function is used to handle form submission
+   * it stores phone number and scope in cookie to use it in verify form
+   * and calls login function with the form data
    */
   function onSubmit(data: z.infer<typeof loginSchema>) {
     //* NOTE: we are storing phone number and scope in cookie to use it in verify form
@@ -48,23 +45,7 @@ export default function LoginForm() {
       scope: EScope.LOGIN,
     }
     setAuthInfo(req_data)
-
-    login(data, {
-      onSuccess: (data) => {
-        toastManager.add({
-          title: 'Success',
-          description: data.message,
-          type: 'success',
-        })
-      },
-      onError: (error) => {
-        toastManager.add({
-          title: 'Error',
-          description: error.message,
-          type: 'error',
-        })
-      },
-    })
+    login(data)
   }
   return (
     <Form {...form}>
