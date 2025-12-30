@@ -15,22 +15,24 @@ const RegisterSchema = z.object({
 export type LoginRequest = z.infer<typeof LoginSchema>;
 export type RegisterRequest = z.infer<typeof RegisterSchema>;
 
-export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
+export interface ILoginResponse {
+  access_token: string;
+  refresh_token: string;
+  expires_in: number;
   user: {
     id: string;
-    email: string;
     name: string;
+    email: string;
     role: string;
+    status: string;
+    photo: string;
   };
 }
 
 export const authApi = {
-  login: async (data: LoginRequest): Promise<LoginResponse> => {
+  login: async (data: LoginRequest): Promise<ILoginResponse> => {
     const validated = LoginSchema.parse(data);
-    const response = await apiClient.post<LoginResponse>(
+    const response = await apiClient.post<ILoginResponse>(
       '/auth/login',
       validated
     );

@@ -45,12 +45,12 @@ export function useAuth(): IUseAuthReturn {
         const response = await authApi.login({ email, password });
 
         await tokenManager.setTokens({
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
-          expiresAt: Date.now() + response.expiresIn * 1000,
+          accessToken: response.access_token,
+          refreshToken: response.refresh_token,
+          expiresAt: Date.now() + response.expires_in * 1000,
         });
 
-        const userData = tokenManager.decodeToken(response.accessToken);
+        const userData = tokenManager.decodeToken(response.access_token);
         setUser(userData);
 
         // redirect based on role or return URL
