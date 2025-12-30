@@ -1,5 +1,5 @@
 import { authApi } from '@/lib/api/endpoints';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { tokenManager, type IDecodedToken } from '../core/token-manager';
 
@@ -18,12 +18,12 @@ interface IUseAuthReturn {
 
 export function useAuth(): IUseAuthReturn {
   const router = useRouter();
-  const pathname = usePathname();
   const [user, setUser] = useState<IDecodedToken | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     initializeAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const initializeAuth = useCallback(async () => {
