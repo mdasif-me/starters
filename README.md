@@ -1,196 +1,160 @@
-# Next.js Enterprise Authentication Starter
+# Next.js Enterprise Starter Kit
 
-> A production-ready Next.js 16 starter template with complete authentication, role-based access control (RBAC), and permission management system.
+> Production-ready Next.js 16 application with JWT authentication, RBAC, and modern development practices.
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38bdf8)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ## 🌟 Features
 
-- ✅ **Next.js 16** - Latest App Router with Server Components
-- 🔐 **Complete Authentication** - Login, Register, Logout with JWT
-- 🛡️ **Authorization System** - Role-based & Permission-based access control
-- 🚀 **Proxy Middleware** - Server-side route protection (Next.js 16 standard)
-- 🎨 **Tailwind CSS v4** - Latest styling with `@tailwindcss/postcss`
-- 📦 **TypeScript** - Full type safety
-- 🔄 **Token Management** - Automatic refresh & secure storage
-- 🎯 **Flexible API Integration** - Easy to adapt to any backend
-- 📱 **Responsive Design** - Mobile-first approach
-- 🧩 **Reusable Components** - Auth guards, permission boundaries
-- 🔧 **Environment Config** - All settings via .env
+- 🚀 **Next.js 16** with App Router and Turbopack
+- 🔐 **JWT Authentication** with automatic token refresh
+- 🛡️ **RBAC System** with role & permission-based access
+- 🎨 **Tailwind CSS v4** with PostCSS plugin
+- 📦 **Feature-Based Architecture** for scalability
+- 🔄 **React Hook Form** with Zod validation
+- 🎯 **Type-Safe API** client with Axios
+- 🔧 **Proxy Middleware** for server-side protection
+- 📱 **Responsive Design** components
+- ⚡ **Production Ready** with error handling
 
 ## 📋 Table of Contents
 
 - [Quick Start](#-quick-start)
 - [Project Structure](#-project-structure)
-- [Authentication Flow](#-authentication-flow)
-- [Customization Guide](#-customization-guide)
-- [Adding Protected Routes](#-adding-protected-routes)
-- [Permission System](#-permission-system)
-- [API Reference](#-api-reference)
+- [Authentication System](#-authentication-system)
+- [Protecting Routes](#-protecting-routes)
+- [Permission Management](#-permission-management)
+- [API Integration](#-api-integration)
+- [Development Guide](#-development-guide)
 - [Deployment](#-deployment)
-- [Troubleshooting](#-troubleshooting)
-
----
-
-## 🚀 Quick Start
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - Node.js 18+
-- pnpm (recommended) or npm
+- pnpm (recommended)
 
 ### Installation
 
 ```bash
-# 1. Clone the repository
-git clone <your-repo-url>
-cd nextjs
-
-# 2. Install dependencies
+# Install dependencies
 pnpm install
 
-# 3. Setup environment variables
+# Setup environment
 cp .env.example .env.local
 
-# 4. Update .env.local with your API URL
-# NEXT_PUBLIC_API_URL=http://localhost:5000/v1
+# Configure your API URL in .env.local
+NODE_ENV=development
+NEXT_PUBLIC_API_URL=http://localhost:5000/v1
+NEXT_PUBLIC_APP_VERSION=1.0.0
+NEXT_PUBLIC_API_TIMEOUT=30000
+NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY=604800
 
-# 5. Start development server
+# Start development
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Visit [http://localhost:3000](http://localhost:3000)
 
-### Default Routes
+### Available Routes
 
-- `/` - Home page (public)
-- `/login` - Login page
-- `/register` - Register page
-- `/dashboard` - Protected dashboard (requires authentication)
+| Route        | Access    | Description       |
+| ------------ | --------- | ----------------- |
+| `/`          | Public    | Home page         |
+| `/login`     | Public    | User login        |
+| `/register`  | Public    | User registration |
+| `/dashboard` | Protected | User dashboard    |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-nextjs/
-├── src/
-│   ├── app/                          # Next.js App Router
-│   │   ├── (public)/                 # Public route group
-│   │   │   ├── login/                # Login page
-│   │   │   └── register/             # Register page
-│   │   ├── (protected)/              # Protected route group
-│   │   │   ├── dashboard/            # Dashboard page
-│   │   │   └── layout.tsx            # Protected layout with auth check
-│   │   ├── components/               # React components
-│   │   │   ├── auth/                 # Auth-related components
-│   │   │   │   ├── auth-guard.tsx    # Client-side auth guard
-│   │   │   │   └── permission-boundary.tsx
-│   │   │   └── shared/               # Shared components
-│   │   ├── providers/                # Context providers
-│   │   └── styles/                   # Global styles
-│   │
-│   ├── lib/                          # Library code
-│   │   ├── api/                      # API client setup
-│   │   │   ├── client/               # Axios instance & interceptors
-│   │   │   ├── endpoints/            # API endpoint definitions
-│   │   │   │   └── auth.ts           # 👈 Customize for your API
-│   │   │   └── utils/                # API utilities
-│   │   │
-│   │   ├── auth/                     # Authentication system
-│   │   │   ├── constants/            # Auth constants
-│   │   │   │   ├── permissions.ts    # Permission definitions
-│   │   │   │   ├── roles.ts          # Role definitions
-│   │   │   │   └── routes.ts         # 👈 Add your routes here
-│   │   │   ├── core/                 # Core auth logic
-│   │   │   │   ├── token-manager.ts  # 👈 JWT handling
-│   │   │   │   └── session-validator.ts
-│   │   │   ├── hooks/                # React hooks
-│   │   │   │   ├── use-auth.ts       # Main auth hook
-│   │   │   │   ├── use-permissions.ts
-│   │   │   │   └── use-roles.ts
-│   │   │   ├── middleware/           # Auth middleware
-│   │   │   │   └── auth-middleware.ts # 👈 Route protection logic
-│   │   │   └── guards/               # Server-side guards
-│   │   │
-│   │   └── utils/                    # Utility functions
-│   │       ├── storage/              # Storage utilities
-│   │       └── validation/           # Validation schemas
-│   │
-│   └── proxy.ts                      # 👈 Next.js 16 proxy (replaces middleware)
+src/
+├── app/                           # Next.js App Router
+│   ├── (public)/                  # Public routes group
+│   │   ├── login/
+│   │   └── register/
+│   ├── (protected)/               # Protected routes group
+│   │   ├── dashboard/
+│   │   └── layout.tsx             # Auth check layout
+│   ├── components/                # Shared components
+│   ├── providers/                 # React providers
+│   └── styles/                    # Global styles
 │
-├── public/                           # Static assets
-├── .env.local                        # 👈 Environment variables (create this)
-├── .env.example                      # Environment template
-├── package.json                      # Dependencies
-├── tsconfig.json                     # TypeScript config
-├── tailwind.config.ts                # Tailwind config
-└── next.config.ts                    # Next.js config
+├── lib/
+│   ├── features/                  # Feature modules
+│   │   └── auth/                  # Auth feature
+│   │       ├── components/        # LoginForm
+│   │       └── schemas/           # Validation
+│   │
+│   ├── auth/                      # Auth system
+│   │   ├── constants/             # Routes, roles, permissions
+│   │   ├── core/                  # Token management
+│   │   ├── hooks/                 # useAuth, usePermissions
+│   │   └── middleware/            # Route protection
+│   │
+│   ├── api/                       # API layer
+│   │   ├── client/                # Axios setup
+│   │   ├── endpoints/             # API endpoints
+│   │   └── utils/                 # Utilities
+│   │
+│   └── utils/                     # Utilities
+│       └── storage/               # Storage helpers
+│
+└── proxy.ts                       # Next.js 16 middleware
 ```
 
-**Key Files to Customize:**
+### Important Directories
 
-- `src/lib/api/endpoints/auth.ts` - Adapt to your API response format
-- `src/lib/auth/core/token-manager.ts` - Adjust JWT structure
-- `src/lib/auth/constants/routes.ts` - Add your protected routes
-- `src/lib/auth/constants/permissions.ts` - Define your permissions
-- `src/proxy.ts` - Already configured (Next.js 16 standard)
+| Directory          | Purpose                                           |
+| ------------------ | ------------------------------------------------- |
+| `lib/features/`    | Feature-based modules with components and schemas |
+| `lib/auth/`        | Complete authentication & authorization system    |
+| `lib/api/`         | API client and endpoint definitions               |
+| `app/(protected)/` | Routes requiring authentication                   |
+| `app/(public)/`    | Publicly accessible routes                        |
 
----
+**📖 For detailed file documentation, see [DOCS.md](./DOCS.md)**
 
-## 🔐 Authentication Flow
+## 🔐 Authentication System
 
 ### How It Works
 
-```mermaid
-graph LR
-    A[User Login] --> B[API Returns JWT]
-    B --> C[Store in Cookies]
-    C --> D[Proxy Validates Token]
-    D --> E{Valid?}
-    E -->|Yes| F[Access Protected Route]
-    E -->|No| G[Redirect to Login]
+```
+User Login → API Returns JWT → Store in Cookies →
+Proxy Validates → Protected Route Access
 ```
 
-1. **User logs in** with email & password
-2. **API returns** JWT access token + refresh token
-3. **Tokens stored** in browser cookies (readable by server)
-4. **Proxy middleware** (`src/proxy.ts`) validates token on every request
-5. **Protected routes** automatically check authentication
-6. **Token decoded** and user info added to request headers
+### Required API Response Format
 
-### Expected API Response Format
-
-Your backend API should return this format for `/auth/login` and `/auth/register`:
+Your backend must return this structure:
 
 ```json
 {
-  "message": "Successfully logged in",
   "data": {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "access_token": "eyJhbGciOiJIUz...",
+    "refresh_token": "eyJhbGciOiJIUz...",
     "expires_in": 3600,
     "user": {
       "id": "user-123",
       "name": "John Doe",
       "email": "john@example.com",
-      "role": "customer",
-      "status": "verified",
-      "photo": null
+      "role": "customer"
     }
   },
-  "success": true,
-  "timestamp": "2025-12-30T19:34:29.024Z"
+  "message": "Login successful",
+  "success": true
 }
 ```
 
 ### JWT Token Structure
 
-Your JWT should contain these fields (customize if different):
+Your JWT payload should include:
 
 ```json
 {
@@ -198,43 +162,25 @@ Your JWT should contain these fields (customize if different):
   "name": "John Doe",
   "email": "john@example.com",
   "role": "customer",
-  "permissions": ["feature:view", "feature:create"],
-  "iat": 1767123269,
-  "exp": 1767126869
+  "permissions": ["product:view", "product:create"],
+  "iat": 1704024000,
+  "exp": 1704027600
 }
 ```
 
----
+### Customizing for Your API
 
-## 🔧 Customization Guide
-
-### Scenario 1: Your API Response Format is Different
-
-**Example:** Your API returns different field names:
-
-```json
-{
-  "token": "jwt_token",
-  "refreshToken": "refresh_token",
-  "expiresIn": 3600
-}
-```
-
-**Solution:** Update `src/lib/api/endpoints/auth.ts`
+If your API format differs, update `src/lib/api/endpoints/auth.ts`:
 
 ```typescript
 export const authApi = {
   login: async (data: LoginRequest): Promise<ILoginResponse> => {
-    const validated = LoginSchema.parse(data);
-    const response = await apiClient.post<YourApiResponse>(
-      '/auth/login',
-      validated
-    );
+    const response = await apiClient.post('/auth/login', data);
 
-    // transform YOUR API response to match internal format
+    // Transform YOUR API response to match expected format
     return {
-      access_token: response.data.token,
-      refresh_token: response.data.refreshToken,
+      access_token: response.data.token, // or your field name
+      refresh_token: response.data.refresh, // or your field name
       expires_in: response.data.expiresIn,
       user: response.data.user,
     };
@@ -242,59 +188,9 @@ export const authApi = {
 };
 ```
 
-### Scenario 2: Different JWT Structure
+## 🛡️ Protecting Routes
 
-**Example:** Your JWT contains different fields:
-
-```json
-{
-  "userId": "123", // instead of "id"
-  "userRole": "admin", // instead of "role"
-  "exp": 1234567890
-}
-```
-
-**Solution:** Update `src/lib/auth/core/token-manager.ts`
-
-```typescript
-export interface IDecodedToken extends IJwtPayload {
-  userId: string; // Change from 'id'
-  email: string;
-  name: string;
-  userRole: string; // Change from 'role'
-  permissions?: string[];
-}
-```
-
-Then update middleware at `src/lib/auth/middleware/auth-middleware.ts`:
-
-```typescript
-const decoded = jwtDecode<{
-  userId: string; // Match your JWT structure
-  userRole: string;
-  permissions?: string[];
-}>(token);
-
-// Update header setting
-headers.set('x-user-id', user.userId || ''); // Use userId
-headers.set('x-user-role', user.userRole || ''); // Use userRole
-```
-
----
-
-## 🛡️ Adding Protected Routes
-
-### Step 1: Create Your Route
-
-Create folder structure:
-
-```
-src/app/(protected)/
-  └── my-feature/
-      └── page.tsx
-```
-
-### Step 2: Register Route as Protected
+### Step 1: Register Route
 
 Edit `src/lib/auth/constants/routes.ts`:
 
@@ -302,270 +198,49 @@ Edit `src/lib/auth/constants/routes.ts`:
 export const PROTECTED_ROUTES = [
   '/dashboard',
   '/profile',
-  '/settings',
-  '/my-feature', // Add your route
+  '/products', // Add your route
   '/api/protected',
 ];
 ```
 
-### Step 3: Create Your Page Component
-
-`src/app/(protected)/my-feature/page.tsx`:
-
-```tsx
-export default function MyFeaturePage() {
-  return (
-    <div>
-      <h1>My Protected Feature</h1>
-      <p>Only authenticated users can see this</p>
-    </div>
-  );
-}
-```
-
-**That's it!** The proxy middleware automatically protects it.
-
----
-
-## 🔐 Permission System
-
-### Step 1: Define Permissions
-
-Edit `src/lib/auth/constants/permissions.ts`:
+### Step 2: Create Page
 
 ```typescript
-export const PERMISSIONS = {
-  // User Management
-  USER_VIEW: 'user:view',
-  USER_CREATE: 'user:create',
-  USER_EDIT: 'user:edit',
-  USER_DELETE: 'user:delete',
-
-  // Your Feature
-  FEATURE_VIEW: 'feature:view',
-  FEATURE_CREATE: 'feature:create',
-  FEATURE_EDIT: 'feature:edit',
-  FEATURE_DELETE: 'feature:delete',
-};
-```
-
-### Step 2: Your API Must Return Permissions
-
-Ensure your JWT token includes permissions array:
-
-```json
-{
-  "id": "user-id",
-  "role": "manager",
-  "permissions": ["feature:view", "feature:create", "feature:edit"]
+// src/app/(protected)/products/page.tsx
+export default function ProductsPage() {
+  return (
+    <div>
+      <h1>Products</h1>
+      <p>This page is automatically protected</p>
+    </div>
+  );
 }
 ```
 
-If your API doesn't return permissions in JWT, you can:
+The proxy middleware handles authentication automatically.
 
-**Option A:** Map role to permissions (simple approach)
+### Admin-Only Routes
 
-Edit `src/lib/auth/hooks/use-permissions.ts`:
+For admin-only sections:
+
+1. **Register as admin route:**
 
 ```typescript
-// Add at the top of usePermissions hook
-useEffect(() => {
-  if (user && !user.permissions) {
-    // Map roles to permissions
-    const rolePermissions = {
-      admin: ['user:view', 'user:create', 'user:edit', 'user:delete'],
-      manager: ['user:view', 'feature:view', 'feature:create'],
-      customer: ['feature:view'],
-    };
-
-    user.permissions = rolePermissions[user.role] || [];
-  }
-}, [user]);
+// src/lib/auth/constants/routes.ts
+export const ADMIN_ROUTES = ['/admin', '/admin/users', '/admin/settings'];
 ```
 
-**Option B:** Fetch permissions from API after login
-
-Update `src/lib/auth/hooks/use-auth.ts`:
+2. **Create admin layout:**
 
 ```typescript
-const login = useCallback(async (email: string, password: string) => {
-  setIsLoading(true);
-  try {
-    const response = await authApi.login({ email, password });
-
-    await tokenManager.setTokens({
-      accessToken: response.access_token,
-      refreshToken: response.refresh_token,
-      expiresAt: Date.now() + response.expires_in * 1000,
-    });
-
-    // Fetch user permissions from API
-    const permissions = await apiClient.get('/user/permissions');
-
-    const userData = tokenManager.decodeToken(response.access_token);
-    if (userData) {
-      userData.permissions = permissions.data;
-    }
-    setUser(userData);
-
-    // ... rest of code
-  }
-});
-```
-
----
-
-## 🎨 UI Protection Examples
-
-### Method 1: Using Hooks (Recommended)
-
-```tsx
-'use client';
-
-import { usePermissions } from '@/lib/auth/hooks/use-permissions';
-import { PERMISSIONS } from '@/lib/auth/constants/permissions';
-
-export default function MyComponent() {
-  const { hasPermission } = usePermissions();
-
-  return (
-    <div>
-      <h1>Feature Management</h1>
-
-      {/* Show button only if user has permission */}
-      {hasPermission(PERMISSIONS.FEATURE_CREATE) && (
-        <button onClick={handleCreate}>Create New</button>
-      )}
-
-      {/* Show edit button only if user has permission */}
-      {hasPermission(PERMISSIONS.FEATURE_EDIT) && (
-        <button onClick={handleEdit}>Edit</button>
-      )}
-
-      {/* Show delete button only if user has permission */}
-      {hasPermission(PERMISSIONS.FEATURE_DELETE) && (
-        <button onClick={handleDelete}>Delete</button>
-      )}
-    </div>
-  );
-}
-```
-
-### Method 2: Using PermissionBoundary Component
-
-```tsx
-'use client';
-
-import { PermissionBoundary } from '@/app/components/auth/permission-boundary';
-
-export default function MyComponent() {
-  return (
-    <div>
-      <h1>Feature Management</h1>
-
-      <PermissionBoundary
-        resource='feature'
-        action='create'
-        fallback={<p>No permission to create</p>}
-      >
-        <button onClick={handleCreate}>Create New</button>
-      </PermissionBoundary>
-
-      <PermissionBoundary resource='feature' action='edit'>
-        <button onClick={handleEdit}>Edit</button>
-      </PermissionBoundary>
-
-      <PermissionBoundary resource='feature' action='delete'>
-        <button onClick={handleDelete}>Delete</button>
-      </PermissionBoundary>
-    </div>
-  );
-}
-```
-
-### Method 3: Multiple Permissions Check
-
-```tsx
-'use client';
-
-import { useAuth } from '@/lib/auth/hooks/use-auth';
-
-export default function MyComponent() {
-  const { hasAnyPermission, hasAllPermissions } = useAuth();
-
-  return (
-    <div>
-      {/* Show if user has ANY of these permissions */}
-      {hasAnyPermission(['feature:edit', 'feature:delete']) && (
-        <div>
-          <h2>Management Actions</h2>
-          {/* management buttons */}
-        </div>
-      )}
-
-      {/* Show if user has ALL of these permissions */}
-      {hasAllPermissions(['feature:view', 'feature:export']) && (
-        <button onClick={handleExport}>Export Data</button>
-      )}
-    </div>
-  );
-}
-```
-
----
-
-## 👥 Role-Based UI Control
-
-### Simple Role Check
-
-```tsx
-'use client';
-
-import { useAuth } from '@/lib/auth/hooks/use-auth';
-
-export default function MyComponent() {
-  const { user, hasRole } = useAuth();
-
-  return (
-    <div>
-      {/* Show for specific role */}
-      {hasRole('admin') && (
-        <button onClick={handleAdminAction}>Admin Panel</button>
-      )}
-
-      {/* Show for multiple roles */}
-      {(hasRole('admin') || hasRole('manager')) && (
-        <div>Management Dashboard</div>
-      )}
-
-      {/* Show based on user role */}
-      {user?.role === 'customer' && <div>Customer View</div>}
-    </div>
-  );
-}
-```
-
----
-
-## 🚨 Advanced: Custom Route Guard
-
-### Protecting Specific Routes with Custom Logic
-
-Create `src/app/(protected)/admin/layout.tsx`:
-
-```tsx
+// src/app/(protected)/admin/layout.tsx
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AdminLayout({ children }) {
   const headersList = await headers();
   const userRole = headersList.get('x-user-role');
 
-  // Only admins can access
   if (userRole !== 'admin' && userRole !== 'super_admin') {
     redirect('/unauthorized');
   }
@@ -574,51 +249,34 @@ export default async function AdminLayout({
 }
 ```
 
-### Add to Route Constants
+## 🔐 Permission Management
 
-Edit `src/lib/auth/constants/routes.ts`:
+### Define Permissions
 
-```typescript
-export const ADMIN_ROUTES = [
-  '/admin',
-  '/admin/users',
-  '/admin/products',
-  '/admin/my-feature', // Add your admin route
-];
-```
-
----
-
-## 📦 Complete Example: Products Feature
-
-### 1. Add Route & Permissions
-
-`src/lib/auth/constants/permissions.ts`:
+Edit `src/lib/auth/constants/permissions.ts`:
 
 ```typescript
 export const PERMISSIONS = {
-  // ... existing
-  PRODUCT_VIEW: 'product:view',
-  PRODUCT_CREATE: 'product:create',
-  PRODUCT_EDIT: 'product:edit',
-  PRODUCT_DELETE: 'product:delete',
+  USER: {
+    VIEW: 'user:view',
+    CREATE: 'user:create',
+    EDIT: 'user:edit',
+    DELETE: 'user:delete',
+  },
+  PRODUCT: {
+    VIEW: 'product:view',
+    CREATE: 'product:create',
+    EDIT: 'product:edit',
+    DELETE: 'product:delete',
+  },
 };
 ```
 
-`src/lib/auth/constants/routes.ts`:
+### Using Permissions in Components
+
+#### Method 1: usePermissions Hook
 
 ```typescript
-export const PROTECTED_ROUTES = [
-  // ... existing
-  '/products',
-];
-```
-
-### 2. Create Page Component
-
-`src/app/(protected)/products/page.tsx`:
-
-```tsx
 'use client';
 
 import { usePermissions } from '@/lib/auth/hooks/use-permissions';
@@ -628,245 +286,396 @@ export default function ProductsPage() {
   const { hasPermission } = usePermissions();
 
   return (
-    <div className='p-8'>
-      <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-2xl font-bold'>Products</h1>
+    <div>
+      <h1>Products</h1>
 
-        {hasPermission(PERMISSIONS.PRODUCT_CREATE) && (
-          <button
-            className='bg-blue-500 text-white px-4 py-2 rounded'
-            onClick={() => console.log('Create product')}
-          >
-            Add Product
-          </button>
-        )}
-      </div>
+      {hasPermission(PERMISSIONS.PRODUCT.CREATE) && (
+        <button onClick={handleCreate}>Create Product</button>
+      )}
 
-      <table className='w-full'>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Product 1</td>
-            <td>$100</td>
-            <td>
-              {hasPermission(PERMISSIONS.PRODUCT_EDIT) && (
-                <button onClick={() => console.log('Edit')}>Edit</button>
-              )}
-              {hasPermission(PERMISSIONS.PRODUCT_DELETE) && (
-                <button onClick={() => console.log('Delete')}>Delete</button>
-              )}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {hasPermission(PERMISSIONS.PRODUCT.EDIT) && (
+        <button onClick={handleEdit}>Edit Product</button>
+      )}
+
+      {hasPermission(PERMISSIONS.PRODUCT.DELETE) && (
+        <button onClick={handleDelete}>Delete Product</button>
+      )}
     </div>
   );
 }
 ```
 
-### 3. Add Navigation Link (if needed)
+#### Method 2: PermissionGuard Component
 
-`src/app/components/shared/navigation.tsx`:
+```typescript
+'use client';
 
-```tsx
+import { PermissionGuard } from '@/app/components/auth/auth-guard';
 import { PERMISSIONS } from '@/lib/auth/constants/permissions';
 
-// Inside component
-{
-  hasPermission(PERMISSIONS.PRODUCT_VIEW) && (
-    <Link href='/products'>Products</Link>
+export default function ProductsPage() {
+  return (
+    <div>
+      <h1>Products</h1>
+
+      <PermissionGuard
+        permission={PERMISSIONS.PRODUCT.CREATE}
+        fallback={<p>No create permission</p>}
+      >
+        <button onClick={handleCreate}>Create Product</button>
+      </PermissionGuard>
+    </div>
   );
 }
 ```
 
----
-
-## 🐛 Troubleshooting
-
-### Issue 1: "Access Denied" after login
-
-**Cause:** JWT token structure doesn't match `IDecodedToken` interface  
-**Solution:** Check your JWT payload and update `token-manager.ts` interface
-
-### Issue 2: Permissions not working
-
-**Cause:** JWT doesn't include `permissions` array  
-**Solution:** Either:
-
-- Update your backend to include permissions in JWT
-- Map roles to permissions on frontend (see "Permission-Based Access Control")
-
-### Issue 3: Redirect loop after login
-
-**Cause:** Route matching issue  
-**Solution:** Already fixed - routes use exact matching
-
-### Issue 4: Cookies not working
-
-**Cause:** `httpOnly` flag cannot be set from client  
-**Solution:** Already fixed - removed `httpOnly` flag
-
----
-
-## 📚 API Reference
-
-### useAuth Hook
+#### Method 3: Multiple Permissions
 
 ```typescript
-const {
-  user, // Current user object
-  isLoading, // Loading state
-  isAuthenticated, // Is user logged in
-  login, // Login function
-  logout, // Logout function
-  hasPermission, // Check single permission
-  hasRole, // Check user role
-  hasAnyPermission, // Check if has any of permissions
-  hasAllPermissions, // Check if has all permissions
-} = useAuth();
+'use client';
+
+import { useAuth } from '@/lib/auth/hooks/use-auth';
+
+export default function ProductsPage() {
+  const { hasAnyPermission, hasAllPermissions } = useAuth();
+
+  return (
+    <div>
+      {/* Show if user has ANY of these */}
+      {hasAnyPermission(['product:edit', 'product:delete']) && (
+        <div>Management Section</div>
+      )}
+
+      {/* Show if user has ALL of these */}
+      {hasAllPermissions(['product:view', 'product:export']) && (
+        <button>Export Products</button>
+      )}
+    </div>
+  );
+}
 ```
 
-### usePermissions Hook
+### Role-Based Access
 
 ```typescript
-const {
-  user, // Current user object
-  hasPermission, // Check permission
-  canView, // Check view permission
-  canCreate, // Check create permission
-  canEdit, // Check edit permission
-  canDelete, // Check delete permission
-  canExport, // Check export permission
-  canManage, // Check manage permission
-} = usePermissions();
+'use client';
+
+import { useAuth } from '@/lib/auth/hooks/use-auth';
+
+export default function DashboardPage() {
+  const { user, hasRole } = useAuth();
+
+  return (
+    <div>
+      {hasRole('admin') && <div>Admin Dashboard</div>}
+
+      {hasRole('manager') && <div>Manager Dashboard</div>}
+
+      {user?.role === 'customer' && <div>Customer Dashboard</div>}
+    </div>
+  );
+}
 ```
 
----
+## 🌐 API Integration
 
-## ✅ Best Practices
+### API Client Configuration
 
-1. **Always define permissions as constants** - Don't use magic strings
-2. **Check permissions on both client AND server** - Client for UI, server for security
-3. **Use TypeScript interfaces** - Helps catch type errors early
-4. **Test with different roles** - Create test users with different permissions
-5. **Handle loading states** - Show loading spinner while checking auth
-6. **Provide fallback UI** - Show meaningful messages when access is denied
+The API client is pre-configured in `src/lib/api/client/axios-client.ts`:
 
----
+- Base URL from environment variable
+- Automatic token attachment
+- Token refresh on 401 errors
+- Type-safe request methods
+- Error handling
+
+### Creating New Endpoints
+
+```typescript
+// src/lib/api/endpoints/products.ts
+import { apiClient } from '../client/axios-client';
+
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+}
+
+export const productsApi = {
+  getProducts: async () => {
+    const response = await apiClient.get<Product[]>('/products');
+    return response.data;
+  },
+
+  createProduct: async (data: Partial<Product>) => {
+    const response = await apiClient.post<Product>('/products', data);
+    return response.data;
+  },
+
+  updateProduct: async (id: string, data: Partial<Product>) => {
+    const response = await apiClient.put<Product>(`/products/${id}`, data);
+    return response.data;
+  },
+
+  deleteProduct: async (id: string) => {
+    await apiClient.delete(`/products/${id}`);
+  },
+};
+```
+
+### Using Endpoints in Components
+
+```typescript
+'use client';
+
+import { productsApi } from '@/lib/api/endpoints/products';
+import { useEffect, useState } from 'react';
+
+export default function ProductsPage() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const data = await productsApi.getProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <div>
+      {products.map((product) => (
+        <div key={product.id}>{product.name}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+## 💻 Development Guide
+
+### Adding a New Feature
+
+1. **Create feature module:**
+
+```
+src/lib/features/products/
+├── components/
+│   └── product-form.tsx
+├── schemas/
+│   └── product.schema.ts
+└── index.ts
+```
+
+2. **Define validation schema:**
+
+```typescript
+// src/lib/features/products/schemas/product.schema.ts
+import { z } from 'zod';
+
+export const productSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  price: z.number().positive('Price must be positive'),
+  description: z.string().optional(),
+});
+
+export type ProductForm = z.infer<typeof productSchema>;
+```
+
+3. **Create component:**
+
+```typescript
+// src/lib/features/products/components/product-form.tsx
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { productSchema, type ProductForm } from '../schemas/product.schema';
+
+export function ProductForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProductForm>({
+    resolver: zodResolver(productSchema),
+  });
+
+  const onSubmit = async (data: ProductForm) => {
+    // Handle submission
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register('name')} />
+      {errors.name && <span>{errors.name.message}</span>}
+
+      <input type='number' {...register('price', { valueAsNumber: true })} />
+      {errors.price && <span>{errors.price.message}</span>}
+
+      <button type='submit'>Submit</button>
+    </form>
+  );
+}
+```
+
+4. **Export from feature:**
+
+```typescript
+// src/lib/features/products/index.ts
+export * from './components';
+export * from './schemas';
+```
+
+5. **Use in page:**
+
+```typescript
+// src/app/(protected)/products/page.tsx
+import { ProductForm } from '@/lib/features/products';
+
+export default function ProductsPage() {
+  return (
+    <div>
+      <h1>Add Product</h1>
+      <ProductForm />
+    </div>
+  );
+}
+```
+
+### Environment Variables
+
+```env
+# .env.local
+NODE_ENV=development
+NEXT_PUBLIC_API_URL=http://localhost:5000/v1
+NEXT_PUBLIC_API_TIMEOUT=30000
+NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY=604800
+```
+
+### Available Commands
+
+```bash
+pnpm dev          # Start development server
+pnpm build        # Build for production
+pnpm start        # Start production server
+pnpm lint         # Run ESLint
+```
 
 ## 🚀 Deployment
 
-### Environment Variables
+### Production Build
+
+```bash
+# Build application
+pnpm build
+
+# Test production build locally
+pnpm start
+```
+
+### Environment Setup
 
 Create `.env.production`:
 
 ```env
 NODE_ENV=production
 NEXT_PUBLIC_API_URL=https://api.yourapp.com/v1
-NEXT_PUBLIC_APP_VERSION=1.0.0
 NEXT_PUBLIC_API_TIMEOUT=30000
 NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY=604800
 ```
 
-### Build & Deploy
+### Deploy to Vercel
 
 ```bash
-# Build for production
-pnpm build
+# Install Vercel CLI
+npm i -g vercel
 
-# Start production server
-pnpm start
-
-# Or deploy to Vercel (recommended)
-vercel deploy --prod
+# Deploy
+vercel --prod
 ```
 
 ### Deployment Checklist
 
-- [ ] Update `NEXT_PUBLIC_API_URL` in production `.env`
-- [ ] Ensure JWT includes all required fields (`id`, `role`, `email`)
-- [ ] Set secure cookies in production (already configured)
-- [ ] Test all protected routes
-- [ ] Test all permission checks
-- [ ] Verify logout clears all cookies
-- [ ] Check redirect flows work correctly
+- [ ] Update `NEXT_PUBLIC_API_URL` to production API
+- [ ] Test all authentication flows
+- [ ] Verify protected routes work
+- [ ] Check permission-based UI
+- [ ] Test token refresh mechanism
+- [ ] Ensure cookies are set correctly
+- [ ] Verify logout clears all data
+
+## 🐛 Common Issues
+
+### Issue: Login fails
+
+**Solution:** Check API response format matches expected structure in `auth.ts`
+
+### Issue: Routes not protected
+
+**Solution:** Ensure route is registered in `src/lib/auth/constants/routes.ts`
+
+### Issue: Permissions not working
+
+**Solution:** Verify JWT includes `permissions` array in payload
+
+### Issue: Token not refreshing
+
+**Solution:** Check refresh token endpoint in `src/lib/api/client/interceptors.ts`
+
+### Issue: Build fails
+
+**Solution:** Run `pnpm build` to see TypeScript errors and fix type mismatches
 
 ---
 
-## 🛠️ Available Scripts
+## 📚 Additional Resources
 
-```bash
-# Development
-pnpm dev              # Start dev server at localhost:3000
-pnpm build            # Build for production
-pnpm start            # Start production server
-
-# Code Quality
-pnpm lint             # Run ESLint
-pnpm type-check       # Run TypeScript compiler check
-
-# Testing (if configured)
-pnpm test             # Run tests
-pnpm test:watch       # Run tests in watch mode
-```
+- **[DOCS.md](./DOCS.md)** - Detailed documentation of every file
+- **[Next.js Documentation](https://nextjs.org/docs)** - Framework docs
+- **[Tailwind CSS](https://tailwindcss.com/docs)** - Styling docs
+- **[React Hook Form](https://react-hook-form.com/)** - Form handling
+- **[Zod](https://zod.dev/)** - Schema validation
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
-
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ---
 
-## 💬 Support & Contact
+## 💬 Support
 
-- **Developer:** Muhammad Asif
-- **Website:** [muhammadasif.vercel.app](https://muhammadasif.vercel.app)
+**Developer:** Muhammad Asif  
+**Portfolio:** [muhammadasif.vercel.app](https://muhammadasif.vercel.app)
 
-### Need Help?
+For issues or questions:
 
-### Need Help?
-
-- 🐛 Check browser console for client-side errors
-- 📝 Check dev server terminal for middleware logs
-- 🔍 Verify JWT structure using [jwt.io](https://jwt.io)
-- 📧 Ensure API response matches expected format
-- 💬 Contact: [muhammadasif.vercel.app](https://muhammadasif.vercel.app)
+- Check [DOCS.md](./DOCS.md) for detailed file documentation
+- Review common issues section above
+- Contact via portfolio website
 
 ---
 
-## ⭐ Show Your Support
-
-If this starter helped you, please give it a ⭐️ on GitHub!
-
----
-
-## 🙏 Acknowledgments
-
-- [Next.js](https://nextjs.org/) - The React Framework
-- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
-- [TypeScript](https://www.typescriptlang.org/) - Typed JavaScript
-- [Axios](https://axios-http.com/) - HTTP client
-- [jwt-decode](https://github.com/auth0/jwt-decode) - JWT decoder
-
----
-
-**Built with ❤️ by [Muhammad Asif](https://muhammadasif.vercel.app)**
+**Built with ❤️ using Next.js 16, TypeScript, and Tailwind CSS**

@@ -4,7 +4,6 @@
 import { useAuth } from '@/lib/auth/hooks/use-auth';
 import { loginSchema, type LoginFormData } from '@/lib/features/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -100,15 +99,6 @@ export function LoginForm() {
           >
             Remember me
           </label>
-        </div>
-
-        <div className='text-sm'>
-          <Link
-            href='/forgot-password'
-            className='font-medium text-blue-600 hover:text-blue-500'
-          >
-            Forgot your password?
-          </Link>
         </div>
       </div>
 
