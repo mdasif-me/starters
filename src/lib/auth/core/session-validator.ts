@@ -24,7 +24,7 @@ export class SessionValidator {
       }
 
       // check if token has required claims
-      if (!user.sub || !user.email || !user.role) {
+      if (!user.id || !user.email || !user.role) {
         return { isValid: false, user: null, error: 'Invalid token claims' };
       }
 
@@ -90,7 +90,7 @@ export class SessionValidator {
     if (!user) return {};
 
     return {
-      userId: user.sub,
+      userId: user.id,
       role: user.role,
       email: user.email,
       permissions: user.permissions,

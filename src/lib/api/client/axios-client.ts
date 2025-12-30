@@ -12,7 +12,7 @@ export class AxiosClient {
   private constructor() {
     this.axiosInstance = axios.create({
       baseURL: process.env.NEXT_PUBLIC_API_URL || '',
-      timeout: 30000,
+      timeout: Number(process.env.NEXT_PUBLIC_API_TIMEOUT) || 30000,
       withCredentials: true,
     });
 

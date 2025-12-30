@@ -48,7 +48,7 @@ class TokenManager {
         httpOnly: process.env.NODE_ENV === 'production',
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60, // 7 days
+        maxAge: Number(process.env.NEXT_PUBLIC_REFRESH_TOKEN_EXPIRY) || 604800,
       });
 
       //INFO: store in secure storage for fallback
