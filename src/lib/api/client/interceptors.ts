@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { tokenManager } from '@/lib/auth/core/token-manager';
 import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { apiClient } from './axios-client';
@@ -17,12 +18,10 @@ export class RequestInterceptor {
     }
 
     //NOTE: add default headers
-    config.headers = {
-      'Content-Type': 'application/json',
-      'X-Client': 'nextjs-web',
-      'X-Client-Version': process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0',
-      ...config.headers,
-    };
+    config.headers['Content-Type'] = 'application/json';
+    config.headers['X-Client'] = 'nextjs-web';
+    config.headers['X-Client-Version'] =
+      process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';
 
     //NOTE: remove custom headers
     delete config.headers?.['requires-auth'];
@@ -40,7 +39,7 @@ export class ResponseInterceptor {
   private static refreshSubscribers: ((token: string) => void)[] = [];
 
   static onResponse(response: AxiosResponse): AxiosResponse {
-    // You can transform response data here
+    // you can transform response data here
     return response;
   }
 
@@ -49,9 +48,10 @@ export class ResponseInterceptor {
       _retry?: boolean;
     };
 
-    // Handle 401 Unauthorized
+    // handle 401 Unauthorized
     if (error.response?.status === 401 && !originalRequest._retry) {
       if (this.isRefreshing) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         return new Promise((resolve, reject) => {
           this.refreshSubscribers.push((token: string) => {
             originalRequest.headers!.Authorization = `Bearer ${token}`;
@@ -64,22 +64,22 @@ export class ResponseInterceptor {
       this.isRefreshing = true;
 
       try {
-        // Try to refresh token
+        // try to refresh token
         const newToken = await this.refreshAccessToken();
 
-        // Update token
+        // update token
         await tokenManager.updateAccessToken(newToken);
 
-        // Update original request
+        // update original request
         originalRequest.headers!.Authorization = `Bearer ${newToken}`;
 
-        // Retry all queued requests
+        // retry all queued requests
         this.refreshSubscribers.forEach((cb) => cb(newToken));
         this.refreshSubscribers = [];
 
         return apiClient.axiosInstance(originalRequest);
       } catch (refreshError) {
-        // Refresh failed - clear tokens and redirect
+        // refresh failed - clear tokens and redirect
         await tokenManager.clearTokens();
         window.location.href = '/login';
         return Promise.reject(refreshError);
@@ -88,12 +88,13 @@ export class ResponseInterceptor {
       }
     }
 
-    // Handle other errors
+    // handle other errors
+    const responseData = error.response?.data as any;
     const apiError = {
       status: error.response?.status || 500,
-      message: error.response?.data?.message || 'An error occurred',
-      code: error.response?.data?.code,
-      details: error.response?.data?.details,
+      message: responseData?.message || 'An error occurred',
+      code: responseData?.code,
+      details: responseData?.details,
     };
 
     return Promise.reject(apiError);
