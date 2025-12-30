@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export interface ApiResponse<T = any> {
+export interface IApiResponse<T = any> {
   data: T;
   message: string;
   success: boolean;
@@ -7,7 +7,7 @@ export interface ApiResponse<T = any> {
   code?: string;
 }
 
-export interface PaginatedResponse<T> {
+export interface IPaginatedResponse<T> {
   items: T[];
   total: number;
   page: number;
@@ -15,22 +15,22 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
-export interface ApiError {
+export interface IApiError {
   status: number;
   message: string;
   code?: string;
   details?: any;
 }
 
-export interface RequestConfig {
-  requiresAuth?: boolean;
-  contentType?: string;
+export interface IRequestConfig {
+  requires_auth?: boolean;
+  content_type?: string;
   headers?: Record<string, string>;
   params?: Record<string, any>;
   timeout?: number;
 }
 
-export interface CacheConfig {
+export interface ICacheConfig {
   enabled?: boolean;
   ttl?: number; //INFO: time to live in milliseconds
   key?: string;

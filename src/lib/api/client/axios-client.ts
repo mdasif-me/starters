@@ -2,7 +2,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { CacheManager } from '../utils/cache-manager';
 import { RequestInterceptor, ResponseInterceptor } from './interceptors';
-import { ApiResponse } from './types';
+import { IApiResponse } from './types';
 
 export class AxiosClient {
   private static instance: AxiosClient;
@@ -11,7 +11,7 @@ export class AxiosClient {
 
   private constructor() {
     this.axiosInstance = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+      baseURL: process.env.NEXT_PUBLIC_API_URL || '',
       timeout: 30000,
       withCredentials: true,
     });
@@ -44,8 +44,8 @@ export class AxiosClient {
   async get<T = any>(
     url: string,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
-    const response = await this.axiosInstance.get<ApiResponse<T>>(url, config);
+  ): Promise<IApiResponse<T>> {
+    const response = await this.axiosInstance.get<IApiResponse<T>>(url, config);
     return response.data;
   }
 
@@ -53,8 +53,8 @@ export class AxiosClient {
     url: string,
     data?: any,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
-    const response = await this.axiosInstance.post<ApiResponse<T>>(
+  ): Promise<IApiResponse<T>> {
+    const response = await this.axiosInstance.post<IApiResponse<T>>(
       url,
       data,
       config
@@ -66,8 +66,8 @@ export class AxiosClient {
     url: string,
     data?: any,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
-    const response = await this.axiosInstance.put<ApiResponse<T>>(
+  ): Promise<IApiResponse<T>> {
+    const response = await this.axiosInstance.put<IApiResponse<T>>(
       url,
       data,
       config
@@ -78,8 +78,8 @@ export class AxiosClient {
   async delete<T = any>(
     url: string,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
-    const response = await this.axiosInstance.delete<ApiResponse<T>>(
+  ): Promise<IApiResponse<T>> {
+    const response = await this.axiosInstance.delete<IApiResponse<T>>(
       url,
       config
     );
@@ -90,8 +90,8 @@ export class AxiosClient {
     url: string,
     data?: any,
     config?: AxiosRequestConfig
-  ): Promise<ApiResponse<T>> {
-    const response = await this.axiosInstance.patch<ApiResponse<T>>(
+  ): Promise<IApiResponse<T>> {
+    const response = await this.axiosInstance.patch<IApiResponse<T>>(
       url,
       data,
       config

@@ -1,5 +1,5 @@
 import { apiClient } from '../client/axios-client';
-import { PaginatedResponse } from '../client/types';
+import { IPaginatedResponse } from '../client/types';
 
 export interface User {
   id: string;
@@ -23,8 +23,8 @@ export const usersApi = {
     limit?: number;
     search?: string;
     role?: string;
-  }): Promise<PaginatedResponse<User>> => {
-    const response = await apiClient.get<PaginatedResponse<User>>('/users', {
+  }): Promise<IPaginatedResponse<User>> => {
+    const response = await apiClient.get<IPaginatedResponse<User>>('/users', {
       params,
     });
     return response.data;

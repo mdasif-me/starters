@@ -62,7 +62,7 @@ export class SessionValidator {
     if (!isValid || !user?.permissions) return false;
 
     return requiredPermissions.some((permission) =>
-      user.permissions.includes(permission)
+      user.permissions?.includes(permission)
     );
   }
 
@@ -73,7 +73,7 @@ export class SessionValidator {
     if (!isValid || !user?.permissions) return false;
 
     return requiredPermissions.every((permission) =>
-      user.permissions.includes(permission)
+      user.permissions?.includes(permission)
     );
   }
 

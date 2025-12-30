@@ -2,22 +2,22 @@
 interface ICacheEntry {
   data: any;
   timestamp: number;
-  expiresAt: number;
+  expires_at: number;
 }
 
 export class CacheManager {
   private cache = new Map<string, ICacheEntry>();
-  private maxEntries = 100;
-  private cleanupInterval = 5 * 60 * 1000; //INFO: 5 minutes
+  private max_entries = 100;
+  private cleanup_interval = 5 * 60 * 1000; //INFO: 5 minutes
 
   constructor() {
     //INFO: start cleanup timer
-    setInterval(() => this.cleanup(), this.cleanupInterval);
+    setInterval(() => this.cleanup(), this.cleanup_interval);
   }
 
   set(key: string, data: any, ttl: number = 5 * 60 * 1000): void {
     //INFO: evict oldest entry if cache is full
-    if (this.cache.size >= this.maxEntries) {
+    if (this.cache.size >= this.max_entries) {
       const oldestKey = Array.from(this.cache.keys())[0];
       this.cache.delete(oldestKey);
     }
@@ -25,7 +25,7 @@ export class CacheManager {
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
-      expiresAt: Date.now() + ttl,
+      expires_at: Date.now() + ttl,
     });
   }
 
@@ -35,7 +35,7 @@ export class CacheManager {
     if (!entry) return null;
 
     //INFO: check if expired
-    if (Date.now() > entry.expiresAt) {
+    if (Date.now() > entry.expires_at) {
       this.cache.delete(key);
       return null;
     }
@@ -71,7 +71,7 @@ export class CacheManager {
 
   has(key: string): boolean {
     return (
-      this.cache.has(key) && Date.now() <= (this.cache.get(key)?.expiresAt || 0)
+      this.cache.has(key) && Date.now() <= (this.cache.get(key)?.expires_at || 0)
     );
   }
 
@@ -79,7 +79,7 @@ export class CacheManager {
     const now = Date.now();
 
     for (const [key, entry] of this.cache.entries()) {
-      if (now > entry.expiresAt) {
+      if (now > entry.expires_at) {
         this.cache.delete(key);
       }
     }
@@ -88,7 +88,7 @@ export class CacheManager {
   getStats() {
     return {
       size: this.cache.size,
-      maxEntries: this.maxEntries,
+      max_entries: this.max_entries,
       keys: Array.from(this.cache.keys()),
     };
   }

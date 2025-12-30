@@ -21,7 +21,7 @@ export class RequestInterceptor {
     config.headers['Content-Type'] = 'application/json';
     config.headers['X-Client'] = 'nextjs-web';
     config.headers['X-Client-Version'] =
-      process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';
+      process.env.NEXT_PUBLIC_APP_VERSION || '0.0.0';
 
     //NOTE: remove custom headers
     delete config.headers?.['requires-auth'];

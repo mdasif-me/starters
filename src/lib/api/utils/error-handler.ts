@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ApiError } from '../client/types';
+import { IApiError } from '../client/types';
 
 export class ErrorHandler {
-  static handle(error: any): ApiError {
+  static handle(error: any): IApiError {
     if (this.isApiError(error)) {
       return error;
     }
@@ -31,7 +31,7 @@ export class ErrorHandler {
     };
   }
 
-  static isApiError(error: any): error is ApiError {
+  static isApiError(error: any): error is IApiError {
     return (
       error &&
       typeof error === 'object' &&
