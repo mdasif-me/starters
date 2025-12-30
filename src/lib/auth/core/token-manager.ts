@@ -10,11 +10,11 @@ export interface IAuthTokens {
 }
 
 export interface IDecodedToken extends IJwtPayload {
-  sub: string;
+  id: string;
   email: string;
   name: string;
   role: string;
-  permissions: string[];
+  permissions?: string[];
   tenantId?: string;
   sessionId?: string;
 }
@@ -38,14 +38,14 @@ class TokenManager {
     try {
       //INFO: store in cookies (HTTP-only for security)
       this.cookieStorage.set('access_token', tokens.accessToken, {
-        httpOnly: true,
+        httpOnly: process.env.NODE_ENV === 'production',
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         maxAge: Math.floor((tokens.expiresAt - Date.now()) / 1000),
       });
 
       this.cookieStorage.set('refresh_token', tokens.refreshToken, {
-        httpOnly: true,
+        httpOnly: process.env.NODE_ENV === 'production',
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60, // 7 days

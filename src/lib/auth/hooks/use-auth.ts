@@ -119,7 +119,7 @@ export function useAuth(): IUseAuthReturn {
     (permissions: string[]): boolean => {
       if (!user?.permissions) return false;
       return permissions.some((permission) =>
-        user.permissions.includes(permission)
+        user.permissions?.includes(permission)
       );
     },
     [user]
@@ -129,7 +129,7 @@ export function useAuth(): IUseAuthReturn {
     (permissions: string[]): boolean => {
       if (!user?.permissions) return false;
       return permissions.every((permission) =>
-        user.permissions.includes(permission)
+        user.permissions?.includes(permission)
       );
     },
     [user]

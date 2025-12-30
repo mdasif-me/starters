@@ -13,30 +13,43 @@ export class AuthMiddleware {
     const { pathname } = request.nextUrl;
     const token = request.cookies.get('access_token')?.value;
 
-    // 1. Check public routes
+    // 1. check public routes
     if (this.isPublicRoute(pathname)) {
+      // redirect authenticated users away from login/register pages
+      if (token && (pathname === '/login' || pathname === '/register')) {
+        try {
+          jwtDecode(token);
+          return NextResponse.redirect(new URL('/dashboard', request.url));
+        } catch {
+          // invalid token, allow access to login/register
+        }
+      }
       return NextResponse.next();
     }
 
-    // 2. Check if token exists
+    // 2. check if token exists
     if (!token) {
       return this.redirectToLogin(request, pathname);
     }
 
     try {
-      const decoded = jwtDecode<{ role: string; permissions: string[] }>(token);
+      const decoded = jwtDecode<{
+        id: string;
+        role: string;
+        permissions?: string[];
+      }>(token);
 
-      // 3. Check protected routes
+      // 3. check protected routes
       if (this.isProtectedRoute(pathname)) {
         return this.handleProtectedRoute(request, decoded);
       }
 
-      // 4. Check admin routes
+      // 4. check admin routes
       if (this.isAdminRoute(pathname)) {
         return this.handleAdminRoute(request, decoded);
       }
 
-      // 5. Add user info to headers
+      // 5. add user info to headers
       return this.addUserHeaders(request, decoded);
     } catch (error) {
       console.error('Middleware error:', error);
@@ -61,7 +74,8 @@ export class AuthMiddleware {
       const regex = new RegExp(`^${pattern.replace(/:[^/]+/g, '([^/]+)')}$`);
       return regex.test(pathname);
     }
-    return pathname.startsWith(pattern);
+    // exact match or prefix match with trailing slash
+    return pathname === pattern || pathname.startsWith(pattern + '/');
   }
 
   private static redirectToLogin(
@@ -78,7 +92,7 @@ export class AuthMiddleware {
     user: any
   ): NextResponse {
     const headers = new Headers(request.headers);
-    headers.set('x-user-id', user.sub || '');
+    headers.set('x-user-id', user.id || '');
     headers.set('x-user-role', user.role || '');
 
     return NextResponse.next({
@@ -95,7 +109,7 @@ export class AuthMiddleware {
     }
 
     const headers = new Headers(request.headers);
-    headers.set('x-user-id', user.sub || '');
+    headers.set('x-user-id', user.id || '');
     headers.set('x-user-role', user.role || '');
     headers.set('x-user-permissions', user.permissions?.join(',') || '');
 
@@ -106,7 +120,7 @@ export class AuthMiddleware {
 
   private static addUserHeaders(request: NextRequest, user: any): NextResponse {
     const headers = new Headers(request.headers);
-    headers.set('x-user-id', user.sub || '');
+    headers.set('x-user-id', user.id || '');
     headers.set('x-user-role', user.role || '');
 
     if (user.permissions) {
@@ -121,7 +135,7 @@ export class AuthMiddleware {
   private static clearAuthAndRedirect(request: NextRequest): NextResponse {
     const response = NextResponse.redirect(new URL('/login', request.url));
 
-    // Clear auth cookies
+    // clear auth cookies
     ['access_token', 'refresh_token'].forEach((cookie) => {
       response.cookies.delete(cookie);
     });
