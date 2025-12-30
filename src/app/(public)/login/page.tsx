@@ -2,49 +2,34 @@
 'use client';
 
 import { useAuth } from '@/lib/auth/hooks/use-auth';
-import { AuthSchemas } from '@/lib/utils/validation/schemas';
-import { Validator } from '@/lib/utils/validation/validators';
+import { loginSchema, type LoginForm } from '@/lib/features/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 export default function LoginPage() {
   const { login, isLoading } = useAuth();
-
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false,
-  });
-
-  const [errors, setErrors] = useState<Record<string, string[]>>({});
   const [submitError, setSubmitError] = useState<string>('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginForm>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      rememberMe: false,
+    },
+  });
 
-    // clear field error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: [] }));
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: LoginForm) => {
     setSubmitError('');
 
-    const validation = Validator.validateSync(AuthSchemas.login, formData);
-
-    if (!validation.success) {
-      setErrors(validation.errors || {});
-      return;
-    }
-
     try {
-      await login(formData.email, formData.password);
+      await login(data.email, data.password);
     } catch (error: any) {
       setSubmitError(
         error.message || 'Login failed. Please check your credentials.'
@@ -70,7 +55,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form className='mt-8 space-y-6' onSubmit={handleSubmit}>
+        <form className='mt-8 space-y-6' onSubmit={handleSubmit(onSubmit)}>
           {submitError && (
             <div className='rounded-md bg-red-50 p-4'>
               <div className='text-sm text-red-700'>{submitError}</div>
@@ -84,19 +69,18 @@ export default function LoginPage() {
               </label>
               <input
                 id='email'
-                name='email'
                 type='email'
                 autoComplete='email'
-                required
-                value={formData.email}
-                onChange={handleChange}
+                {...register('email')}
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
                   errors.email ? 'border-red-300' : 'border-gray-300'
                 } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
                 placeholder='Email address'
               />
               {errors.email && (
-                <p className='mt-1 text-sm text-red-600'>{errors.email[0]}</p>
+                <p className='mt-1 text-sm text-red-600'>
+                  {errors.email.message}
+                </p>
               )}
             </div>
             <div>
@@ -105,12 +89,9 @@ export default function LoginPage() {
               </label>
               <input
                 id='password'
-                name='password'
                 type='password'
                 autoComplete='current-password'
-                required
-                value={formData.password}
-                onChange={handleChange}
+                {...register('password')}
                 className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
                   errors.password ? 'border-red-300' : 'border-gray-300'
                 } placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm`}
@@ -118,7 +99,7 @@ export default function LoginPage() {
               />
               {errors.password && (
                 <p className='mt-1 text-sm text-red-600'>
-                  {errors.password[0]}
+                  {errors.password.message}
                 </p>
               )}
             </div>
@@ -128,10 +109,8 @@ export default function LoginPage() {
             <div className='flex items-center'>
               <input
                 id='remember-me'
-                name='rememberMe'
                 type='checkbox'
-                checked={formData.rememberMe}
-                onChange={handleChange}
+                {...register('rememberMe')}
                 className='h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded'
               />
               <label
