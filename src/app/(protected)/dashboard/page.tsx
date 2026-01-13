@@ -1,4 +1,4 @@
-import { AppSidebar } from '@/app/components/app-sidebar';
+import { AppSidebar } from '@/app/components/shared/app-sidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,9 +13,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/app/components/shared/ui/sidebar';
-import Image from 'next/image';
-import user from '../../../../public/img/user.svg';
-import { SearchForm } from '../../components/search-form';
+import { SearchForm } from '../../components/shared/search-form';
+import User from '../../components/shared/user';
 
 export default function Page() {
   return (
@@ -50,15 +49,7 @@ export default function Page() {
               <SearchForm />
             </div>
           </header>
-          <div className='flex items-center gap-3'>
-            <article>
-              <h1 className='text-sm text-[#0F172B] text-end'>Admin User</h1>
-              <p className='text-[#62748E] text-xs text-end'>
-                admin@educenter.com
-              </p>
-            </article>
-            <Image src={user} alt='User' />
-          </div>
+          <User />
         </div>
       </SidebarInset>
     </SidebarProvider>
