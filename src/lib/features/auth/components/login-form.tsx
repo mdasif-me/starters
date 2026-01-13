@@ -28,14 +28,13 @@ export function LoginForm() {
     defaultValues: {
       email: '',
       password: '',
-      remember_me: false,
     },
     resolver: zodResolver(loginSchema),
   });
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await login(data.email, data.password, data.remember_me);
+      await login(data.email, data.password);
     } catch (error: any) {
       form.setError('root', {
         message:

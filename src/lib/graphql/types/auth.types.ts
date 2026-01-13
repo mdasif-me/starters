@@ -4,7 +4,6 @@
 export interface ILoginUserInput {
   email: string;
   password: string;
-  remember_me?: boolean;
 }
 
 export interface ITokenData {

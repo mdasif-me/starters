@@ -15,11 +15,7 @@ interface IUseAuthReturn {
     confirm_password: string,
     accept_terms: boolean
   ) => Promise<void>;
-  login: (
-    email: string,
-    password: string,
-    remember_me?: boolean
-  ) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
   resetPassword: (token: string, newPassword: string) => Promise<void>;
   verifyEmail: (token: string) => Promise<void>;
@@ -55,13 +51,12 @@ export function useAuth(): IUseAuthReturn {
   }, []);
 
   const login = useCallback(
-    async (email: string, password: string, remember_me?: boolean) => {
+    async (email: string, password: string) => {
       setIsLoading(true);
       try {
         const response = await graphqlAuthApi.login({
           email,
           password,
-          remember_me,
         });
         const data = response.data;
         toast.success(response.message);
@@ -75,13 +70,11 @@ export function useAuth(): IUseAuthReturn {
         const userData = tokenManager.decodeToken(data.tokens.accessToken);
         setUser(userData);
 
-        // redirect based on role or return URL
         const searchParams = new URLSearchParams(window.location.search);
         const redirectTo =
           searchParams.get('redirect') || getDefaultRoute(userData?.role);
 
         router.push(redirectTo);
-        router.refresh(); // refresh server components
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         toast.error(error.message);

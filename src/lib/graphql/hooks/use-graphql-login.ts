@@ -25,7 +25,6 @@ const cookies = new Cookies();
  *       const result = await loginUser({
  *         email: values.email,
  *         password: values.password,
- *         remember_me: values.remember_me
  *       });
  *       console.log('Login successful:', result.data);
  *     } catch (err) {

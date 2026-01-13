@@ -12,7 +12,6 @@ export const loginSchema = z.object({
       /[^A-Za-z0-9]/,
       'Password must contain at least one special character'
     ),
-  remember_me: z.boolean().optional(),
 });
 
 export type TLoginForm = z.infer<typeof loginSchema>;
