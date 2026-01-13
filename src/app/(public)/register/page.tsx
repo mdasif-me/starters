@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { RegisterForm } from '../../../lib/features/auth/components/register-form';
-import Logo from '../../components/shared/logo';
+import Logo from '../../components/shared/logo-name';
 import { Card, CardContent, CardFooter } from '../../components/shared/ui/card';
 
 export default function RegisterPage() {

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import logo from '../../../public/logo.svg';
 
-export default function Logo() {
+export default function LogoWithName() {
   return (
     <div className='flex items-center gap-3'>
       <Image src={logo} alt='Logo' width={40} height={40} />
