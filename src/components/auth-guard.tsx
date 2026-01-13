@@ -1,9 +1,9 @@
 import { usePermission } from '../features/auth/hooks'
-import type { IRole } from '../features/auth/types'
+import type { ERole } from '../features/auth/types'
 
 interface PermissionGuardProps {
   children: React.ReactNode
-  allowedRoles?: IRole[]
+  allowedRoles?: ERole[]
   requiredPermission?: string
   fallback?: React.ReactNode
 }
