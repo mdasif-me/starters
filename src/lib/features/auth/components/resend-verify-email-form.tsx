@@ -14,7 +14,7 @@ import { Input } from '@/app/components/shared/ui/input';
 import { Spinner } from '@/app/components/shared/ui/spinner';
 import { useAuth } from '@/lib/auth/hooks/use-auth';
 import {
-  type ResendVerificationEmailForm,
+  type TResendVerificationEmailForm,
   resendVerificationEmailSchema,
 } from '@/lib/features/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,7 +32,7 @@ export function ResendVerifyEmailForm() {
     resolver: zodResolver(resendVerificationEmailSchema),
   });
 
-  const onSubmit = async (data: ResendVerificationEmailForm) => {
+  const onSubmit = async (data: TResendVerificationEmailForm) => {
     try {
       await resendVerificationEmail(data.email);
     } catch (error: any) {
