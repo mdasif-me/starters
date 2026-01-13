@@ -23,7 +23,9 @@ import {
   Settings,
   Users,
 } from 'lucide-react';
-import Logo from './logo';
+import Link from 'next/link';
+import LogoWithName from './logo';
+import { SearchForm } from './search-form';
 
 const data = {
   versions: ['1.0.1', '1.1.0-alpha', '2.0.0-beta1'],
@@ -34,12 +36,12 @@ const data = {
       items: [
         {
           title: 'Dashboard',
-          url: '/',
+          url: '/dashboard',
           icon: LayoutDashboard,
         },
         {
           title: 'Students',
-          url: '/students',
+          url: '/dashboard/students',
           icon: Users,
         },
       ],
@@ -50,23 +52,23 @@ const data = {
       items: [
         {
           title: 'Classes & Batches',
-          url: '/classes-and-batches',
+          url: '/dashboard/classes-and-batches',
           isActive: true,
           icon: BookOpen,
         },
         {
           title: 'Attendance',
-          url: '/attendance',
+          url: '/dashboard/attendance',
           icon: ClipboardCheck,
         },
         {
           title: 'Marks & Grades',
-          url: '/marks-and-grades',
+          url: '/dashboard/marks-and-grades',
           icon: Award,
         },
         {
           title: 'Fees & Payments',
-          url: '/fees-and-payments',
+          url: '/dashboard/fees-and-payments',
           icon: CreditCard,
         },
       ],
@@ -77,17 +79,17 @@ const data = {
       items: [
         {
           title: 'Reports',
-          url: '/reports',
+          url: '/dashboard/reports',
           icon: FileText,
         },
         {
           title: 'Notifications',
-          url: '/notifications',
+          url: '/dashboard/notifications',
           icon: Bell,
         },
         {
           title: 'Settings',
-          url: '/settings',
+          url: '/dashboard/settings',
           icon: Settings,
         },
       ],
@@ -103,9 +105,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader className='border-b'>
-        <Logo />
+        <LogoWithName />
       </SidebarHeader>
       <SidebarContent>
+        <div className='block lg:hidden mt-3'>
+          <SearchForm />
+        </div>
         {data.navMain.map((group) => (
           <SidebarGroup key={group.title}>
             <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
@@ -117,14 +122,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild isActive={item.isActive}>
-                        <a href={item.url} className='flex items-center gap-2'>
+                        <Link
+                          href={item.url}
+                          className='flex items-center gap-2'
+                        >
                           {IconComponent ? (
                             <IconComponent size={24} className='shrink-0' />
                           ) : (
                             <FallbackIcon />
                           )}
                           <span>{item.title}</span>
-                        </a>
+                        </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );

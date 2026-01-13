@@ -1,7 +1,7 @@
 import { ResetPasswordForm } from '@/lib/features/auth/components/reset-password-form';
 import Link from 'next/link';
 import { ResendVerifyEmailForm } from '../../../lib/features/auth/components/resend-verify-email-form';
-import Logo from '../../components/shared/logo';
+import Logo from '../../components/shared/logo-name';
 import { Card, CardContent, CardFooter } from '../../components/shared/ui/card';
 import {
   Popover,
