@@ -13,10 +13,7 @@ import {
 import { Input } from '@/app/components/shared/ui/input';
 import { Spinner } from '@/app/components/shared/ui/spinner';
 import { useAuth } from '@/lib/auth/hooks/use-auth';
-import {
-  type ResendVerificationEmailForm,
-  resendVerificationEmailSchema,
-} from '@/lib/features/auth';
+import { resendVerificationEmailSchema } from '@/lib/features/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MailIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -32,7 +29,9 @@ export function ResendVerifyEmailForm() {
     resolver: zodResolver(resendVerificationEmailSchema),
   });
 
-  const onSubmit = async (data: ResendVerificationEmailForm) => {
+  const onSubmit = async (
+    data: z.infer<typeof resendVerificationEmailSchema>
+  ) => {
     try {
       await resendVerificationEmail(data.email);
     } catch (error: any) {
