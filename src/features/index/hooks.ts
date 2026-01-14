@@ -1,0 +1,30 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toastManager } from '../../components/ui/toast'
+import { apiClient } from '../../lib/api-client'
+import { infoApi } from './api'
+import type { companyInfo } from './schema'
+
+export const useInfo = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (variables: { data: companyInfo; phone_number: string }) =>
+      infoApi.addInformation(variables.data, variables.phone_number),
+    onSuccess: (data) => {
+      apiClient.setToken(data.access_token)
+      queryClient.setQueryData(['info'], data.access_token)
+      toastManager.add({
+        title: 'Success',
+        description: data.message,
+        type: 'success',
+      })
+    },
+    onError: (error) => {
+      toastManager.add({
+        title: 'Error',
+        description: error.message,
+        type: 'error',
+      })
+    },
+  })
+}

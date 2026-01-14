@@ -4,7 +4,7 @@ import type {
   LoginCredentials,
   SignupCredentials,
 } from './schemas'
-import type { IAuthResponse, IUserResponse } from './types'
+import type { IAuthResponse } from './types'
 
 export const authApi = {
   /**
@@ -45,10 +45,10 @@ export const authApi = {
 
   /**
    * Get the user profile.
-   * @returns {Promise<IUserResponse>} - Promise with user response.
+   * @returns {Promise<IAuthResponse>} - Promise with user response.
    */
-  getUserProfile: (): Promise<IUserResponse> => {
-    return apiClient.get<IUserResponse>('/u/me')
+  getUserProfile: (): Promise<IAuthResponse> => {
+    return apiClient.get<IAuthResponse>('/u/me')
   },
 
   logout: () => {

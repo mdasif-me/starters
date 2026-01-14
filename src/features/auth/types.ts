@@ -26,16 +26,6 @@ export interface IUser {
   updated_at: string
   deleted_at: string | null
 }
-
-export interface IUserResponse {
-  status_code: number
-  message: string
-  edge: {
-    node: string
-    data: IUser
-  }
-}
-
 export interface IAuthResponse {
   status_code: number
   message: string
