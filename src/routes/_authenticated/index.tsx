@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button'
-import CardAreaChart from '@/features/index/components/card-area-chart'
-import PendingSalesTable from '@/features/index/components/pending-sales.table'
-import SalesBarChart from '@/features/index/components/sales-bar-chart'
+import {
+  CardAreaChart,
+  PendingSalesTable,
+  SalesBarChart,
+} from '@/features/index'
 import { Icon } from '@/utils/icon'
 import { File01Icon } from '@hugeicons-pro/core-stroke-rounded'
 import { createFileRoute } from '@tanstack/react-router'
