@@ -48,7 +48,7 @@ export const authApi = {
    * @returns {Promise<IAuthResponse>} - Promise with user response.
    */
   getUserProfile: (): Promise<IAuthResponse> => {
-    return apiClient.get<IAuthResponse>('/u/me')
+    return apiClient.get<IAuthResponse>('/u?scope=retrieve_information')
   },
 
   logout: () => {
