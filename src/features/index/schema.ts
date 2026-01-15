@@ -50,7 +50,7 @@ export const businessInfoSchema = z
   })
 
 export const organizationDetailsSchema = z.object({
-  date_of_incorporation: z.date('Invalid date format').optional(),
+  date_of_incorporation: z.date('Invalid date format'),
   registered_address: z
     .string()
     .trim()

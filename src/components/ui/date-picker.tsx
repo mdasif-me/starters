@@ -141,7 +141,7 @@ export default function DatePicker({
   value,
   onChange,
   placeholder = 'Pick a date',
-  className = 'w-72',
+  className = 'w-full',
   minDate,
   maxDate,
   showTimePicker = false,
@@ -417,11 +417,12 @@ export default function DatePicker({
       <PopoverTrigger asChild>
         <div className={cn('relative', className)}>
           <Button
+            size={'lg'}
             type="button"
             variant="outline"
             mode="input"
             placeholder={!currentValue}
-            className="w-full"
+            className="w-full text-foreground ring-0! focus-visible:border-primary!"
             disabled={disabled}
             aria-required={required}
           >

@@ -270,7 +270,10 @@ export default function InfoForm() {
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Date of Incorporation</FormLabel>
+                      <FormLabel>
+                        Date of Incorporation{' '}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
                       <FormControl>
                         <DatePicker
                           mode="single"
@@ -291,7 +294,10 @@ export default function InfoForm() {
                 name="registered_address"
                 render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel>Registered Address</FormLabel>
+                    <FormLabel>
+                      Registered Address{' '}
+                      <span className="text-destructive">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -309,7 +315,10 @@ export default function InfoForm() {
                 name="mailing_address"
                 render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel>Mailing Address</FormLabel>
+                    <FormLabel>
+                      Mailing Address{' '}
+                      <span className="text-destructive">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -327,7 +336,9 @@ export default function InfoForm() {
                 name="email_address"
                 render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel>Email Address</FormLabel>
+                    <FormLabel>
+                      Email Address <span className="text-destructive">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -346,7 +357,10 @@ export default function InfoForm() {
                 name="website"
                 render={({ field, fieldState }) => (
                   <FormItem>
-                    <FormLabel>Website</FormLabel>
+                    <FormLabel>
+                      Company Website{' '}
+                      <span className="text-destructive">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
