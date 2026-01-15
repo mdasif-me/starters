@@ -80,7 +80,7 @@ export default function InfoForm() {
   }
 
   function onSubmit(data: companyInfo) {
-    addInformation({ data, phone_number: '' })
+    addInformation(data)
   }
 
   return (

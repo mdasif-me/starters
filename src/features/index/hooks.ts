@@ -8,8 +8,7 @@ export const useInfo = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (variables: { data: companyInfo; phone_number: string }) =>
-      infoApi.addInformation(variables.data, variables.phone_number),
+    mutationFn: (data: companyInfo) => infoApi.addInformation(data),
     onSuccess: (data) => {
       apiClient.setToken(data.access_token)
       queryClient.setQueryData(['info'], data.access_token)

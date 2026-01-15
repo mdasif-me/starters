@@ -13,8 +13,8 @@ export const businessInfoSchema = z
     registration_number: z
       .string()
       .trim()
-      .min(5, 'Registration number must be 5-7 characters long')
-      .max(7, 'Registration number must be 5-7 characters long')
+      .min(14, 'Registration number must be 14 characters long')
+      .max(14, 'Registration number must be 14 characters long')
       .regex(/^[a-zA-Z0-9]+$/, 'Must be alphanumeric (no spaces or symbols)')
       .optional(),
 

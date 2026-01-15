@@ -6,6 +6,9 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import { AnchoredToastProvider, ToastProvider } from '@/components/ui/toast'
 import type { ERole, IUser } from '@/features/auth/types'
+import InfoForm from '@/features/index/components/info-form'
+import VerificationStatus from '@/features/index/components/verification-status'
+import { getCookie } from '@/hooks/use-cookie-storage'
 import type { QueryClient } from '@tanstack/react-query'
 
 interface AuthHelpers {
@@ -21,6 +24,23 @@ export interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => {
+    const user: string | null = getCookie('user')
+    const user_info: IUser | null = user ? JSON.parse(user) : null
+    const isCompany = !!user_info?.company_info
+    const isPending = user_info?.company_info?.verification_status === 'pending'
+
+    if (isPending) {
+      return <VerificationStatus />
+    }
+    if (isCompany) {
+      return (
+        <div className="w-full flex justify-center braid-shape">
+          <div className="w-fit h-fit mx-auto my-auto bg-white rounded-2xl shadow backdrop-blur">
+            <InfoForm />
+          </div>
+        </div>
+      )
+    }
     return (
       <>
         <ToastProvider>

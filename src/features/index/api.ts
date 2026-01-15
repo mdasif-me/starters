@@ -3,10 +3,13 @@ import type { companyInfo } from './schema'
 import type { IInfoResponse } from './types'
 
 export const infoApi = {
-  addInformation: (
-    data: companyInfo,
-    phone_number: string,
-  ): Promise<IInfoResponse> => {
-    return apiClient.post<IInfoResponse>(`/u/${phone_number}`, data)
+  addInformation: (data: companyInfo): Promise<IInfoResponse> => {
+    const payload = {
+      company_info: { ...data },
+    }
+    return apiClient.patch<IInfoResponse>(
+      `/u?scope=update_information`,
+      payload,
+    )
   },
 }
