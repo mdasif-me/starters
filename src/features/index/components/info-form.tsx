@@ -1,5 +1,6 @@
 import { SingleCombobox, type TComboboxOption } from '@/components/combobox'
 import { Button } from '@/components/ui/button'
+import DatePicker from '@/components/ui/date-picker'
 import {
   Form,
   FormControl,
@@ -46,11 +47,11 @@ export default function InfoForm() {
     defaultValues: {
       name: '',
       type: EBuisnessType.LIMITED_COMPANY,
-      registration_number: '00000',
+      registration_number: '012345',
       tin: '',
       trade_license_number: '',
       vat_number: '',
-      date_of_incorporation: '',
+      date_of_incorporation: undefined,
       registered_address: '',
       mailing_address: '',
       email_address: '',
@@ -266,19 +267,23 @@ export default function InfoForm() {
               <FormField
                 control={form.control}
                 name="date_of_incorporation"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>Date of Incorporation</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="date"
-                        aria-invalid={!!fieldState.error}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Date of Incorporation</FormLabel>
+                      <FormControl>
+                        <DatePicker
+                          mode="single"
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Select date of incorporation"
+                          required
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
               />
 
               <FormField
