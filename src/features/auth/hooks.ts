@@ -4,6 +4,7 @@ import { toastManager } from '../../components/ui/toast'
 import { useCookieStorage } from '../../hooks/use-cookie-storage'
 import { apiClient } from '../../lib/api-client'
 import { authApi } from './api'
+import type { IUser } from './types'
 
 /**
  * A hook to login a user.
@@ -74,10 +75,7 @@ export const useSignup = () => {
  * toast if the verification fails.
  */
 export const useVerify = () => {
-  const [, setToken] = useCookieStorage<string | null>('token', null, {
-    path: '/',
-  })
-  const [, setUserInfo] = useCookieStorage<string>('user', '', {
+  const [, setUserInfo] = useCookieStorage<IUser | null>('user', null, {
     path: '/',
   })
   const queryClient = useQueryClient()
@@ -89,8 +87,7 @@ export const useVerify = () => {
       const userResponse = await authApi.getUserProfile()
       const user = userResponse.edge.data
 
-      setToken(data.access_token)
-      setUserInfo(JSON.stringify(user))
+      setUserInfo(user)
 
       queryClient.setQueryData(['user'], user)
 
@@ -149,7 +146,7 @@ export const useResend = () => {
 export const useLogout = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const [, , removeUserCookie] = useCookieStorage<string | null>('user', null, {
+  const [, , removeUserCookie] = useCookieStorage<IUser | null>('user', null, {
     path: '/',
   })
 

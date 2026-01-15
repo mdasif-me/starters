@@ -25,8 +25,7 @@ export interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => {
     const token = getCookie<string>('token')
-    const user: string | null = getCookie('user')
-    const user_info: IUser | null = user ? JSON.parse(user) : null
+    const user_info = getCookie<IUser>('user')
     const isCompany = !!user_info?.company_info
     const isPending = user_info?.company_info?.verification_status === 'pending'
 

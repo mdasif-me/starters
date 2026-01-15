@@ -1,21 +1,29 @@
-import { useCookieStorage } from '@/hooks/use-cookie-storage'
+import { getCookie, useCookieStorage } from '@/hooks/use-cookie-storage'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toastManager } from '../../components/ui/toast'
-import { apiClient } from '../../lib/api-client'
+import type { IUser } from '../auth/types'
 import { infoApi } from './api'
 import type { companyInfo } from './schema'
 
 export const useInfo = () => {
-  const [, setUser] = useCookieStorage('user', '', { path: '/' })
+  const token = getCookie<string>('token')
+  const currentUser = getCookie<IUser>('user')
+
+  const [, setUser] = useCookieStorage<IUser | null>('user', null, {
+    path: '/',
+  })
 
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (data: companyInfo) => infoApi.addInformation(data),
+
     onSuccess: (data) => {
-      apiClient.setToken(data.access_token)
-      queryClient.setQueryData(['info'], data.access_token)
-      setUser(JSON.stringify({ company_info: data }))
+      queryClient.setQueryData(['user'], token)
+      setUser({
+        ...currentUser,
+        company_info: data.edge.data,
+      } as unknown as IUser)
       toastManager.add({
         title: 'Success',
         description: data.message,
