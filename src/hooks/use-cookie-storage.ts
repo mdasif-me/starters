@@ -46,6 +46,24 @@ function setCookie<T>(
   }
 }
 
+export function getRawCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null
+
+  const cookies = document.cookie.split('; ')
+  for (const cookie of cookies) {
+    const [cookieName, ...rest] = cookie.split('=')
+    if (cookieName === name) {
+      try {
+        return decodeURIComponent(rest.join('='))
+      } catch (error) {
+        console.error('Error decoding cookie:', error)
+        return null
+      }
+    }
+  }
+  return null
+}
+
 export function getCookie<T>(name: string): T | null {
   if (typeof document === 'undefined') return null
 
@@ -64,7 +82,6 @@ export function getCookie<T>(name: string): T | null {
   }
   return null
 }
-
 export function useCookieStorage<T>(
   key: string,
   initialValue: T | (() => T),

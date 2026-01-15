@@ -6,7 +6,6 @@ import { infoApi } from './api'
 import type { companyInfo } from './schema'
 
 export const useInfo = () => {
-  const token = getCookie<string>('token')
   const currentUser = getCookie<IUser>('user')
 
   const [, setUser] = useCookieStorage<IUser | null>('user', null, {
@@ -19,11 +18,13 @@ export const useInfo = () => {
     mutationFn: (data: companyInfo) => infoApi.addInformation(data),
 
     onSuccess: (data) => {
-      queryClient.setQueryData(['user'], token)
-      setUser({
+      const updatedUser: IUser = {
         ...currentUser,
         company_info: data.edge.data,
-      } as unknown as IUser)
+      } as unknown as IUser
+
+      queryClient.setQueryData(['user'], updatedUser)
+      setUser(updatedUser)
       toastManager.add({
         title: 'Success',
         description: data.message,

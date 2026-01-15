@@ -8,30 +8,27 @@ import { AnchoredToastProvider, ToastProvider } from '@/components/ui/toast'
 import type { ERole, IUser } from '@/features/auth/types'
 import InfoForm from '@/features/index/components/info-form'
 import VerificationStatus from '@/features/index/components/verification-status'
-import { getCookie } from '@/hooks/use-cookie-storage'
+import { getCookie, getRawCookie } from '@/hooks/use-cookie-storage'
 import type { QueryClient } from '@tanstack/react-query'
 
-interface AuthHelpers {
+interface IAuthHelpers {
   getUser: () => IUser | null
   hasRole: (roles: ERole[]) => boolean
   hasPermission: (permission: string) => boolean
 }
 
-export interface MyRouterContext {
+export interface IRouterContext {
   queryClient: QueryClient
-  auth: AuthHelpers
+  auth: IAuthHelpers
 }
 
-export const Route = createRootRouteWithContext<MyRouterContext>()({
+export const Route = createRootRouteWithContext<IRouterContext>()({
   component: () => {
-    const token = getCookie<string>('token')
+    const token = getRawCookie('token')
     const user_info = getCookie<IUser>('user')
     const isCompany = !!user_info?.company_info
     const isPending = user_info?.company_info?.verification_status === 'pending'
 
-    if (isPending && token) {
-      return <VerificationStatus />
-    }
     if (!isCompany && token) {
       return (
         <div className="w-full flex justify-center braid-shape">
@@ -41,6 +38,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         </div>
       )
     }
+    if (isPending && token) {
+      return <VerificationStatus />
+    }
+
     return (
       <>
         <ToastProvider>

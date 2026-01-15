@@ -13,8 +13,7 @@ export const businessInfoSchema = z
     registration_number: z
       .string()
       .trim()
-      .min(14, 'Registration number must be 14 characters long')
-      .max(14, 'Registration number must be 14 characters long')
+      .length(14, 'Registration number must be exactly 14 characters long')
       .regex(/^[a-zA-Z0-9]+$/, 'Must be alphanumeric (no spaces or symbols)')
       .optional(),
 
@@ -27,13 +26,13 @@ export const businessInfoSchema = z
     trade_license_number: z
       .string()
       .trim()
-      .min(5, 'Trade License Number must be at least 5 characters long')
-      .max(20, 'Trade License Number must be at most 20 characters long'),
+      .length(12, 'Trade License Number must be exactly 12 digits long')
+      .regex(/^\d+$/, 'Trade License Number must contain only digits'),
 
     vat_number: z
       .string()
       .trim()
-      .length(13, 'VAT Registration Number must be exactly 13 digits long')
+      .length(9, 'VAT Registration Number must be exactly 9 digits long')
       .regex(/^\d+$/, 'VAT Registration Number must contain only digits'),
   })
   .superRefine((data, ctx) => {
