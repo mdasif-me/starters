@@ -319,7 +319,7 @@ export default function Combobox({
     }
 
     if (checkIcon === 'custom' && !customCheckIcon) {
-      return <ChevronLeft className="size-4 ms-auto text-primary" />
+      return <ChevronLeft className="size-4 ms-auto text-foreground" />
     }
 
     return <CommandCheck />
@@ -470,6 +470,7 @@ export default function Combobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          size={'lg'}
           variant="outline"
           role="combobox"
           mode="input"
@@ -480,7 +481,7 @@ export default function Combobox({
             mode === 'multiple' &&
               multipleDisplayMode === 'badges' &&
               'p-1 relative',
-            'justify-between',
+            'justify-between rounded-lg w-full text-foreground',
           )}
           disabled={disabled || readOnly}
         >

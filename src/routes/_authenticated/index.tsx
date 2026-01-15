@@ -1,9 +1,12 @@
 import { Button } from '@/components/ui/button'
+import type { IUser } from '@/features/auth/types'
 import {
   CardAreaChart,
   PendingSalesTable,
   SalesBarChart,
 } from '@/features/index'
+import InfoForm from '@/features/index/components/info-form'
+import { getCookie } from '@/hooks/use-cookie-storage'
 import { Icon } from '@/utils/icon'
 import { File01Icon } from '@hugeicons-pro/core-stroke-rounded'
 import { createFileRoute } from '@tanstack/react-router'
@@ -14,6 +17,19 @@ export const Route = createFileRoute('/_authenticated/')({
 })
 
 function RouteComponent() {
+  const user: IUser | null = getCookie('user')
+  const is_company: boolean = user?.company_info === null ? true : false
+
+  if (is_company) {
+    return (
+      <div className="w-full flex justify-center braid-shape">
+        <div className="w-fit h-fit mx-auto my-auto bg-white rounded-2xl shadow backdrop-blur">
+          <InfoForm />
+        </div>
+      </div>
+    )
+  }
+
   const [selectedCard, setSelectedCard] = useState<
     'total_sales' | 'approved_sales' | 'pending_sales'
   >('total_sales')
