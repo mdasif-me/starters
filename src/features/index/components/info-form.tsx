@@ -47,7 +47,7 @@ export default function InfoForm() {
     defaultValues: {
       name: '',
       type: EBuisnessType.LIMITED_COMPANY,
-      registration_number: '012345',
+      registration_number: '01234567891234',
       tin: '',
       trade_license_number: '',
       vat_number: '',
@@ -91,152 +91,155 @@ export default function InfoForm() {
       >
         {/* STEP 1: BUSINESS INFO */}
         {step === 'business-info' && (
-          <ScrollArea className="max-h-[75vh] p-6">
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-2xl font-semibold">
-                  Add Company Information
-                </h2>
-                <p className="text-muted-foreground">
-                  Fill out all the requirements to continue this application.
-                </p>
-              </div>
-              <Separator className="my-4" />
-              <div className="grid md:grid-cols-2 gap-4">
+          <div className="space-y-4 p-6">
+            <article>
+              <h2 className="md:text-2xl text-lg font-semibold">
+                Add Company Information
+              </h2>
+              <p className="text-muted-foreground md:text-base text-sm">
+                Fill out all the requirements to continue this application.
+              </p>
+            </article>
+            <Separator className="my-4" />
+            <ScrollArea className="max-h-[75vh] overflow-auto">
+              <div className="space-y-4">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Company Name{' '}
+                          <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Enter company name"
+                            aria-invalid={!!fieldState.error}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Enter your company registered name.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="type"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Business Type{' '}
+                          <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <SingleCombobox
+                            options={businessTypeOptions}
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="Select business type..."
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Select your company's business type.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="tin"
                   render={({ field, fieldState }) => (
                     <FormItem>
                       <FormLabel>
-                        Company Name <span className="text-destructive">*</span>
+                        TIN Number <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="Enter company name"
+                          placeholder="Enter 12-digit TIN"
                           aria-invalid={!!fieldState.error}
                         />
                       </FormControl>
-                      <FormDescription>
-                        Enter your company registered name.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        Business Type{' '}
-                        <span className="text-destructive">*</span>
-                      </FormLabel>
-                      <FormControl>
-                        <SingleCombobox
-                          options={businessTypeOptions}
-                          value={field.value}
-                          onChange={field.onChange}
-                          placeholder="Select business type..."
-                          disabled={isPending}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Select your company's business type.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="tin"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>
-                      TIN Number <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Enter 12-digit TIN"
-                        aria-invalid={!!fieldState.error}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="trade_license_number"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Trade License Number{' '}
-                      <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Enter trade license number"
-                        aria-invalid={!!fieldState.error}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="vat_number"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>
-                      VAT Number <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Enter 13-digit VAT number"
-                        aria-invalid={!!fieldState.error}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {form.watch('type') !== EBuisnessType.SOLE_PROPRIETORSHIP && (
-                <FormField
-                  control={form.control}
-                  name="registration_number"
+                  name="trade_license_number"
                   render={({ field, fieldState }) => (
                     <FormItem>
                       <FormLabel>
-                        Registration Number{' '}
+                        Trade License Number{' '}
                         <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="Enter registration number"
+                          placeholder="Enter trade license number"
                           aria-invalid={!!fieldState.error}
                         />
                       </FormControl>
-                      <FormDescription>
-                        Required for limited/public companies.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              )}
-            </div>
+                <FormField
+                  control={form.control}
+                  name="vat_number"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>
+                        VAT Number <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Enter 13-digit VAT number"
+                          aria-invalid={!!fieldState.error}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {form.watch('type') !== EBuisnessType.SOLE_PROPRIETORSHIP && (
+                  <FormField
+                    control={form.control}
+                    name="registration_number"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Registration Number{' '}
+                          <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="Enter registration number"
+                            aria-invalid={!!fieldState.error}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Required for limited/public companies.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </div>
+            </ScrollArea>
             <Separator className="my-4" />
             <div className="flex items-center gap-2.5">
               <Button
@@ -248,132 +251,135 @@ export default function InfoForm() {
                 Next Step
               </Button>
             </div>
-          </ScrollArea>
+          </div>
         )}
 
         {/* STEP 2: ORGANIZATION DETAILS */}
         {step === 'organization-details' && (
-          <ScrollArea className="max-h-[75vh] p-6">
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-2xl font-semibold">
-                  Add Company Information
-                </h2>
-                <p className="text-muted-foreground">
-                  Fill out all the requirements to continue this application.
-                </p>
-              </div>
-              <Separator className="my-4" />
-              <FormField
-                control={form.control}
-                name="date_of_incorporation"
-                render={({ field }) => {
-                  return (
+          <div className="space-y-4 p-6">
+            <article>
+              <h2 className="md:text-2xl text-lg font-semibold">
+                Add Company Information
+              </h2>
+              <p className="text-muted-foreground md:text-base text-sm">
+                Fill out all the requirements to continue this application.
+              </p>
+            </article>
+            <Separator className="my-4" />
+            <ScrollArea className="max-h-[75vh] overflow-auto">
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="date_of_incorporation"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>
+                          Date of Incorporation{' '}
+                          <span className="text-destructive">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <DatePicker
+                            mode="single"
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="Select date of incorporation"
+                            required
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )
+                  }}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="registered_address"
+                  render={({ field, fieldState }) => (
                     <FormItem>
                       <FormLabel>
-                        Date of Incorporation{' '}
+                        Registered Address{' '}
                         <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker
-                          mode="single"
-                          value={field.value}
-                          onChange={field.onChange}
-                          placeholder="Select date of incorporation"
-                          required
+                        <Input
+                          {...field}
+                          placeholder="Enter registered address"
+                          aria-invalid={!!fieldState.error}
                         />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
-                  )
-                }}
-              />
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="registered_address"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Registered Address{' '}
-                      <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Enter registered address"
-                        aria-invalid={!!fieldState.error}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="mailing_address"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Mailing Address{' '}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Enter mailing address"
+                          aria-invalid={!!fieldState.error}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="mailing_address"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Mailing Address{' '}
-                      <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Enter mailing address"
-                        aria-invalid={!!fieldState.error}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="email_address"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Email Address{' '}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="Enter email address"
+                          aria-invalid={!!fieldState.error}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="email_address"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Email Address <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="email"
-                        placeholder="Enter email address"
-                        aria-invalid={!!fieldState.error}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="website"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Company Website{' '}
-                      <span className="text-destructive">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="url"
-                        placeholder="Enter website URL"
-                        aria-invalid={!!fieldState.error}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                <FormField
+                  control={form.control}
+                  name="website"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Company Website{' '}
+                        <span className="text-destructive">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="url"
+                          placeholder="Enter website URL"
+                          aria-invalid={!!fieldState.error}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </ScrollArea>
             <Separator className="my-4" />
             <div className="flex items-center gap-2.5">
               <Button
@@ -397,7 +403,7 @@ export default function InfoForm() {
                 {isPending ? 'Submitting...' : 'Submit'}
               </Button>
             </div>
-          </ScrollArea>
+          </div>
         )}
       </form>
     </Form>

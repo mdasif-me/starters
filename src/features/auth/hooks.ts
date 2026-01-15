@@ -69,20 +69,18 @@ export const useSignup = () => {
  * A hook to verify a user.
  * It will call the verify endpoint, set the token to the api client,
  * update the user data in the query client and cookie storage.
- * It will also show a success toast if the verification is successful, and an error
- * toast if the verification fails. If the verification fails, it will also redirect
- * the user to the root route.
+ * It will also store the user profile information in cookies for persistence.
+ * It will show a success toast if the verification is successful, and an error
+ * toast if the verification fails.
  */
 export const useVerify = () => {
   const [, setToken] = useCookieStorage<string | null>('token', null, {
     path: '/',
   })
-
-  const [, setUser] = useCookieStorage<string | null>('user', null, {
+  const [, setUserInfo] = useCookieStorage<string>('user', '', {
     path: '/',
   })
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
 
   return useMutation({
     mutationFn: authApi.verify,
@@ -90,15 +88,19 @@ export const useVerify = () => {
       apiClient.setToken(data.access_token)
       const userResponse = await authApi.getUserProfile()
       const user = userResponse.edge.data
+
       setToken(data.access_token)
-      setUser(JSON.stringify(user))
+      setUserInfo(JSON.stringify(user))
+
       queryClient.setQueryData(['user'], user)
+
       toastManager.add({
         title: 'Success',
         description: data.message,
         type: 'success',
       })
-      navigate({ to: '/' })
+
+      window.location.href = '/'
     },
     onError: (error) => {
       toastManager.add({
@@ -139,19 +141,23 @@ export const useResend = () => {
 
 /**
  * A hook to logout a user.
- * It will call the logout endpoint, clear the user data from the query client and
- * redirect the user to the login route.
+ * It will call the logout endpoint, clear the user data from the query client,
+ * clear user info from cookies, and redirect the user to the login route.
  * It will also show a success toast if the logout is successful, and an error
  * toast if the logout fails.
  */
 export const useLogout = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const [, , removeUserCookie] = useCookieStorage<string | null>('user', null, {
+    path: '/',
+  })
 
   return useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
       queryClient.setQueryData(['user'], null)
+      removeUserCookie()
       navigate({ to: '/auth/login' })
     },
   })
