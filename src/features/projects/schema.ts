@@ -19,16 +19,16 @@ export const projectSchema = z
     total_shares: z.number().int().gt(0),
     share_price: z.number().int().min(1).max(999999),
 
-    location: z.string().min(2).max(255).nullish(),
-    description: z.string().max(1024).nullish(),
+    location: z.string().min(2).max(255).nullable().optional(),
+    description: z.string().min(10).max(1024).nullable().optional(),
 
     remaining_shares: z.number().int().min(0).optional(),
 
-    gallery: z.array(z.string().min(2).max(255)).default([]),
+    gallery: z.array(z.string().min(2).max(255)).optional(),
 
-    allotments: z.array(allotmentSchema).default([]),
+    allotments: z.array(allotmentSchema).optional(),
 
-    staffs: z.array(staffSchema).default([]),
+    staffs: z.array(staffSchema).optional(),
   })
   .refine(
     (data) => {
@@ -42,19 +42,8 @@ export const projectSchema = z
       path: ['remaining_shares'],
     },
   )
-  .transform((data) => {
-    return {
-      ...data,
-      remaining_shares: data.remaining_shares ?? data.total_shares,
-      allotments: data.allotments.map((allotment) => ({
-        ...allotment,
-        total_price:
-          allotment.total_price ?? allotment.assigned_shares * data.share_price,
-      })),
-    }
-  })
 
-export type ProjectInput = z.infer<typeof projectSchema>
+export type TCreateProject = z.infer<typeof projectSchema>
 
 /**
 //NOTE: IMPORTANT RULES:

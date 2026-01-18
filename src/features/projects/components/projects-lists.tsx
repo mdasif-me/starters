@@ -1,5 +1,3 @@
-import { useMemo, useState } from 'react'
-
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -14,6 +12,7 @@ import { DataGridPagination } from '@/components/ui/data-grid-pagination'
 import { DataGridTable } from '@/components/ui/data-grid-table'
 import { Input } from '@/components/ui/input'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { useMemo, useState } from 'react'
 
 import {
   getCoreRowModel,
@@ -24,10 +23,11 @@ import {
   type SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { PlusIcon, Search, X } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { useProjects } from '../hooks'
 import type { IProjectList } from '../interface'
 import { columns } from '../utils/columns'
+import CreateProject from './create-project'
 
 export default function ProjectsLists() {
   const [pagination, setPagination] = useState<PaginationState>({
@@ -103,21 +103,21 @@ export default function ProjectsLists() {
       isLoading={isLoading}
     >
       <Card>
-        <CardHeader>
+        <CardHeader className="py-4">
           <CardToolbar>
             <h1 className="text-xl text-foreground/80 font-semibold tracking-tight">
               Our Projects
             </h1>
           </CardToolbar>
           <CardHeading>
-            <div className="flex items-center gap-2.5">
-              <div className="relative">
+            <div className="flex w-full items-center gap-2.5">
+              <div className="relative w-full">
                 <Search className="size-4 text-muted-foreground absolute start-3 top-1/2 -translate-y-1/2" />
                 <Input
                   placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="ps-9 w-xs focus-visible:ring-0 shadow-none"
+                  className="ps-9 md:w-xs w-full focus-visible:ring-0 shadow-none"
                 />
                 {searchQuery.length > 0 && (
                   <Button
@@ -130,10 +130,7 @@ export default function ProjectsLists() {
                   </Button>
                 )}
               </div>
-              <Button variant="primary">
-                <PlusIcon />
-                Add Project
-              </Button>
+              <CreateProject />
             </div>
           </CardHeading>
         </CardHeader>

@@ -1,6 +1,7 @@
 import type { IApiResponse } from '@/interface'
 import { apiClient } from '../../lib/api-client'
 import type { IListProjectsParams, IProjectList } from './interface'
+import type { TCreateProject } from './schema'
 
 const buildQueryString = (params: IListProjectsParams): string => {
   const queryParams = new URLSearchParams()
@@ -21,5 +22,11 @@ export const projectApi = {
     const queryString = buildQueryString(params)
     const endpoint = queryString ? `/p/l?${queryString}` : '/p/l'
     return apiClient.get<IApiResponse<IProjectList>>(endpoint)
+  },
+
+  createProject: (
+    data: TCreateProject,
+  ): Promise<IApiResponse<IProjectList>> => {
+    return apiClient.post<IApiResponse<IProjectList>>('/p/c', data)
   },
 }

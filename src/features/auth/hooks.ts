@@ -5,7 +5,7 @@ import { useCookieStorage } from '../../hooks/use-cookie-storage'
 import { apiClient } from '../../lib/api-client'
 import { authApi } from './api'
 import type { AuthVerifyCredentials } from './schemas'
-import { EScope, type IUser } from './types'
+import { ERole, EScope, type IUser } from './types'
 
 /**
  * A hook to login a user.
@@ -180,4 +180,35 @@ export const useLogout = () => {
       navigate({ to: '/auth/login' })
     },
   })
+}
+
+/**
+ * A hook to check user permissions and roles.
+ * Currently provides dummy/hardcoded role checking.
+ * TODO: Implement actual permission checking when auth system is fully implemented.
+ */
+export const usePermission = () => {
+  const [user] = useCookieStorage<IUser | null>('user', null, {
+    path: '/',
+  })
+
+  const hasRole = (roles: ERole[]): boolean => {
+    if (!user) return false
+    // For now, all authenticated users are treated as having at least USER role
+    // This will be properly implemented when role management is added
+    const userRole = (user.role || ERole.USER) as ERole
+    return roles.includes(userRole)
+  }
+
+  const hasPermission = (_permission: string): boolean => {
+    // TODO: Implement actual permission checking
+    // For now, all authenticated users have all permissions
+    return !!user
+  }
+
+  return {
+    hasRole,
+    hasPermission,
+    user,
+  }
 }
