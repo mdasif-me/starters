@@ -24,7 +24,7 @@ import {
   type SortingState,
   useReactTable,
 } from '@tanstack/react-table'
-import { Search, X } from 'lucide-react'
+import { PlusIcon, Search, X } from 'lucide-react'
 import { useProjects } from '../hooks'
 import type { IProjectList } from '../interface'
 import { columns } from '../utils/columns'
@@ -103,9 +103,9 @@ export default function ProjectsLists() {
       isLoading={isLoading}
     >
       <Card>
-        <CardHeader className="py-4">
+        <CardHeader>
           <CardToolbar>
-            <h1 className="text-xl text-black/80 font-semibold tracking-tight">
+            <h1 className="text-xl text-foreground/80 font-semibold tracking-tight">
               Our Projects
             </h1>
           </CardToolbar>
@@ -130,6 +130,10 @@ export default function ProjectsLists() {
                   </Button>
                 )}
               </div>
+              <Button variant="primary">
+                <PlusIcon />
+                Add Project
+              </Button>
             </div>
           </CardHeading>
         </CardHeader>
