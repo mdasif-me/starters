@@ -3,6 +3,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/components/ui/base-avatar'
+import { Button } from '@/components/ui/button'
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header'
 import { type ColumnDef } from '@tanstack/react-table'
 import type { IProjectList } from '../interface'
@@ -36,7 +37,10 @@ export const columns: ColumnDef<IProjectList>[] = [
       return (
         <div className="flex items-center gap-3">
           <Avatar className="size-8">
-            <AvatarImage src={`/media/avatars`} alt={row.original.title} />
+            <AvatarImage
+              src={row.original.gallery[0]}
+              alt={row.original.title}
+            />
             <AvatarFallback>{row.original.title[0]}</AvatarFallback>
           </Avatar>
           <div className="space-y-px">
@@ -65,12 +69,32 @@ export const columns: ColumnDef<IProjectList>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center gap-1.5">
-          {row.original.allotments.length}
+        <div className="flex w-full justify-between items-center gap-1.5">
           <div className="font-medium text-foreground">
+            <span className="text-xs">
+              {row.original.allotments.length > 0 ? (
+                `(${row.original.allotments.length}) `
+              ) : (
+                <p className="text-muted-foreground">No Packages</p>
+              )}
+            </span>
             {row.original.allotments
               .map((allotment: any) => allotment.name)
               .join(', ')}
+          </div>
+          <div>
+            {row.original.allotments.length > 0 ? (
+              <Button
+                size="xs"
+                className="bg-warning hover:bg-warning text-white"
+              >
+                Edit
+              </Button>
+            ) : (
+              <Button size="xs" variant="primary">
+                Setup
+              </Button>
+            )}
           </div>
         </div>
       )

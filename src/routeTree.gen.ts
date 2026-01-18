@@ -22,6 +22,7 @@ import { Route as AuthenticatedRevenueIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects/index'
 import { Route as AuthenticatedApprovalsIndexRouteImport } from './routes/_authenticated/approvals/index'
 import { Route as AuthenticatedAgentsIndexRouteImport } from './routes/_authenticated/agents/index'
+import { Route as AuthenticatedProjectsPidIndexRouteImport } from './routes/_authenticated/projects/$pid/index'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -92,6 +93,12 @@ const AuthenticatedAgentsIndexRoute =
     path: '/agents/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedProjectsPidIndexRoute =
+  AuthenticatedProjectsPidIndexRouteImport.update({
+    id: '/projects/$pid/',
+    path: '/projects/$pid/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/403': typeof R403Route
@@ -106,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
   '/auth/verify': typeof AuthVerifyIndexRoute
+  '/projects/$pid': typeof AuthenticatedProjectsPidIndexRoute
 }
 export interface FileRoutesByTo {
   '/403': typeof R403Route
@@ -120,6 +128,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginIndexRoute
   '/auth/signup': typeof AuthSignupIndexRoute
   '/auth/verify': typeof AuthVerifyIndexRoute
+  '/projects/$pid': typeof AuthenticatedProjectsPidIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -136,6 +145,7 @@ export interface FileRoutesById {
   '/auth/login/': typeof AuthLoginIndexRoute
   '/auth/signup/': typeof AuthSignupIndexRoute
   '/auth/verify/': typeof AuthVerifyIndexRoute
+  '/_authenticated/projects/$pid/': typeof AuthenticatedProjectsPidIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/auth/verify'
+    | '/projects/$pid'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/403'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/auth/verify'
+    | '/projects/$pid'
   id:
     | '__root__'
     | '/403'
@@ -181,6 +193,7 @@ export interface FileRouteTypes {
     | '/auth/login/'
     | '/auth/signup/'
     | '/auth/verify/'
+    | '/_authenticated/projects/$pid/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -282,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAgentsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/projects/$pid/': {
+      id: '/_authenticated/projects/$pid/'
+      path: '/projects/$pid'
+      fullPath: '/projects/$pid'
+      preLoaderRoute: typeof AuthenticatedProjectsPidIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -293,6 +313,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedRevenueIndexRoute: typeof AuthenticatedRevenueIndexRoute
   AuthenticatedSalesIndexRoute: typeof AuthenticatedSalesIndexRoute
   AuthenticatedWithdrawalsIndexRoute: typeof AuthenticatedWithdrawalsIndexRoute
+  AuthenticatedProjectsPidIndexRoute: typeof AuthenticatedProjectsPidIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -303,6 +324,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedRevenueIndexRoute: AuthenticatedRevenueIndexRoute,
   AuthenticatedSalesIndexRoute: AuthenticatedSalesIndexRoute,
   AuthenticatedWithdrawalsIndexRoute: AuthenticatedWithdrawalsIndexRoute,
+  AuthenticatedProjectsPidIndexRoute: AuthenticatedProjectsPidIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
