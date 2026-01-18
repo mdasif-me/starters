@@ -50,7 +50,9 @@ export const CreateForm = ({
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>3-255 characters (required)</FormDescription>
+                <FormDescription>
+                  Name of the project (e.g., "Project A")
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -73,7 +75,8 @@ export const CreateForm = ({
                   />
                 </FormControl>
                 <FormDescription>
-                  Location of the project (e.g., New York)
+                  Location of the project (e.g., "Baddhamondir, Dhaka-1214,
+                  Bangladesh")
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -90,10 +93,16 @@ export const CreateForm = ({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      type="text"
-                      placeholder="commission-rate"
+                      type="number"
+                      placeholder="Enter commission rate"
                       disabled={isLoading}
                       {...field}
+                      value={field.value || ''}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value ? Number(e.target.value) : '',
+                        )
+                      }
                     />
                   </FormControl>
                   <FormDescription>
@@ -113,10 +122,16 @@ export const CreateForm = ({
                   </FormLabel>
                   <FormControl>
                     <Input
-                      type="text"
-                      placeholder="total-shares"
+                      type="number"
+                      placeholder="Enter total shares"
                       disabled={isLoading}
                       {...field}
+                      value={field.value || ''}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value ? Number(e.target.value) : '',
+                        )
+                      }
                     />
                   </FormControl>
                   <FormDescription>
@@ -137,10 +152,16 @@ export const CreateForm = ({
                 </FormLabel>
                 <FormControl>
                   <Input
-                    type="text"
-                    placeholder="share-price"
+                    type="number"
+                    placeholder="Enter share price"
                     disabled={isLoading}
                     {...field}
+                    value={field.value || ''}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value ? Number(e.target.value) : '',
+                      )
+                    }
                   />
                 </FormControl>
                 <FormDescription>Price per share (e.g., 10.00)</FormDescription>
@@ -149,8 +170,8 @@ export const CreateForm = ({
             )}
           />
 
-          <div className="space-y-8">
-            <h1>Asset Management</h1>
+          <div className="space-y-2">
+            <h3 className="font-medium text-sm">Project Images</h3>
             <Upload maxFiles={10} maxSize={50 * 1024 * 1024} accept="image/*" />
           </div>
 
@@ -174,7 +195,9 @@ export const CreateForm = ({
                     />
                   </FormControl>
                   <FormDescription>
-                    10-1024 characters (required)
+                    Provide a detailed description of the project. This will be
+                    displayed on the project page. (max 1024 characters are
+                    allowed)
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

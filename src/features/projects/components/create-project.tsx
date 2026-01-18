@@ -14,13 +14,17 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 import { Loader2, PlusIcon } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useCreateProject } from '../hooks'
 import { projectSchema, type TCreateProject } from '../schema'
 import { CreateForm } from './create-form'
 
 export default function CreateProject() {
+  const [open, setOpen] = useState(false)
+  const queryClient = useQueryClient()
   const { mutate: createProject, isPending } = useCreateProject()
   const form = useForm<TCreateProject>({
     defaultValues: {
@@ -34,17 +38,24 @@ export default function CreateProject() {
   })
 
   const onSubmit = async (data: TCreateProject): Promise<void> => {
-    createProject(data)
+    createProject(data, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['projects'] })
+        setOpen(false)
+        form.reset()
+      },
+    })
   }
 
   const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen)
     if (!isOpen) {
       form.reset()
     }
   }
 
   return (
-    <Sheet onOpenChange={handleOpenChange}>
+    <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetTrigger render={<Button size={'lg'} />}>
         <PlusIcon className="h-4 w-4" />
         <span className="md:block hidden">Add Project</span>
