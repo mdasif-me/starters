@@ -31,8 +31,10 @@ const allotmentsSchema = z.object({
 
 type TAllotmentsForm = z.infer<typeof allotmentsSchema>
 
-export default function CreateAllotment({ row }: { row?: any }) {
+export default function Allotment({ row }: { row?: any }) {
   const [open, setOpen] = useState(false)
+  const [editMode, setEditMode] = useState(false)
+  const [editedIndex, setEditedIndex] = useState<number | null>(null)
   const queryClient = useQueryClient()
   const { mutate: updateProject, isPending } = useUpdateProject()
   const form = useForm<TAllotmentsForm>({
@@ -49,14 +51,37 @@ export default function CreateAllotment({ row }: { row?: any }) {
     mode: 'onChange',
   })
 
+  /**
+   * Builds the payload for the updateProject mutation based on the editMode and editedIndex state.
+   * If editMode is false or editedIndex is null, it returns the formData as is.
+   * If editMode is true and editedIndex is a number, it returns a new array with the same length as formData.allotments,
+   * but with all elements before editedIndex set to empty objects, and the element at editedIndex set to the edited allotment.
+   * @param {TAllotmentsForm} formData - The form data to build the payload from.
+   */
+  const buildPayload = (formData: TAllotmentsForm) => {
+    if (!editMode || editedIndex === null) {
+      return { allotments: formData.allotments }
+    }
+    const allotmentsPayload: any[] = []
+    for (let i = 0; i < editedIndex; i++) {
+      allotmentsPayload.push({})
+    }
+    allotmentsPayload.push(formData.allotments[editedIndex])
+
+    return { allotments: allotmentsPayload }
+  }
+
   const onSubmit = async (data: TAllotmentsForm): Promise<void> => {
+    const payload = buildPayload(data)
     updateProject(
-      { pid: row.original.id, data: { allotments: data.allotments } },
+      { pid: row.original.id, data: payload },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['projects'] })
           setOpen(false)
           form.reset()
+          setEditMode(false)
+          setEditedIndex(null)
         },
       },
     )
@@ -64,20 +89,35 @@ export default function CreateAllotment({ row }: { row?: any }) {
 
   const handleOpenChange = (isOpen: boolean) => {
     setOpen(isOpen)
-    if (!isOpen) {
+    if (isOpen) {
+      if (row.original.allotments && row.original.allotments.length > 0) {
+        setEditMode(true)
+        form.reset({
+          allotments: row.original.allotments,
+        })
+      } else {
+        setEditMode(false)
+        form.reset()
+      }
+    } else {
       form.reset()
+      setEditMode(false)
+      setEditedIndex(null)
     }
   }
 
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
-      <SheetTrigger render={<Button size={'xs'} />}>Setup</SheetTrigger>
-
+      <SheetTrigger render={<Button size={'xs'} />}>
+        {row.original.allotments.length > 0 ? 'Update' : 'Add'}
+      </SheetTrigger>
       <SheetPopup inset className={'max-w-2xl w-full'}>
         <SheetHeader>
-          <SheetTitle>Setup Allotment</SheetTitle>
+          <SheetTitle>{editMode ? 'Edit' : 'Setup'} Allotment</SheetTitle>
           <SheetDescription>
-            Fill out the form below to add a new allotment to your catalog.
+            {editMode
+              ? 'Edit the allotment details below. Only edited allotment will be updated.'
+              : 'Fill out the form below to add a new allotment to your catalog.'}
             Fields marked with * are required.
           </SheetDescription>
         </SheetHeader>
@@ -88,6 +128,9 @@ export default function CreateAllotment({ row }: { row?: any }) {
             onSubmit={onSubmit}
             form={form}
             isLoading={isPending}
+            editMode={editMode}
+            editedIndex={editedIndex}
+            onEditChange={setEditedIndex}
           />
         </SheetPanel>
 
@@ -106,7 +149,13 @@ export default function CreateAllotment({ row }: { row?: any }) {
               onClick={() => form.handleSubmit(onSubmit)()}
             >
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isPending ? 'Adding...' : 'Add'}
+              {isPending
+                ? editMode
+                  ? 'Updating...'
+                  : 'Adding...'
+                : editMode
+                  ? 'Update'
+                  : 'Add'}
             </Button>
           </div>
         </SheetFooter>

@@ -3,10 +3,9 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/components/ui/base-avatar'
-import { Button } from '@/components/ui/button'
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header'
 import { type ColumnDef } from '@tanstack/react-table'
-import CreateAllotment from '../components/create-allotment'
+import Allotment from '../components/allotment'
 import type { IProjectList } from '../interface'
 import { ActionsCell } from '../utils/action-cell'
 
@@ -85,14 +84,9 @@ export const columns: ColumnDef<IProjectList>[] = [
           </div>
           <div>
             {row.original.allotments.length > 0 ? (
-              <Button
-                size="xs"
-                className="bg-warning hover:bg-warning text-white"
-              >
-                Edit
-              </Button>
+              <Allotment row={row} />
             ) : (
-              <CreateAllotment row={row} />
+              <Allotment row={row} />
             )}
           </div>
         </div>
