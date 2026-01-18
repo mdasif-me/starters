@@ -4,7 +4,8 @@ import { toastManager } from '../../components/ui/toast'
 import { useCookieStorage } from '../../hooks/use-cookie-storage'
 import { apiClient } from '../../lib/api-client'
 import { authApi } from './api'
-import type { IUser } from './types'
+import type { AuthVerifyCredentials } from './schemas'
+import { EScope, type IUser } from './types'
 
 /**
  * A hook to login a user.
@@ -19,12 +20,20 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      toastManager.add({
-        title: 'Success',
-        description: data.message,
-        type: 'success',
-      })
-      navigate({ to: '/auth/verify' })
+      if (data.status_code !== 200) {
+        toastManager.add({
+          title: 'Message',
+          description: data.message,
+          type: 'info',
+        })
+      } else {
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
+        navigate({ to: '/auth/verify' })
+      }
     },
     onError: (error) => {
       toastManager.add({
@@ -78,26 +87,39 @@ export const useVerify = () => {
   const [, setUserInfo] = useCookieStorage<IUser | null>('user', null, {
     path: '/',
   })
+  const [auth_verification] = useCookieStorage<AuthVerifyCredentials>(
+    'auth_verification',
+    {
+      otp: '',
+      phone_number: '',
+      scope: EScope.REGISTER,
+    },
+    {
+      path: '/',
+    },
+  )
+
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: authApi.verify,
     onSuccess: async (data) => {
-      apiClient.setToken(data.access_token)
-      const userResponse = await authApi.getUserProfile()
-      const user = userResponse.edge.data
+      if (auth_verification.scope !== EScope.REGISTER.toLowerCase()) {
+        apiClient.setToken(data.access_token)
+        const userResponse = await authApi.getUserProfile()
+        const user = userResponse.edge.data
 
-      setUserInfo(user)
-
-      queryClient.setQueryData(['user'], user)
-
-      toastManager.add({
-        title: 'Success',
-        description: data.message,
-        type: 'success',
-      })
-
-      window.location.href = '/'
+        setUserInfo(user)
+        queryClient.setQueryData(['user'], user)
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
+        window.location.href = '/'
+      } else {
+        window.location.href = '/auth/login'
+      }
     },
     onError: (error) => {
       toastManager.add({

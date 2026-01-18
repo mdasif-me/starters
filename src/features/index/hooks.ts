@@ -16,20 +16,20 @@ export const useInfo = () => {
 
   return useMutation({
     mutationFn: (data: companyInfo) => infoApi.addInformation(data),
-
-    onSuccess: (data) => {
+    onSuccess: (response, submittedData) => {
       const updatedUser: IUser = {
         ...currentUser,
-        company_info: data.edge.data,
+        company_info: submittedData,
       } as unknown as IUser
 
       queryClient.setQueryData(['user'], updatedUser)
       setUser(updatedUser)
       toastManager.add({
         title: 'Success',
-        description: data.message,
+        description: response.message,
         type: 'success',
       })
+      window.location.reload()
     },
     onError: (error) => {
       toastManager.add({

@@ -204,7 +204,7 @@ export default function InfoForm() {
                       <FormControl>
                         <Input
                           {...field}
-                          placeholder="Enter 13-digit VAT number"
+                          placeholder="Enter 9-digit VAT number"
                           aria-invalid={!!fieldState.error}
                         />
                       </FormControl>
