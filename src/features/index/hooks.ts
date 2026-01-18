@@ -19,7 +19,7 @@ export const useInfo = () => {
     onSuccess: (response, submittedData) => {
       const updatedUser: IUser = {
         ...currentUser,
-        company_info: submittedData,
+        company_info: { ...submittedData, verification_status: 'pending' },
       } as unknown as IUser
 
       queryClient.setQueryData(['user'], updatedUser)

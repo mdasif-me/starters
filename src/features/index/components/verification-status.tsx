@@ -1,6 +1,24 @@
+import { Button } from '@/components/ui/button'
+import { toastManager } from '@/components/ui/toast'
+import { authApi } from '@/features/auth/api'
+import { useCookieStorage } from '@/hooks/use-cookie-storage'
+import { ReloadIcon } from '@hugeicons-pro/core-solid-rounded'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { ClockIcon } from 'lucide-react'
 
 export default function VerificationStatus() {
+  const [, setUserInfo] = useCookieStorage<any>('user', {}, { path: '/' })
+  const handleRecheck = async () => {
+    const userResponse = await authApi.getUserProfile()
+    const user = userResponse.edge.data
+    setUserInfo(user)
+    toastManager.add({
+      title: 'Success',
+      type: 'success',
+    })
+    window.location.href = '/'
+  }
+
   return (
     <div className="flex items-center justify-center h-screen min-h-96 w-full p-4">
       <div className="max-w-xl w-full bg-background border border-border rounded-3xl shadow-xl overflow-hidden">
@@ -27,10 +45,13 @@ export default function VerificationStatus() {
             </button>
           </div>
         </div>
-        <div className="bg-background px-8 py-4 border-t border-border">
+        <div className="bg-background flex items-center justify-between px-8 py-4 border-t border-border">
           <p className="text-xs text-muted-foreground text-center uppercase tracking-wider font-semibold">
             Status: Pending Review
           </p>
+          <Button onClick={handleRecheck}>
+            Recheck <HugeiconsIcon icon={ReloadIcon} size={16} />
+          </Button>
         </div>
       </div>
     </div>

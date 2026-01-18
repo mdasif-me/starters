@@ -1,3 +1,4 @@
+import ProjectsLists from '@/features/projects/components/projects-lists'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authenticated/projects/')({
@@ -5,5 +6,9 @@ export const Route = createFileRoute('/_authenticated/projects/')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/projects/"!</div>
+  return (
+    <div>
+      <ProjectsLists />
+    </div>
+  )
 }

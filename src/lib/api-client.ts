@@ -48,20 +48,20 @@ class ApiClient {
     try {
       const response = await fetch(url, config)
 
-      // if (response.status === 401) {
-      //   this.removeToken()
-      //   if (window.location.pathname !== '/auth/login') {
-      //     window.location.href = '/auth/login'
-      //   }
-      //   throw new Error('Unauthorized')
-      // }
+      if (response.status === 401) {
+        this.removeToken()
+        if (window.location.pathname !== '/auth/login') {
+          window.location.href = '/auth/login'
+        }
+        throw new Error('Unauthorized')
+      }
 
-      // if (!response.ok) {
-      //   const error = await response
-      //     .json()
-      //     .catch(() => ({ message: 'API Error' }))
-      //   throw new Error(error.message || 'Something went wrong')
-      // }
+      if (!response.ok) {
+        const error = await response
+          .json()
+          .catch(() => ({ message: 'API Error' }))
+        throw new Error(error.message || 'Something went wrong')
+      }
 
       return response.json()
     } catch (error) {

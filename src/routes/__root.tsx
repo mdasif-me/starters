@@ -38,6 +38,7 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
         </div>
       )
     }
+    console.log('token', token)
     if (isPending && token) {
       return <VerificationStatus />
     }
