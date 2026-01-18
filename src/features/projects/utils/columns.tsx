@@ -80,7 +80,7 @@ export const columns: ColumnDef<IProjectList>[] = [
       headerClassName: '',
       cellClassName: 'text-start',
     },
-    enableSorting: true,
+    enableSorting: false,
     enableHiding: true,
     enableResizing: true,
   },
@@ -106,7 +106,7 @@ export const columns: ColumnDef<IProjectList>[] = [
       )
     },
     size: 100,
-    enableSorting: true,
+    enableSorting: false,
     enableHiding: true,
     enableResizing: true,
   },
@@ -132,13 +132,15 @@ export const columns: ColumnDef<IProjectList>[] = [
       headerClassName: '',
       cellClassName: 'text-start',
     },
-    enableSorting: true,
+    enableSorting: false,
     enableHiding: true,
     enableResizing: true,
   },
   {
     id: 'actions',
-    header: '',
+    header: ({ column }) => (
+      <DataGridColumnHeader title="Actions" visibility={true} column={column} />
+    ),
     cell: ({ row }) => <ActionsCell row={row} />,
     size: 60,
     enableSorting: false,

@@ -15,7 +15,7 @@ export const useCreateProject = () => {
   return useMutation({
     mutationFn: projectApi.createProject,
     onSuccess: (data) => {
-      if (data.status_code !== 2001) {
+      if (data.status_code !== 201) {
         toastManager.add({
           title: 'Message',
           description: data.message,
