@@ -7,8 +7,8 @@ import {
   getFileIcon,
   getFileTypeLabelFromFile,
 } from '@/features/uploads/utils/file-icons'
-import { UploadActions as UploadFileActions } from './upload-actions'
-import { UploadStatus as UploadFileStatus } from './upload-status'
+import { UploadActions } from './upload-actions'
+import { UploadStatus } from './upload-status'
 
 interface UploadTableRowProps {
   fileItem: IFileUploadItem
@@ -28,7 +28,7 @@ export function UploadTableRow({
   return (
     <TableRow>
       <TableCell className="py-2 ps-1.5">
-        <UploadFileStatus
+        <UploadStatus
           status={fileItem.status}
           progress={fileItem.progress}
           fileName={fileItem.file.name}
@@ -47,7 +47,7 @@ export function UploadTableRow({
       </TableCell>
 
       <TableCell className="py-2 pe-1">
-        <UploadFileActions
+        <UploadActions
           fileId={fileItem.id}
           status={fileItem.status}
           previewUrl={fileItem.preview}

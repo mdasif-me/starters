@@ -17,7 +17,7 @@ export interface IUploadOptions {
   multiple?: boolean
   initialFiles?: IFileMetadata[]
   onFilesChange?: (files: IFileWithPreview[]) => void
-  onUploadComplete?: (assetIds: string[]) => void
+  onUploadComplete?: (assetIds: string[], fileUrls: string[]) => void
 }
 
 export function useUploadState({
@@ -94,6 +94,7 @@ export function useUploadState({
 
   const autoUploadFiles = async (filesToUpload: IFileUploadItem[]) => {
     const uploadedAssetIds: string[] = []
+    const uploadedFileUrls: string[] = []
 
     for (const fileItem of filesToUpload) {
       try {
@@ -109,6 +110,8 @@ export function useUploadState({
         if (asset) {
           console.log('Upload response:', asset)
           uploadedAssetIds.push(asset.id)
+          const fileUrl = asset.file_url || asset.secure_url || asset.url || ''
+          uploadedFileUrls.push(fileUrl)
 
           setUploadFiles((prev) =>
             prev.map((f) =>
@@ -118,8 +121,7 @@ export function useUploadState({
                     progress: 100,
                     status: 'completed' as const,
                     assetId: asset.id,
-                    preview:
-                      asset.file_url || asset.secure_url || asset.url || '',
+                    preview: fileUrl,
                   }
                 : f,
             ),
@@ -144,7 +146,7 @@ export function useUploadState({
     }
 
     if (uploadedAssetIds.length > 0) {
-      onUploadComplete?.(uploadedAssetIds)
+      onUploadComplete?.(uploadedAssetIds, uploadedFileUrls)
     }
   }
 
@@ -210,6 +212,7 @@ export function useUploadState({
       })
 
       if (asset) {
+        const fileUrl = asset.file_url || asset.secure_url || asset.url || ''
         console.log('Retry upload response:', asset)
         setUploadFiles((prev) =>
           prev.map((f) =>
@@ -219,14 +222,13 @@ export function useUploadState({
                   progress: 100,
                   status: 'completed' as const,
                   assetId: asset.id,
-                  preview:
-                    asset.file_url || asset.secure_url || asset.url || '',
+                  preview: fileUrl,
                 }
               : f,
           ),
         )
 
-        onUploadComplete?.([asset.id])
+        onUploadComplete?.([asset.id], [fileUrl])
       }
     } catch (error) {
       const errorMessage =

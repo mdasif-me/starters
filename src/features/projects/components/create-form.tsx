@@ -26,6 +26,13 @@ export const CreateForm = ({
   form,
   isLoading = false,
 }: ICreateFormProps) => {
+  const handleUpload = (assetIds: string[], fileUrls: string[]) => {
+    console.info('assetIds', assetIds)
+    if (fileUrls.length > 0) {
+      form.setValue('gallery', fileUrls, { shouldValidate: true })
+    }
+  }
+
   return (
     <Form {...form}>
       <form
@@ -172,7 +179,12 @@ export const CreateForm = ({
 
           <div className="space-y-2">
             <h3 className="font-medium text-sm">Project Images</h3>
-            <Upload maxFiles={10} maxSize={50 * 1024 * 1024} accept="image/*" />
+            <Upload
+              maxFiles={10}
+              maxSize={50 * 1024 * 1024}
+              accept="image/*"
+              onUploadComplete={handleUpload}
+            />
           </div>
 
           <div className="col-span-2">

@@ -16,7 +16,7 @@ interface IUpload {
   multiple?: boolean
   className?: string
   onFilesChange?: (files: IFileWithPreview[]) => void
-  onUploadComplete?: (assetIds: string[]) => void
+  onUploadComplete?: (assetIds: string[], files: string[]) => void
   showDefaults?: boolean
   initialFiles?: IFileMetadata[]
 }

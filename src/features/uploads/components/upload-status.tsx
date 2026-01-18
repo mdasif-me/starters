@@ -72,7 +72,7 @@ export function UploadStatus({
       </div>
       <div className="flex flex-col gap-1 min-w-0 flex-1">
         <p className="flex items-center gap-1 truncate text-sm font-medium">
-          {fileName}
+          <span className="max-w-52 truncate">{fileName}</span>
           {status === 'error' && (
             <Badge variant="destructive" size="sm" appearance="light">
               Error
