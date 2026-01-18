@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Download, Loader2, RefreshCwIcon, Trash2 } from 'lucide-react'
+import { EyeIcon, Loader2, RefreshCwIcon, Trash2 } from 'lucide-react'
 
 export type IFileActionStatus = 'uploading' | 'completed' | 'error'
 
@@ -23,18 +23,18 @@ export function UploadActions({
   onDelete,
 }: IUploadActionsProps) {
   return (
-    <div className="flex items-center gap-1">
-      {/* Download button - only show for completed uploads with preview URL */}
+    <div className="flex items-center justify-end gap-1">
+      {/* Preview button - only show for completed uploads with preview URL */}
       {previewUrl && status === 'completed' && (
         <Button
-          variant="ghost"
+          variant="inverse"
           size="icon"
-          className="size-8"
+          className="size-6 hover:bg-foreground/10"
           asChild
-          title="Download file"
+          title="Preview file"
         >
           <a href={previewUrl} target="_blank" rel="noopener noreferrer">
-            <Download className="size-3.5" />
+            <EyeIcon className="size-4" />
           </a>
         </Button>
       )}
@@ -43,28 +43,28 @@ export function UploadActions({
       {status === 'error' ? (
         <Button
           onClick={() => onRetry(fileId)}
-          variant="ghost"
+          variant="inverse"
           size="icon"
-          className="size-8 text-destructive/80 hover:text-destructive"
+          className="size-6 text-destructive/80 hover:text-destructive"
           title="Retry upload"
         >
-          <RefreshCwIcon className="size-3.5" />
+          <RefreshCwIcon className="size-4" />
         </Button>
       ) : (
         /* Delete button - show for all non-error files */
         <Button
           onClick={() => onDelete(fileId)}
-          variant="ghost"
+          variant="destructive"
           size="icon"
-          className="size-8"
+          className="size-6 text-white"
           type="button"
           disabled={isDeleting}
           title="Delete file"
         >
           {isDeleting ? (
-            <Loader2 className="size-3.5 animate-spin" />
+            <Loader2 className="size-4 animate-spin" />
           ) : (
-            <Trash2 className="size-3.5" />
+            <Trash2 className="size-4" />
           )}
         </Button>
       )}

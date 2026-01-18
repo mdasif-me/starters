@@ -34,6 +34,9 @@ export const projectApi = {
     pid: string,
     data: Partial<TAllotment>,
   ): Promise<IApiResponse<IProjectList>> => {
-    return apiClient.put<IApiResponse<IProjectList>>(`/p/${pid}`, data)
+    const payload = {
+      allotments: [data],
+    }
+    return apiClient.patch<IApiResponse<IProjectList>>(`/p/${pid}`, payload)
   },
 }

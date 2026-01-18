@@ -93,7 +93,7 @@ export default function CreateAllotment({ row }: { row?: any }) {
               onClick={() => form.handleSubmit(onSubmit)()}
             >
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isPending ? 'Adding Project...' : 'Add Project'}
+              {isPending ? 'Adding...' : 'Add'}
             </Button>
           </div>
         </SheetFooter>
