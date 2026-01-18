@@ -27,7 +27,7 @@ import { Search, X } from 'lucide-react'
 import { useProjects } from '../hooks'
 import type { IProjectList } from '../interface'
 import { columns } from '../utils/columns'
-import CreateProject from './create-project'
+import Project from './project'
 
 export default function ProjectsLists() {
   const [pagination, setPagination] = useState<PaginationState>({
@@ -130,7 +130,7 @@ export default function ProjectsLists() {
                   </Button>
                 )}
               </div>
-              <CreateProject />
+              <Project />
             </div>
           </CardHeading>
         </CardHeader>

@@ -22,7 +22,7 @@ import { useCreateProject } from '../hooks'
 import { projectSchema, type TCreateProject } from '../schema'
 import { ProjectForm } from './project-form'
 
-export default function CreateProject() {
+export default function Project() {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const { mutate: createProject, isPending } = useCreateProject()

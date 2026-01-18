@@ -26,11 +26,25 @@ export const ProjectForm = ({
   form,
   isLoading = false,
 }: IProjectFormProps) => {
+  const gallery = form.watch('gallery')
+
   const handleUpload = (assetIds: string[], fileUrls: string[]) => {
     console.info('assetIds', assetIds)
     if (fileUrls.length > 0) {
       form.setValue('gallery', fileUrls, { shouldValidate: true })
     }
+  }
+
+  const getInitialGalleryFiles = () => {
+    if (!gallery || gallery.length === 0) return []
+
+    return gallery.map((url, index) => ({
+      id: `gallery-${index}`,
+      name: `project-image-${index}`,
+      size: 0,
+      type: 'image/jpeg',
+      url,
+    }))
   }
 
   return (
@@ -183,6 +197,7 @@ export const ProjectForm = ({
               maxFiles={10}
               maxSize={50 * 1024 * 1024}
               accept="image/*"
+              initialFiles={getInitialGalleryFiles()}
               onUploadComplete={handleUpload}
             />
           </div>
