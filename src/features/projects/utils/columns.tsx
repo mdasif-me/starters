@@ -6,6 +6,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { DataGridColumnHeader } from '@/components/ui/data-grid-column-header'
 import { type ColumnDef } from '@tanstack/react-table'
+import CreateAllotment from '../components/create-allotment'
 import type { IProjectList } from '../interface'
 import { ActionsCell } from '../utils/action-cell'
 
@@ -91,9 +92,7 @@ export const columns: ColumnDef<IProjectList>[] = [
                 Edit
               </Button>
             ) : (
-              <Button size="xs" variant="primary">
-                Setup
-              </Button>
+              <CreateAllotment row={row} />
             )}
           </div>
         </div>

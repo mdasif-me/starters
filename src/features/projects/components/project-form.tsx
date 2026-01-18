@@ -15,17 +15,17 @@ import { Upload } from '@/features/uploads'
 import { type UseFormReturn } from 'react-hook-form'
 import type { TCreateProject } from '../schema'
 
-interface ICreateFormProps {
+interface IProjectFormProps {
   onSubmit: (data: TCreateProject) => Promise<void>
   form: UseFormReturn<TCreateProject>
   isLoading?: boolean
 }
 
-export const CreateForm = ({
+export const ProjectForm = ({
   onSubmit,
   form,
   isLoading = false,
-}: ICreateFormProps) => {
+}: IProjectFormProps) => {
   const handleUpload = (assetIds: string[], fileUrls: string[]) => {
     console.info('assetIds', assetIds)
     if (fileUrls.length > 0) {

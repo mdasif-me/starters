@@ -2,6 +2,7 @@ import { toastManager } from '@/components/ui/toast'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { projectApi } from './api'
 import type { IListProjectsParams } from './interface'
+import type { TAllotment } from './schema'
 
 export const useProjects = (params: IListProjectsParams = {}) => {
   return useQuery({
@@ -16,6 +17,35 @@ export const useCreateProject = () => {
     mutationFn: projectApi.createProject,
     onSuccess: (data) => {
       if (data.status_code !== 201) {
+        toastManager.add({
+          title: 'Message',
+          description: data.message,
+          type: 'info',
+        })
+      } else {
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
+      }
+    },
+    onError: (error) => {
+      toastManager.add({
+        title: 'Error',
+        description: error.message,
+        type: 'error',
+      })
+    },
+  })
+}
+
+export const useUpdateProject = () => {
+  return useMutation({
+    mutationFn: ({ pid, data }: { pid: string; data: Partial<TAllotment> }) =>
+      projectApi.updateProject(pid, data),
+    onSuccess: (data) => {
+      if (data.status_code !== 200) {
         toastManager.add({
           title: 'Message',
           description: data.message,

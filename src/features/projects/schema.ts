@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const allotmentSchema = z.object({
+export const allotmentSchema = z.object({
   name: z.string().min(2).max(32),
   assigned_shares: z.number().int().min(0),
   icon: z.string().url().or(z.string().min(2).max(255)),
@@ -44,6 +44,7 @@ export const projectSchema = z
   )
 
 export type TCreateProject = z.infer<typeof projectSchema>
+export type TAllotment = z.infer<typeof allotmentSchema>
 
 /**
 //NOTE: IMPORTANT RULES:

@@ -15,36 +15,38 @@ import {
 } from '@/components/ui/sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
-import { Loader2, PlusIcon } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useCreateProject } from '../hooks'
-import { projectSchema, type TCreateProject } from '../schema'
-import { ProjectForm } from './project-form'
+import { useUpdateProject } from '../hooks'
+import { allotmentSchema, type TAllotment } from '../schema'
+import { AllotmentForm } from './allotment-form'
 
-export default function CreateProject() {
+export default function CreateAllotment({ row }: { row?: any }) {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
-  const { mutate: createProject, isPending } = useCreateProject()
-  const form = useForm<TCreateProject>({
+  const { mutate: updateProject, isPending } = useUpdateProject()
+  const form = useForm<TAllotment>({
     defaultValues: {
-      title: '',
-      commission_rate: 0,
-      total_shares: 0,
-      share_price: 0,
+      name: '',
+      assigned_shares: 0,
+      icon: '',
     },
-    resolver: zodResolver(projectSchema),
+    resolver: zodResolver(allotmentSchema),
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: TCreateProject): Promise<void> => {
-    createProject(data, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['projects'] })
-        setOpen(false)
-        form.reset()
+  const onSubmit = async (data: TAllotment): Promise<void> => {
+    updateProject(
+      { pid: row.original.id, data },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['projects'] })
+          setOpen(false)
+          form.reset()
+        },
       },
-    })
+    )
   }
 
   const handleOpenChange = (isOpen: boolean) => {
@@ -56,23 +58,24 @@ export default function CreateProject() {
 
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
-      <SheetTrigger render={<Button size={'lg'} />}>
-        <PlusIcon className="h-4 w-4" />
-        <span className="md:block hidden">Add Project</span>
-      </SheetTrigger>
+      <SheetTrigger render={<Button size={'xs'} />}>Setup</SheetTrigger>
 
       <SheetPopup inset className={'max-w-2xl w-full'}>
         <SheetHeader>
-          <SheetTitle>Add Project</SheetTitle>
+          <SheetTitle>Setup Allotment</SheetTitle>
           <SheetDescription>
-            Fill out the form below to add a new project to your catalog. Fields
-            marked with * are required.
+            Fill out the form below to add a new allotment to your catalog.
+            Fields marked with * are required.
           </SheetDescription>
         </SheetHeader>
         <Separator />
 
         <SheetPanel className="max-h-[calc(100vh-180px)] h-lvh">
-          <ProjectForm onSubmit={onSubmit} form={form} isLoading={isPending} />
+          <AllotmentForm
+            onSubmit={onSubmit}
+            form={form}
+            isLoading={isPending}
+          />
         </SheetPanel>
 
         <SheetFooter>
