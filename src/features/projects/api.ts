@@ -1,7 +1,7 @@
 import type { IApiResponse } from '@/interface'
 import { apiClient } from '../../lib/api-client'
 import type { IListProjectsParams, IProjectList } from './interface'
-import type { TAllotment, TCreateProject } from './schema'
+import type { TCreateProject } from './schema'
 
 const buildQueryString = (params: IListProjectsParams): string => {
   const queryParams = new URLSearchParams()
@@ -32,11 +32,8 @@ export const projectApi = {
 
   updateProject: (
     pid: string,
-    data: Partial<TAllotment>,
+    data: Partial<TCreateProject>,
   ): Promise<IApiResponse<IProjectList>> => {
-    const payload = {
-      allotments: [data],
-    }
-    return apiClient.patch<IApiResponse<IProjectList>>(`/p/${pid}`, payload)
+    return apiClient.patch<IApiResponse<IProjectList>>(`/p/${pid}`, data)
   },
 }

@@ -18,27 +18,40 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 import { useUpdateProject } from '../hooks'
-import { allotmentSchema, type TAllotment } from '../schema'
+import { allotmentSchema } from '../schema'
 import { AllotmentForm } from './allotment-form'
+
+const allotmentsSchema = z.object({
+  allotments: z
+    .array(allotmentSchema)
+    .min(1, 'At least one allotment is required'),
+})
+
+type TAllotmentsForm = z.infer<typeof allotmentsSchema>
 
 export default function CreateAllotment({ row }: { row?: any }) {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const { mutate: updateProject, isPending } = useUpdateProject()
-  const form = useForm<TAllotment>({
+  const form = useForm<TAllotmentsForm>({
     defaultValues: {
-      name: '',
-      assigned_shares: 0,
-      icon: '',
+      allotments: [
+        {
+          name: '',
+          assigned_shares: 0,
+          icon: '',
+        },
+      ],
     },
-    resolver: zodResolver(allotmentSchema),
+    resolver: zodResolver(allotmentsSchema),
     mode: 'onChange',
   })
 
-  const onSubmit = async (data: TAllotment): Promise<void> => {
+  const onSubmit = async (data: TAllotmentsForm): Promise<void> => {
     updateProject(
-      { pid: row.original.id, data },
+      { pid: row.original.id, data: { allotments: data.allotments } },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['projects'] })
