@@ -20,6 +20,7 @@ import { Route as AuthenticatedWithdrawalsIndexRouteImport } from './routes/_aut
 import { Route as AuthenticatedSalesIndexRouteImport } from './routes/_authenticated/sales/index'
 import { Route as AuthenticatedRevenueIndexRouteImport } from './routes/_authenticated/revenue/index'
 import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects/index'
+import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile/index'
 import { Route as AuthenticatedApprovalsIndexRouteImport } from './routes/_authenticated/approvals/index'
 import { Route as AuthenticatedAgentsIndexRouteImport } from './routes/_authenticated/agents/index'
 import { Route as AuthenticatedProjectsPidIndexRouteImport } from './routes/_authenticated/projects/$pid/index'
@@ -81,6 +82,12 @@ const AuthenticatedProjectsIndexRoute =
     path: '/projects/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedProfileIndexRoute =
+  AuthenticatedProfileIndexRouteImport.update({
+    id: '/profile/',
+    path: '/profile/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedApprovalsIndexRoute =
   AuthenticatedApprovalsIndexRouteImport.update({
     id: '/approvals/',
@@ -106,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/agents': typeof AuthenticatedAgentsIndexRoute
   '/approvals': typeof AuthenticatedApprovalsIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
   '/revenue': typeof AuthenticatedRevenueIndexRoute
   '/sales': typeof AuthenticatedSalesIndexRoute
@@ -121,6 +129,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/agents': typeof AuthenticatedAgentsIndexRoute
   '/approvals': typeof AuthenticatedApprovalsIndexRoute
+  '/profile': typeof AuthenticatedProfileIndexRoute
   '/projects': typeof AuthenticatedProjectsIndexRoute
   '/revenue': typeof AuthenticatedRevenueIndexRoute
   '/sales': typeof AuthenticatedSalesIndexRoute
@@ -138,6 +147,7 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/agents/': typeof AuthenticatedAgentsIndexRoute
   '/_authenticated/approvals/': typeof AuthenticatedApprovalsIndexRoute
+  '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
   '/_authenticated/revenue/': typeof AuthenticatedRevenueIndexRoute
   '/_authenticated/sales/': typeof AuthenticatedSalesIndexRoute
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/'
     | '/agents'
     | '/approvals'
+    | '/profile'
     | '/projects'
     | '/revenue'
     | '/sales'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '/'
     | '/agents'
     | '/approvals'
+    | '/profile'
     | '/projects'
     | '/revenue'
     | '/sales'
@@ -186,6 +198,7 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/_authenticated/agents/'
     | '/_authenticated/approvals/'
+    | '/_authenticated/profile/'
     | '/_authenticated/projects/'
     | '/_authenticated/revenue/'
     | '/_authenticated/sales/'
@@ -281,6 +294,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProjectsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/profile/': {
+      id: '/_authenticated/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/approvals/': {
       id: '/_authenticated/approvals/'
       path: '/approvals'
@@ -309,6 +329,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAgentsIndexRoute: typeof AuthenticatedAgentsIndexRoute
   AuthenticatedApprovalsIndexRoute: typeof AuthenticatedApprovalsIndexRoute
+  AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedProjectsIndexRoute: typeof AuthenticatedProjectsIndexRoute
   AuthenticatedRevenueIndexRoute: typeof AuthenticatedRevenueIndexRoute
   AuthenticatedSalesIndexRoute: typeof AuthenticatedSalesIndexRoute
@@ -320,6 +341,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedAgentsIndexRoute: AuthenticatedAgentsIndexRoute,
   AuthenticatedApprovalsIndexRoute: AuthenticatedApprovalsIndexRoute,
+  AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedProjectsIndexRoute: AuthenticatedProjectsIndexRoute,
   AuthenticatedRevenueIndexRoute: AuthenticatedRevenueIndexRoute,
   AuthenticatedSalesIndexRoute: AuthenticatedSalesIndexRoute,

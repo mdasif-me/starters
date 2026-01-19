@@ -13,7 +13,8 @@ import {
   SidebarTrigger,
 } from '../components/ui/sidebar'
 
-import userAvatar from '/user.png'
+import type { IUser } from '@/features/auth/types'
+import { getCookie } from '@/hooks/use-cookie-storage'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: ({ context }) => {
@@ -28,6 +29,18 @@ export const Route = createFileRoute('/_authenticated')({
   component: AuthenticatedLayout,
 })
 
+const user_info = getCookie<IUser>('user')
+
+/**
+ * The authenticated layout component.
+ *
+ * This component provides the layout for the authenticated user experience.
+ * It includes a sidebar, a top navigation bar, and a main content area.
+ * The top navigation bar includes a sidebar trigger, a global search input field, and the user's profile information.
+ * The main content area renders the outlet of the current route.
+ */
+
+console.log('user_info', user_info)
 function AuthenticatedLayout() {
   return (
     <SidebarProvider>
@@ -47,18 +60,24 @@ function AuthenticatedLayout() {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-3">
               <Avatar className="size-9">
-                <AvatarImage src={userAvatar} alt="user profile" />
-                <AvatarFallback>AS</AvatarFallback>
+                <AvatarImage
+                  src={user_info?.company_info?.logo}
+                  alt="user profile"
+                />
+                <AvatarFallback>
+                  {user_info?.company_info?.name[0] || 'U'}
+                </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
                 <Link
-                  to="/"
+                  to="/profile"
                   className="text-sm font-medium text-foreground hover:text-primary"
                 >
-                  {'Kathryn Campbell'}
+                  {user_info?.company_info?.name || 'Kathryn Campbell'}
                 </Link>
                 <div className="text-xs font-normal text-muted-foreground">
-                  {'kathryn.campbell@example.com'}
+                  {user_info?.company_info?.email_address ||
+                    'kathryn.campbell@example.com'}
                 </div>
               </div>
             </div>
