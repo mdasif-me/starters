@@ -12,6 +12,14 @@ export const useProjects = (params: IListProjectsParams = {}) => {
   })
 }
 
+export const useProject = (pid: string) => {
+  return useQuery({
+    queryKey: ['project', pid],
+    queryFn: () => projectApi.getProject(pid),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
 export const useCreateProject = () => {
   return useMutation({
     mutationFn: projectApi.createProject,

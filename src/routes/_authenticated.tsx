@@ -40,7 +40,6 @@ const user_info = getCookie<IUser>('user')
  * The main content area renders the outlet of the current route.
  */
 
-console.log('user_info', user_info)
 function AuthenticatedLayout() {
   return (
     <SidebarProvider>

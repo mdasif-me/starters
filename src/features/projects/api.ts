@@ -1,4 +1,4 @@
-import type { IApiResponse } from '@/interface'
+import type { IApiResponse, IApiResponseSingle } from '@/interface'
 import { apiClient } from '../../lib/api-client'
 import type { IListProjectsParams, IProjectList } from './interface'
 import type { TCreateProject } from './schema'
@@ -22,6 +22,10 @@ export const projectApi = {
     const queryString = buildQueryString(params)
     const endpoint = queryString ? `/p/l?${queryString}` : '/p/l'
     return apiClient.get<IApiResponse<IProjectList>>(endpoint)
+  },
+
+  getProject: (pid: string): Promise<IApiResponseSingle<IProjectList>> => {
+    return apiClient.get<IApiResponseSingle<IProjectList>>(`/p/${pid}`)
   },
 
   createProject: (

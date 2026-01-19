@@ -22,3 +22,8 @@ export interface IEdge<T> {
   node: string
   data: T
 }
+export interface IApiResponseSingle<T> {
+  status_code: number
+  message: string
+  edge: IEdge<T>
+}
