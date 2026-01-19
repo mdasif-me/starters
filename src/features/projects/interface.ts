@@ -1,5 +1,6 @@
 export interface IAllotment {
   name: string
+  icon: string
   total_price: number
   assigned_shares: number
 }
