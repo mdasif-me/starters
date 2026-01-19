@@ -4,28 +4,11 @@ import type { IComponentProps } from '../../interface'
 
 export default function Allotment({
   info,
-  loading,
 }: IComponentProps<{
   icon: string
   name: string
   price: number
 }>) {
-  if (loading) {
-    return (
-      <div className="flex w-full justify-between items-center space-y-4">
-        <div className="flex items-center gap-2">
-          <Skeleton className="w-20 h-12 shrink-0 rounded" />
-          <Skeleton className="h-5 w-32 rounded" />
-        </div>
-
-        <div className="flex items-center gap-1">
-          <Skeleton className="h-5 w-5 rounded-full" />
-          <Skeleton className="h-7 w-16" />
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div className="flex w-full justify-between items-center space-y-4">
       <div className="flex items-center gap-2">
@@ -46,3 +29,17 @@ export default function Allotment({
     </div>
   )
 }
+
+export const AllotmentSkeleton = ({ idx }: { idx: number }) => (
+  <div key={idx} className="flex w-full justify-between items-center space-y-4">
+    <div className="flex items-center gap-2">
+      <Skeleton className="w-20 h-12 shrink-0 rounded" />
+      <Skeleton className="h-5 w-32 rounded" />
+    </div>
+
+    <div className="flex items-center gap-1">
+      <Skeleton className="h-5 w-5 rounded-full" />
+      <Skeleton className="h-7 w-16" />
+    </div>
+  </div>
+)

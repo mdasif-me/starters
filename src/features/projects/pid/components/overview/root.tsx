@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { useProject } from '@/features/projects/hooks'
 import { useParams } from '@tanstack/react-router'
-import Allotment from './allotment'
+import Allotment, { AllotmentSkeleton } from './allotment'
 import Article from './article'
 import { Images } from './images'
 import Info from './info'
@@ -51,17 +51,21 @@ export default function OverviewRoot() {
       <div>
         <Card>
           <CardContent className="p-4">
-            {project?.allotments.map((allotment, idx) => (
-              <Allotment
-                key={idx}
-                info={{
-                  icon: allotment.icon,
-                  name: allotment.name,
-                  price: allotment.total_price,
-                }}
-                loading={isLoading}
-              />
-            ))}
+            {isLoading
+              ? Array(3)
+                  .fill(null)
+                  .map((_, idx) => <AllotmentSkeleton idx={idx} />)
+              : project?.allotments.map((allotment, idx) => (
+                  <Allotment
+                    key={idx}
+                    info={{
+                      icon: allotment.icon,
+                      name: allotment.name,
+                      price: allotment.total_price,
+                    }}
+                    loading={isLoading}
+                  />
+                ))}
           </CardContent>
         </Card>
       </div>
