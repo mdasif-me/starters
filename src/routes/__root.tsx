@@ -29,7 +29,7 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
     const isCompany = !!user_info?.company_info
     const isPending = user_info?.company_info?.verification_status === 'pending'
 
-    if (!isCompany && token) {
+    if (user_info && !isCompany && token) {
       return (
         <div className="w-full flex justify-center braid-shape">
           <div className="w-fit h-fit mx-auto my-auto bg-white rounded-2xl shadow backdrop-blur">
@@ -38,7 +38,7 @@ export const Route = createRootRouteWithContext<IRouterContext>()({
         </div>
       )
     }
-    console.log('token', token)
+
     if (isPending && token) {
       return <VerificationStatus />
     }

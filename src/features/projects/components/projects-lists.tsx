@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { useMemo, useState } from 'react'
 
+import { useDebounceCallback } from '@/hooks/use-debounce-callback'
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -38,6 +39,8 @@ export default function ProjectsLists() {
     { id: 'title', desc: false },
   ])
   const [searchQuery, setSearchQuery] = useState('')
+  const [inputValue, setInputValue] = useState('')
+  const debounced = useDebounceCallback(setSearchQuery, 500)
 
   const offset = pagination.pageIndex + 1
   const limit = pagination.pageSize
@@ -115,16 +118,22 @@ export default function ProjectsLists() {
                 <Search className="size-4 text-muted-foreground absolute start-3 top-1/2 -translate-y-1/2" />
                 <Input
                   placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={inputValue}
+                  onChange={(e) => {
+                    setInputValue(e.target.value)
+                    debounced(e.target.value)
+                  }}
                   className="ps-9 md:w-xs w-full focus-visible:ring-0 shadow-none"
                 />
-                {searchQuery.length > 0 && (
+                {inputValue.length > 0 && (
                   <Button
                     mode="icon"
                     variant="ghost"
                     className="absolute end-1.5 top-1/2 -translate-y-1/2 h-6 w-6"
-                    onClick={() => setSearchQuery('')}
+                    onClick={() => {
+                      setInputValue('')
+                      setSearchQuery('')
+                    }}
                   >
                     <X />
                   </Button>
