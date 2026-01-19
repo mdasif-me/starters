@@ -29,7 +29,7 @@ export const companyInfoConfig: Record<string, IFieldConfig> = {
     order: 8,
     isVisible: true,
   },
-  email_address: { label: 'Email Address', order: 9, isVisible: true },
+  email_address: { label: 'Email Address', order: 9, isVisible: false },
   mailing_address: { label: 'Mailing Address', order: 10, isVisible: true },
   website: { label: 'Company Website', order: 11, isVisible: true },
   verification_status: {

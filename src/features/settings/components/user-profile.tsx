@@ -11,16 +11,18 @@ export default function UserProfile({ user }: { user: IUser }) {
         <div className="flex items-center gap-4">
           <img
             className="w-24 h-24 shrink-0 object-center rounded-xl object-cover bg-muted"
-            src={user.profile_picture || profile}
-            alt={user.full_name || 'User Profile'}
+            src={user.company_info?.logo || profile}
+            alt={user.company_info?.name || 'User Profile'}
           />
           <article>
-            <h3 className="text-2xl font-medium">{user.full_name || 'Asif'}</h3>
+            <h3 className="text-2xl font-medium">
+              {user.company_info?.name || 'Asif'}
+            </h3>
             <p className="text-muted-foreground">
               {user.phone_number || '+880123456789'}
             </p>
             <p className="text-muted-foreground">
-              {user.email_address || 'biswas.mail@gmail.com'}
+              {user.company_info?.email_address || 'biswas.mail@gmail.com'}
             </p>
           </article>
         </div>
