@@ -1,10 +1,12 @@
 import { Card, CardContent } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import { useProject } from '@/features/projects/hooks'
 import { useParams } from '@tanstack/react-router'
 import Allotment, { AllotmentSkeleton } from './allotment'
 import Article from './article'
 import { Images } from './images'
 import Info from './info'
+import SalesList from './sales-list'
 import Share from './share'
 
 export default function OverviewRoot() {
@@ -48,24 +50,39 @@ export default function OverviewRoot() {
           <div className="block lg:hidden mt-6">{ProjectStats}</div>
         </CardContent>
       </Card>
-      <div>
-        <Card>
+      <div className="flex items-start gap-4">
+        <Card className="flex-1">
           <CardContent className="p-4">
             {isLoading
-              ? Array(3)
+              ? Array(5)
                   .fill(null)
-                  .map((_, idx) => <AllotmentSkeleton key={idx} />)
+                  .map((_, idx) => (
+                    <>
+                      <AllotmentSkeleton key={idx} />
+                      {idx !== 5 - 1 && <Separator className="my-4" />}
+                    </>
+                  ))
               : project?.allotments.map((allotment, idx) => (
-                  <Allotment
-                    key={idx}
-                    info={{
-                      icon: allotment.icon,
-                      name: allotment.name,
-                      price: allotment.total_price,
-                    }}
-                    loading={isLoading}
-                  />
+                  <>
+                    <Allotment
+                      key={idx}
+                      info={{
+                        icon: allotment.icon,
+                        name: allotment.name,
+                        price: allotment.total_price,
+                      }}
+                      loading={isLoading}
+                    />
+                    {idx !== project.allotments.length - 1 && (
+                      <Separator className="my-4" />
+                    )}
+                  </>
                 ))}
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <SalesList />
           </CardContent>
         </Card>
       </div>
