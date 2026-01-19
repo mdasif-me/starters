@@ -31,7 +31,9 @@ export const ProjectForm = ({
   const handleUpload = (assetIds: string[], fileUrls: string[]) => {
     console.info('assetIds', assetIds)
     if (fileUrls.length > 0) {
-      form.setValue('gallery', fileUrls, { shouldValidate: true })
+      const currentGallery = gallery || []
+      const updatedGallery = [...currentGallery, ...fileUrls]
+      form.setValue('gallery', updatedGallery, { shouldValidate: true })
     }
   }
 
