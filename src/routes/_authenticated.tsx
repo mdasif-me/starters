@@ -69,7 +69,7 @@ function AuthenticatedLayout() {
               </Avatar>
               <div className="flex flex-col">
                 <Link
-                  to="/profile"
+                  to="/settings"
                   className="text-sm font-medium text-foreground hover:text-primary"
                 >
                   {user_info?.company_info?.name || 'Kathryn Campbell'}
