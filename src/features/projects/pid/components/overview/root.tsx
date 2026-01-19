@@ -4,6 +4,7 @@ import { useProject } from '@/features/projects/hooks'
 import { useParams } from '@tanstack/react-router'
 import Allotment, { AllotmentSkeleton } from './allotment'
 import Article from './article'
+import BookingList from './booking-list'
 import { Images } from './images'
 import Info from './info'
 import SalesList from './sales-list'
@@ -80,11 +81,18 @@ export default function OverviewRoot() {
                 ))}
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
-            <SalesList />
-          </CardContent>
-        </Card>
+        <div className="space-y-4">
+          <Card>
+            <CardContent className="p-4">
+              <SalesList />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <BookingList />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )
