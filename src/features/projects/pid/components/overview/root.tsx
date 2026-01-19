@@ -54,7 +54,7 @@ export default function OverviewRoot() {
             {isLoading
               ? Array(3)
                   .fill(null)
-                  .map((_, idx) => <AllotmentSkeleton idx={idx} />)
+                  .map((_, idx) => <AllotmentSkeleton key={idx} />)
               : project?.allotments.map((allotment, idx) => (
                   <Allotment
                     key={idx}

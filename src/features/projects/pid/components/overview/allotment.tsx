@@ -30,8 +30,8 @@ export default function Allotment({
   )
 }
 
-export const AllotmentSkeleton = ({ idx }: { idx: number }) => (
-  <div key={idx} className="flex w-full justify-between items-center space-y-4">
+export const AllotmentSkeleton = () => (
+  <div className="flex w-full justify-between items-center space-y-4">
     <div className="flex items-center gap-2">
       <Skeleton className="w-20 h-12 shrink-0 rounded" />
       <Skeleton className="h-5 w-32 rounded" />
