@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button'
-import CardAreaChart from '@/features/index/components/card-area-chart'
-import PendingSalesTable from '@/features/index/components/pending-sales.table'
-import SalesBarChart from '@/features/index/components/sales-bar-chart'
+import {
+  CardAreaChart,
+  PendingSalesTable,
+  SalesBarChart,
+} from '@/features/index'
 import { Icon } from '@/utils/icon'
 import { File01Icon } from '@hugeicons-pro/core-stroke-rounded'
 import { createFileRoute } from '@tanstack/react-router'
@@ -43,7 +45,7 @@ function RouteComponent() {
           Export PDF
         </Button>
       </div>
-      <div className="flex flex-wrap justify-center items-center lg:gap-8 gap-2">
+      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-x-4 justify-items-center">
         {cardTypes.map((type) => (
           <CardAreaChart
             key={type}

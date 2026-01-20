@@ -1,8 +1,7 @@
-import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Sheet,
-  SheetBody,
   SheetClose,
   SheetContent,
   SheetDescription,
@@ -10,11 +9,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
-import { useDirection } from '@radix-ui/react-direction';
+} from '@/components/ui/sheet'
+import { useDirection } from '@radix-ui/react-direction'
 
 export default function DemoSheet() {
-  const direction = useDirection();
+  const direction = useDirection()
 
   const faqSections = [
     {
@@ -62,20 +61,20 @@ export default function DemoSheet() {
       content:
         'Admins can assign roles and permissions to other users. These roles determine the level of access within the platform.',
     },
-  ];
+  ]
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline">Open Sheet</Button>
+      <SheetTrigger render={<Button variant="outline" />}>
+        Open Sheet
       </SheetTrigger>
-      <SheetContent className="p-0" dir={direction}>
+      <SheetContent className="p-0 flex flex-col" dir={direction}>
         <SheetHeader className="py-4 px-5 border-b border-border">
           <SheetTitle>Quick Help</SheetTitle>
           <SheetDescription>Frequently Asked Questions(FAQ)</SheetDescription>
         </SheetHeader>
-        <SheetBody className="py-0 px-5 grow">
-          <ScrollArea className="text-sm h-[calc(100dvh-190px)] pe-3 -me-3">
+        <div className="py-0 px-5 grow overflow-hidden flex-1">
+          <ScrollArea className="text-sm h-full pe-3 -me-3">
             <div className="space-y-4 [&_h3]:font-semibold [&_h3]:text-foreground">
               {faqSections.map((faq, index) => (
                 <div key={index} className="text-accent-foreground space-y-1">
@@ -85,16 +84,14 @@ export default function DemoSheet() {
               ))}
             </div>
           </ScrollArea>
-        </SheetBody>
+        </div>
         <SheetFooter className="py-4 px-5 border-t border-border">
-          <SheetClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </SheetClose>
-          <SheetClose asChild>
-            <Button type="submit">Submit Feedback</Button>
+          <SheetClose render={<Button variant="outline" />}>Cancel</SheetClose>
+          <SheetClose render={<Button type="submit" />}>
+            Submit Feedback
           </SheetClose>
         </SheetFooter>
       </SheetContent>
     </Sheet>
-  );
+  )
 }

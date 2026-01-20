@@ -37,7 +37,7 @@ interface ToastProviderProps extends Toast.Provider.Props {
 
 function ToastProvider({
   children,
-  position = 'top-right',
+  position = 'top-center',
   ...props
 }: ToastProviderProps) {
   return (

@@ -1,10 +1,11 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toastManager } from '../../components/ui/toast'
 import { useCookieStorage } from '../../hooks/use-cookie-storage'
 import { apiClient } from '../../lib/api-client'
 import { authApi } from './api'
-import type { IUser } from './types'
+import type { AuthVerifyCredentials } from './schemas'
+import { ERole, EScope, type IUser } from './types'
 
 /**
  * A hook to login a user.
@@ -14,20 +15,25 @@ import type { IUser } from './types'
  * toast if the login fails.
  */
 export const useLogin = () => {
-  const queryClient = useQueryClient()
   const navigate = useNavigate()
 
   return useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      apiClient.setToken(data.access_token)
-      queryClient.setQueryData(['user'], data.access_token)
-      toastManager.add({
-        title: 'Success',
-        description: data.message,
-        type: 'success',
-      })
-      navigate({ to: '/auth/verify' })
+      if (data.status_code !== 200) {
+        toastManager.add({
+          title: 'Message',
+          description: data.message,
+          type: 'info',
+        })
+      } else {
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
+        navigate({ to: '/auth/verify' })
+      }
     },
     onError: (error) => {
       toastManager.add({
@@ -47,14 +53,11 @@ export const useLogin = () => {
  * toast if the signup fails.
  */
 export const useSignup = () => {
-  const queryClient = useQueryClient()
   const navigate = useNavigate()
 
   return useMutation({
     mutationFn: authApi.signup,
     onSuccess: (data) => {
-      apiClient.setToken(data.access_token)
-      queryClient.setQueryData(['user'], data.access_token)
       toastManager.add({
         title: 'Success',
         description: data.message,
@@ -76,31 +79,47 @@ export const useSignup = () => {
  * A hook to verify a user.
  * It will call the verify endpoint, set the token to the api client,
  * update the user data in the query client and cookie storage.
- * It will also show a success toast if the verification is successful, and an error
- * toast if the verification fails. If the verification fails, it will also redirect
- * the user to the root route.
+ * It will also store the user profile information in cookies for persistence.
+ * It will show a success toast if the verification is successful, and an error
+ * toast if the verification fails.
  */
 export const useVerify = () => {
-  const [, setUser] = useCookieStorage<IUser | null>('user', null, {
+  const [, setUserInfo] = useCookieStorage<IUser | null>('user', null, {
     path: '/',
   })
+  const [auth_verification] = useCookieStorage<AuthVerifyCredentials>(
+    'auth_verification',
+    {
+      otp: '',
+      phone_number: '',
+      scope: EScope.REGISTER,
+    },
+    {
+      path: '/',
+    },
+  )
+
   const queryClient = useQueryClient()
-  const navigate = useNavigate()
 
   return useMutation({
     mutationFn: authApi.verify,
     onSuccess: async (data) => {
-      apiClient.setToken(data.access_token)
-      const userResponse = await authApi.getUserProfile()
-      const user = userResponse.edge.data
-      setUser(user)
-      queryClient.setQueryData(['user'], user)
-      toastManager.add({
-        title: 'Success',
-        description: data.message,
-        type: 'success',
-      })
-      navigate({ to: '/' })
+      if (auth_verification.scope !== EScope.REGISTER.toLowerCase()) {
+        apiClient.setToken(data.access_token)
+        const userResponse = await authApi.getUserProfile()
+        const user = userResponse.edge.data
+
+        setUserInfo(user)
+        queryClient.setQueryData(['user'], user)
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
+        window.location.href = '/'
+      } else {
+        window.location.href = '/auth/login'
+      }
     },
     onError: (error) => {
       toastManager.add({
@@ -140,66 +159,56 @@ export const useResend = () => {
 }
 
 /**
- * A hook to get the user data from the query client.
- * It will fetch the user data from the api and cache it in the query client.
- * The user data will be fetched only once, and subsequent calls will return the cached data.
- * The stale time for the user data is 5 minutes.
- */
-
-export const useUser = () => {
-  return useQuery({
-    queryKey: ['user'],
-    queryFn: authApi.getUserProfile,
-    select: (data) => data.edge.data,
-    retry: false,
-    staleTime: 1000 * 60 * 5,
-  })
-}
-
-/**
  * A hook to logout a user.
- * It will call the logout endpoint, clear the user data from the query client and
- * redirect the user to the login route.
+ * It will call the logout endpoint, clear the user data from the query client,
+ * clear user info from cookies, and redirect the user to the login route.
  * It will also show a success toast if the logout is successful, and an error
  * toast if the logout fails.
  */
 export const useLogout = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const [, , removeUserCookie] = useCookieStorage<IUser | null>('user', null, {
+    path: '/',
+  })
 
   return useMutation({
     mutationFn: authApi.logout,
     onSuccess: () => {
       queryClient.setQueryData(['user'], null)
+      removeUserCookie()
       navigate({ to: '/auth/login' })
     },
   })
 }
 
 /**
- * A hook to check if a user has a certain role or permission.
- * It takes advantage of the useUser hook to fetch the user data and then
- * checks if the user has the specified role or permission.
- * If the user is not logged in, it will return false for both checks.
- * If the user is logged in, it will return true if the user has the specified role or permission,
- * and false otherwise.
- * @returns An object with two functions: hasRole and hasPermission.
- * hasRole takes an array of roles and returns true if the user has any of those roles.
- * hasPermission takes a string permission and returns true if the user has that permission.
- * The user field contains the user data if the user is logged in, otherwise it is null.
+ * A hook to check user permissions and roles.
+ * Currently provides dummy/hardcoded role checking.
+ * TODO: Implement actual permission checking when auth system is fully implemented.
  */
 export const usePermission = () => {
-  const { data: user } = useUser()
+  const [user] = useCookieStorage<IUser | null>('user', null, {
+    path: '/',
+  })
+
+  const hasRole = (roles: ERole[]): boolean => {
+    if (!user) return false
+    // For now, all authenticated users are treated as having at least USER role
+    // This will be properly implemented when role management is added
+    const userRole = (user.role || ERole.USER) as ERole
+    return roles.includes(userRole)
+  }
+
+  const hasPermission = (_permission: string): boolean => {
+    // TODO: Implement actual permission checking
+    // For now, all authenticated users have all permissions
+    return !!user
+  }
 
   return {
-    hasRole: (roles: IUser['role'][]) => {
-      if (!user) return false
-      return roles.includes(user.role)
-    },
-    // permissions field is removed from IUser, so we default to false or remove this
-    hasPermission: (_permission: string) => {
-      return false
-    },
+    hasRole,
+    hasPermission,
     user,
   }
 }

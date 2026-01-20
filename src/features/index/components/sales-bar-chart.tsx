@@ -181,10 +181,9 @@ export default function SalesBarChart() {
       <CardContent className="px-2 sm:p-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-72 w-full"
         >
           <BarChart
-            responsive
             accessibilityLayer
             data={chartData}
             margin={{
@@ -225,7 +224,7 @@ export default function SalesBarChart() {
             <ChartTooltip
               content={
                 <ChartTooltipContent
-                  className="w-[150px]"
+                  className="w-40"
                   nameKey="sales"
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString('en-US', {

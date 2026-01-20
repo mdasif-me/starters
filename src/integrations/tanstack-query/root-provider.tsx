@@ -1,4 +1,4 @@
-import type { ERole, IUser } from '@/features/auth/types'
+import { ERole, type IUser } from '@/features/auth/types'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { getCookie } from '@/hooks/use-cookie-storage'
@@ -29,7 +29,8 @@ export function getAuthHelpers(queryClient: QueryClient) {
   const hasRole = (roles: ERole[]): boolean => {
     const user = getUser()
     if (!user) return false
-    return roles.includes(user.role)
+    const userRole = (user.role as ERole) || ERole.USER
+    return roles.includes(userRole)
   }
 
   const hasPermission = (_permission: string): boolean => {

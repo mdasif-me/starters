@@ -9,10 +9,30 @@ export enum ERole {
   MANAGER = 'manager',
   COMPANY = 'company',
 }
+export type TVerificationStatus = 'pending' | 'verified' | 'rejected'
+
+export interface ICompanyInfo {
+  name: string
+  type: string
+  tin: string
+  logo: string
+  website: string
+  vat_number: string
+  email_address: string
+  mailing_address: string
+  registered_address: string
+  registration_number: string
+  trade_license_number: string
+  date_of_incorporation: string
+  verification_status: TVerificationStatus
+}
 
 export interface IUser {
   id: string
-  role: ERole
+  created_at: string
+  updated_at: string
+  deleted_at: string | null
+  role: string
   full_name: string | null
   profile_picture: string | null
   phone_number: string
@@ -20,11 +40,8 @@ export interface IUser {
   otp: string | null
   is_company: boolean
   is_verified: boolean
-  company_info: any | null
+  company_info: ICompanyInfo | null
   employee_info: any | null
-  created_at: string
-  updated_at: string
-  deleted_at: string | null
 }
 
 export interface IUserResponse {
@@ -35,7 +52,6 @@ export interface IUserResponse {
     data: IUser
   }
 }
-
 export interface IAuthResponse {
   status_code: number
   message: string
