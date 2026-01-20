@@ -1,9 +1,8 @@
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import type { IUser } from '@/features/auth/types'
-import { PencilLineIcon } from 'lucide-react'
 import { companyInfoConfig } from '../utils/company-info-config'
 import { formatValue } from '../utils/format-value'
+import UpdateCompany from './update-company-info'
 
 export default function CompanyProfile({ user }: { user: IUser }) {
   const companyInfo = user?.company_info || {}
@@ -20,15 +19,7 @@ export default function CompanyProfile({ user }: { user: IUser }) {
       <CardContent className="w-full md:p-4 p-2">
         <div className="flex w-full items-center justify-between relative">
           <h2 className="sm:text-2xl font-medium">Company Information</h2>
-          <div className="sm:static absolute top-0 right-0">
-            <Button
-              variant="secondary"
-              className="text-muted-foreground py-2 sm:size-fit size-6"
-            >
-              <PencilLineIcon />
-              <span className="sm:block hidden">Edit</span>
-            </Button>
-          </div>
+          <UpdateCompany />
         </div>
         <div className="grid md:grid-cols-3 grid-cols-2 w-full sm:mt-6 mt-3 md:gap-6 sm:gap-4 gap-2">
           {sortedEntries.map(([key, value]) => {

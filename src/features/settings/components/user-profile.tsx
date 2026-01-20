@@ -1,8 +1,7 @@
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import type { IUser } from '@/features/auth/types'
-import { PencilLineIcon } from 'lucide-react'
 import profile from '../../../../public/logo-icon.svg'
+import UpdateProfile from './update-profile'
 
 export default function UserProfile({ user }: { user: IUser }) {
   return (
@@ -27,13 +26,7 @@ export default function UserProfile({ user }: { user: IUser }) {
           </article>
         </div>
         <div>
-          <Button
-            variant="secondary"
-            className="text-muted-foreground py-2 sm:size-fit size-6"
-          >
-            <PencilLineIcon />
-            <span className="sm:block hidden">Edit</span>
-          </Button>
+          <UpdateProfile />
         </div>
       </CardContent>
     </Card>
