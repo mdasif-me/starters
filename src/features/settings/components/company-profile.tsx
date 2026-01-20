@@ -17,15 +17,20 @@ export default function CompanyProfile({ user }: { user: IUser }) {
 
   return (
     <Card>
-      <CardContent className="w-full">
-        <div className="flex w-full items-center justify-between">
-          <h2 className="text-2xl font-medium">Company Information</h2>
-          <Button variant="secondary" className="text-muted-foreground">
-            <PencilLineIcon />
-            Edit
-          </Button>
+      <CardContent className="w-full md:p-4 p-2">
+        <div className="flex w-full items-center justify-between relative">
+          <h2 className="sm:text-2xl font-medium">Company Information</h2>
+          <div className="sm:static absolute top-0 right-0">
+            <Button
+              variant="secondary"
+              className="text-muted-foreground py-2 sm:size-fit size-6"
+            >
+              <PencilLineIcon />
+              <span className="sm:block hidden">Edit</span>
+            </Button>
+          </div>
         </div>
-        <div className="grid grid-cols-3 w-full mt-6 gap-6">
+        <div className="grid md:grid-cols-3 grid-cols-2 w-full sm:mt-6 mt-3 md:gap-6 sm:gap-4 gap-2">
           {sortedEntries.map(([key, value]) => {
             const config = companyInfoConfig[key]
             const label =
@@ -34,8 +39,10 @@ export default function CompanyProfile({ user }: { user: IUser }) {
 
             return (
               <article key={key} className="space-y-2">
-                <p className="text-muted-foreground">{label}</p>
-                <h3 className="text-xl text-foreground/70 font-medium break-all">
+                <p className="text-muted-foreground md:text-base text-xs">
+                  {label}
+                </p>
+                <h3 className="md:text-xl sm:text-base text-sm text-foreground/70 font-medium break-all">
                   {formatValue(key, value)}
                 </h3>
               </article>
