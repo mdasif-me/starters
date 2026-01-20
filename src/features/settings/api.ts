@@ -1,20 +1,27 @@
-import type { IApiResponse } from '@/interface'
+import type { IApiResponseSingle } from '@/interface'
 import { apiClient } from '../../lib/api-client'
 import type { ICompanyInfo } from './interface'
 import type { TUpdateCompanyInfo, TUpdateProfile } from './schema'
 
 export const profileApi = {
-  //note: pid: means profile ID
   updateProfile: (
-    pid: string,
     data: Partial<TUpdateProfile>,
-  ): Promise<IApiResponse<ICompanyInfo>> => {
-    return apiClient.patch<IApiResponse<ICompanyInfo>>(`/p/${pid}`, data)
+  ): Promise<IApiResponseSingle<ICompanyInfo>> => {
+    const payload = {
+      company_info: { ...data },
+    }
+    return apiClient.patch<IApiResponseSingle<ICompanyInfo>>(
+      `/u?scope=update_information`,
+      payload,
+    )
   },
   updateCompany: (
-    pid: string,
     data: Partial<TUpdateCompanyInfo>,
-  ): Promise<IApiResponse<ICompanyInfo>> => {
-    return apiClient.patch<IApiResponse<ICompanyInfo>>(`/p/${pid}`, data)
+  ): Promise<IApiResponseSingle<ICompanyInfo>> => {
+    const payload = { company_info: { ...data } }
+    return apiClient.patch<IApiResponseSingle<ICompanyInfo>>(
+      `/u?scope=update_information`,
+      payload,
+    )
   },
 }

@@ -13,6 +13,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import type { IUser } from '@/features/auth/types'
+import { getCookie } from '@/hooks/use-cookie-storage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Loader2, PencilLineIcon } from 'lucide-react'
@@ -23,14 +25,15 @@ import { updateCompanyInfoSchema, type TUpdateCompanyInfo } from '../schema'
 import UpdateCompanyInfoForm from './update-company-info-form'
 
 export default function UpdateCompany() {
+  const user = getCookie<IUser>('user')
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const { mutate: updateCompany, isPending } = useUpdateCompany()
   const form = useForm<TUpdateCompanyInfo>({
     defaultValues: {
-      mailing_address: '',
-      registered_address: '',
-      website: '',
+      mailing_address: user?.company_info?.mailing_address || '',
+      registered_address: user?.company_info?.registered_address || '',
+      website: user?.company_info?.website || '',
     },
     resolver: zodResolver(updateCompanyInfoSchema),
     mode: 'onChange',
@@ -38,7 +41,7 @@ export default function UpdateCompany() {
 
   const onSubmit = async (data: TUpdateCompanyInfo): Promise<void> => {
     updateCompany(
-      { pid: '', data },
+      { data },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['profile'] })
@@ -59,15 +62,15 @@ export default function UpdateCompany() {
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetTrigger
-        render={<div className="sm:static absolute top-0 right-0" />}
+        render={
+          <Button
+            variant="secondary"
+            className="text-muted-foreground py-2 sm:size-fit size-6"
+          />
+        }
       >
-        <Button
-          variant="secondary"
-          className="text-muted-foreground py-2 sm:size-fit size-6"
-        >
-          <PencilLineIcon />
-          <span className="sm:block hidden">Edit</span>
-        </Button>
+        <PencilLineIcon />
+        <span className="sm:block hidden">Edit</span>
       </SheetTrigger>
 
       <SheetPopup inset className={'max-w-2xl w-full'}>

@@ -37,4 +37,5 @@ export const companyInfoConfig: Record<string, IFieldConfig> = {
     order: 12,
     isVisible: false,
   },
+  logo: { label: 'Company Logo', order: 13, isVisible: false },
 }

@@ -13,6 +13,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import type { IUser } from '@/features/auth/types'
+import { getCookie } from '@/hooks/use-cookie-storage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueryClient } from '@tanstack/react-query'
 import { Loader2, PencilLineIcon } from 'lucide-react'
@@ -23,14 +25,14 @@ import { updateProfileSchema, type TUpdateProfile } from '../schema'
 import UpdateProfileForm from './update-profile-form'
 
 export default function UpdateProfile() {
+  const user = getCookie<IUser>('user')
+
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const { mutate: updateProfile, isPending } = useUpdateProfile()
   const form = useForm<TUpdateProfile>({
     defaultValues: {
-      photo: null,
-      email_address: null,
-      phone_number: '',
+      logo: user?.company_info?.logo || null,
     },
     resolver: zodResolver(updateProfileSchema),
     mode: 'onChange',
@@ -38,7 +40,7 @@ export default function UpdateProfile() {
 
   const onSubmit = async (data: TUpdateProfile): Promise<void> => {
     updateProfile(
-      { pid: '', data },
+      { data },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['profile'] })

@@ -64,7 +64,7 @@ function AuthenticatedLayout() {
                   alt="user profile"
                 />
                 <AvatarFallback>
-                  {user_info?.company_info?.name[0] || 'U'}
+                  {user_info?.company_info?.name?.[0] || 'U'}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">

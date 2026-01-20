@@ -15,12 +15,12 @@ export default function UpdateProfileForm({
   onSubmit,
   form,
 }: IUpdateProfileFormProps) {
-  const photo = form.watch('photo')
+  const logo = form.watch('logo')
   const handleUpload = (assetIds: string[], fileUrls: string[]) => {
     console.info('assetIds', assetIds)
     if (fileUrls.length > 0) {
-      const currentPhoto = photo
-      form.setValue('photo', currentPhoto, { shouldValidate: true })
+      const newLogoUrl = fileUrls[0]
+      form.setValue('logo', newLogoUrl, { shouldValidate: true })
     }
   }
 
@@ -33,17 +33,19 @@ export default function UpdateProfileForm({
       >
         <div className="space-y-4">
           <div className="space-y-2">
-            <h3 className="font-medium text-sm">Project Images</h3>
+            <h3 className="font-medium text-sm">
+              Company Logo <span className="text-destructive">*</span>
+            </h3>
             <Upload
               maxFiles={10}
               maxSize={50 * 1024 * 1024}
               accept="image/*"
               initialFiles={
-                photo
+                logo
                   ? [
                       {
-                        url: photo,
-                        id: photo,
+                        url: logo,
+                        id: logo,
                         name: 'company-logo',
                         size: 0,
                         type: 'image/jpeg',

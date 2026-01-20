@@ -1,9 +1,7 @@
 import { z } from 'zod'
 
 export const updateProfileSchema = z.object({
-  photo: z.string().url().nullable().optional(),
-  phone_number: z.string().min(7).max(15),
-  email_address: z.string().email().nullable().optional(),
+  logo: z.string().url().nullable().optional(),
 })
 
 export const updateCompanyInfoSchema = z.object({
