@@ -13,7 +13,7 @@
 ## Coding Patterns
 
 - Don't use an extra commit on the file. Just provide the final code.
-- Don't add comments unless necessary. And avoid .md file generate on the project.
+- Please don't add comments unless you need to. Avoid generating .md files in the project. If you need to explain something, do it here. All explanations should be in this file only, and in lowercase. If multiple explanations are needed, use bullet points.
 - When adding new features, follow the existing project structure.
 - Follow the existing project structure and coding conventions.
 - Use TanStack Query for data fetching and mutations.
@@ -42,6 +42,68 @@ export const useUsers = () => {
     queryKey: ['users'],
     queryFn: () => api.getUsers(),
     staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
+export const useCreateProject = () => {
+  return useMutation({
+    mutationFn: projectApi.createProject,
+    onSuccess: (data) => {
+      if (data.status_code !== 201) {
+        toastManager.add({
+          title: 'Message',
+          description: data.message,
+          type: 'info',
+        })
+      } else {
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
+      }
+    },
+    onError: (error) => {
+      toastManager.add({
+        title: 'Error',
+        description: error.message,
+        type: 'error',
+      })
+    },
+  })
+}
+
+export const useUpdateProject = () => {
+  return useMutation({
+    mutationFn: ({
+      pid,
+      data,
+    }: {
+      pid: string
+      data: Partial<TCreateProject>
+    }) => projectApi.updateProject(pid, data),
+    onSuccess: (data) => {
+      if (data.status_code !== 200) {
+        toastManager.add({
+          title: 'Message',
+          description: data.message,
+          type: 'info',
+        })
+      } else {
+        toastManager.add({
+          title: 'Success',
+          description: data.message,
+          type: 'success',
+        })
+      }
+    },
+    onError: (error) => {
+      toastManager.add({
+        title: 'Error',
+        description: error.message,
+        type: 'error',
+      })
+    },
   })
 }
 ```
