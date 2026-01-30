@@ -1,9 +1,8 @@
 ## project stack
 
-- React 19+ with TypeScript
-- Create React App (no Vite)
+- React 19 with TypeScript
+- Create Next.js App Router (app directory)
 - TanStack Query v5
-- Clerk Authentication
 - shadcn/ui components
 - Tailwind CSS v4
 - pnpm workspace
@@ -46,30 +45,30 @@
 ## example tanstack query hook with api layer
 
 ```typescript
-import { useQuery } from '@tanstack/react-query'
-import { api } from '@/features/api/api-client'
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/features/api/api-client';
 
-import { toastManager } from '@/components/ui/toast'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { projectApi } from './api'
-import type { IApprovedProject, IListProjectsParams } from './interface'
-import type { TCreateProject } from './schema'
+import { toastManager } from '@/components/ui/toast';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { projectApi } from './api';
+import type { IApprovedProject, IListProjectsParams } from './interface';
+import type { TCreateProject } from './schema';
 
 export const useProjects = (params: IListProjectsParams = {}) => {
   return useQuery({
     queryKey: ['projects', params],
     queryFn: () => projectApi.listProjects(params),
     staleTime: 5 * 60 * 1000, // 5 minutes
-  })
-}
+  });
+};
 
 export const useProject = (pid: string, tab: string) => {
   return useQuery({
     queryKey: ['project', pid, tab],
     queryFn: () => projectApi.getProject(pid, tab),
     staleTime: 5 * 60 * 1000, // 5 minutes
-  })
-}
+  });
+};
 
 export const useCreateProject = () => {
   return useMutation({
@@ -80,13 +79,13 @@ export const useCreateProject = () => {
           title: 'Message',
           description: data.message,
           type: 'info',
-        })
+        });
       } else {
         toastManager.add({
           title: 'Success',
           description: data.message,
           type: 'success',
-        })
+        });
       }
     },
     onError: (error) => {
@@ -94,10 +93,10 @@ export const useCreateProject = () => {
         title: 'Error',
         description: error.message,
         type: 'error',
-      })
+      });
     },
-  })
-}
+  });
+};
 
 export const useUpdateProject = () => {
   return useMutation({
@@ -105,8 +104,8 @@ export const useUpdateProject = () => {
       pid,
       data,
     }: {
-      pid: string
-      data: Partial<TCreateProject>
+      pid: string;
+      data: Partial<TCreateProject>;
     }) => projectApi.updateProject(pid, data),
     onSuccess: (data) => {
       if (data.status_code !== 200) {
@@ -114,13 +113,13 @@ export const useUpdateProject = () => {
           title: 'Message',
           description: data.message,
           type: 'info',
-        })
+        });
       } else {
         toastManager.add({
           title: 'Success',
           description: data.message,
           type: 'success',
-        })
+        });
       }
     },
     onError: (error) => {
@@ -128,13 +127,13 @@ export const useUpdateProject = () => {
         title: 'Error',
         description: error.message,
         type: 'error',
-      })
+      });
     },
-  })
-}
+  });
+};
 
 export const useDeleteProject = () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (pid: string) => projectApi.deleteProject(pid),
     onSuccess: (data) => {
@@ -143,14 +142,14 @@ export const useDeleteProject = () => {
           title: 'Message',
           description: data.message,
           type: 'info',
-        })
+        });
       } else {
         toastManager.add({
           title: 'Success',
           description: data.message,
           type: 'success',
-        })
-        queryClient.invalidateQueries({ queryKey: ['projects'] })
+        });
+        queryClient.invalidateQueries({ queryKey: ['projects'] });
       }
     },
     onError: (error) => {
@@ -158,10 +157,10 @@ export const useDeleteProject = () => {
         title: 'Error',
         description: error.message,
         type: 'error',
-      })
+      });
     },
-  })
-}
+  });
+};
 ```
 
 ## example data grid with server side pagination and client side pagination with filtering
@@ -465,3 +464,282 @@ export default function SalesList({
 }
 
 ```
+
+## example sheet design and form implementation
+
+```typescript
+import { BDTCurrencyIcon } from '@/assets/icon'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Separator } from '@/components/ui/separator'
+import {
+  Sheet,
+  SheetClose,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetPanel,
+  SheetPopup,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { Textarea } from '@/components/ui/textarea'
+import { toastManager } from '@/components/ui/toast'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Loader2 } from 'lucide-react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useRefundApproval } from '../hooks'
+import type { IRefundItem } from '../interface'
+import { refundApprovalSchema, type TRefundApproval } from '../schema'
+
+interface RefundApprovalProps {
+  refund: IRefundItem
+}
+
+export default function RefundApproval({ refund }: RefundApprovalProps) {
+  const [open, setOpen] = useState(false)
+  const [rejectReason, setRejectReason] = useState('')
+  const { mutate: approveRefund, isPending } = useRefundApproval()
+
+  const form = useForm<TRefundApproval>({
+    resolver: zodResolver(refundApprovalSchema),
+    defaultValues: {
+      amount: refund.total_refund,
+      remarks: '',
+    },
+  })
+
+  const handleApprove = () => {
+    const amount = form.getValues('amount')
+    const remarks = form.getValues('remarks')?.trim()
+
+    if (!amount || amount <= 0) {
+      toastManager.add({
+        title: 'Invalid amount',
+        description: 'Please enter a valid refund amount.',
+        type: 'error',
+      })
+      return
+    }
+
+    if (!remarks) {
+      toastManager.add({
+        title: 'Remarks required',
+        description: 'Please provide remarks for the refund.',
+        type: 'error',
+      })
+      return
+    }
+
+    approveRefund(
+      {
+        refundId: refund.id,
+        data: { amount, remarks },
+      },
+      {
+        onSuccess: () => {
+          setOpen(false)
+          form.reset()
+        },
+      },
+    )
+  }
+
+  const handleReject = () => {
+    const reason = rejectReason.trim()
+    if (!reason) {
+      toastManager.add({
+        title: 'Reason required',
+        description: 'Please provide a rejection reason.',
+        type: 'error',
+      })
+      return
+    }
+
+    toastManager.add({
+      title: 'Info',
+      description: 'Reject functionality will be implemented.',
+      type: 'info',
+    })
+  }
+
+  const handleOpenChange = (isOpen: boolean) => {
+    setOpen(isOpen)
+    if (!isOpen) {
+      form.reset()
+    }
+  }
+
+  return (
+    <Sheet open={open} onOpenChange={handleOpenChange}>
+      <SheetTrigger
+        render={
+          <button className="gradient-btn text-white rounded-2xl! cursor-pointer" />
+        }
+      >
+        View
+      </SheetTrigger>
+      <SheetPopup inset className="max-w-lg w-full">
+        <SheetHeader>
+          <SheetTitle>Refund Details</SheetTitle>
+          <SheetDescription>review and approve refund request</SheetDescription>
+        </SheetHeader>
+        <Separator />
+
+        <SheetPanel className="max-h-[calc(100vh-180px)] h-lvh">
+          <div className="space-y-3 text-sm bg-muted/30 p-4 rounded-lg">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Client Name:</span>
+              <span className="font-medium">{refund.full_name}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Allotment:</span>
+              <span className="font-medium">{refund.allotment_name}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Total Paid:</span>
+              <span className="font-medium flex items-center gap-1">
+                <BDTCurrencyIcon className="size-4" />
+                {refund.total_paid.toLocaleString('en-IN', {
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Requested Refund:</span>
+              <span className="font-medium flex items-center gap-1 text-red-600">
+                <BDTCurrencyIcon className="size-4" />
+                {refund.total_refund.toLocaleString('en-IN', {
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Status:</span>
+              <Badge
+                variant={
+                  refund.status === 'approved'
+                    ? 'success'
+                    : refund.status === 'rejected'
+                      ? 'destructive'
+                      : 'info'
+                }
+              >
+                {refund.status?.toUpperCase()}
+              </Badge>
+            </div>
+          </div>
+
+          {refund.status === 'pending' && (
+            <div className="space-y-4 mt-4">
+              <Separator />
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="amount">Refund Amount</Label>
+                  <Input
+                    id="amount"
+                    type="number"
+                    {...form.register('amount', { valueAsNumber: true })}
+                    disabled={isPending}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="remarks">Remarks</Label>
+                  <Textarea
+                    id="remarks"
+                    placeholder="Enter remarks for refund approval..."
+                    {...form.register('remarks')}
+                    rows={4}
+                    disabled={isPending}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </SheetPanel>
+
+        {refund.status === 'pending' && (
+          <>
+            <Separator />
+            <SheetFooter>
+              <div className="flex items-center gap-3 w-full justify-between">
+                <SheetClose
+                  render={<Button variant="ghost" />}
+                  disabled={isPending}
+                >
+                  Cancel
+                </SheetClose>
+                <div className="flex items-center gap-4">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="destructive" disabled={isPending}>
+                        Reject
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <div className="space-y-4">
+                        <p>Are you sure you want to reject?</p>
+                        <Textarea
+                          className="w-full"
+                          placeholder="Reason for rejection"
+                          value={rejectReason}
+                          onChange={(e) => setRejectReason(e.target.value)}
+                          disabled={isPending}
+                          rows={4}
+                          autoFocus
+                          required
+                        />
+                        <div className="flex items-center gap-2 justify-end">
+                          <Button disabled={isPending} onClick={handleReject}>
+                            {isPending && (
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            {isPending ? 'Confirm...' : 'Confirm'}
+                          </Button>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                  <Button
+                    className="ms-auto md:min-w-40"
+                    disabled={isPending}
+                    onClick={handleApprove}
+                  >
+                    {isPending && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    {isPending ? 'Approving...' : 'Approve'}
+                  </Button>
+                </div>
+              </div>
+            </SheetFooter>
+          </>
+        )}
+      </SheetPopup>
+    </Sheet>
+  )
+}
+```
+
+## notes
+
+- in the example tanstack query hook with api layer, make sure to replace the dummy api calls with actual api calls as per your project's api structure.
+- always handle errors and loading states properly in your hooks.
+- use descriptive query keys for better cache management.
+- follow the existing project structure and coding conventions when adding new features or hooks.
+- avoid unnecessary re-renders by optimizing hook dependencies.
+- use toast notifications for user feedback on actions.
+- ensure responsiveness and accessibility in UI components.
+- follow the existing folder structure for features, components, and routes.
+- write unit tests for critical components and hooks.
+- use ESLint and Prettier for code formatting and linting.
+- in the example data grid with server side pagination and client side pagination with filtering, ensure to adapt the code to fit your project's specific requirements and data structures.
