@@ -1,2 +1,4 @@
-// Shared UI components
-export * from './components';
+export * from './button';
+export * from './card';
+export * from './checkbox';
+export * from './input';

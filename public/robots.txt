@@ -1,0 +1,13 @@
+# Cotap - Robots.txt
+# Allow all crawlers
+
+User-agent: *
+Allow: /
+
+# Disallow admin and private routes
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_next/
+
+# Sitemap location (update with actual sitemap URL when available)
+# Sitemap: https://yourdomain.com/sitemap.xml
