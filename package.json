@@ -1,9 +1,9 @@
 {
-  "name": "cotapp",
+  "name": "cotap",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Cotapp is an attendance management system.",
+  "description": "Cotap is an attendance management system.",
   "author": "Muhammad Asif",
   "contributors": [
     {
@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ZMC-Technologies-Limited/cotapp.git"
+    "url": "https://github.com/ZMC-Technologies-Limited/cotap.git"
   },
   "license": "MIT",
   "scripts": {
